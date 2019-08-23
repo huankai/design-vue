@@ -1,0 +1,32 @@
+#components-layout-demo-custom-trigger .trigger {
+    font-size: 18px;
+    line-height: 64px;
+    padding: 0 24px;
+    cursor: pointer;
+    transition: color .3s;
+}
+
+#components-layout-demo-custom-trigger .trigger:hover {
+    color: #1890ff;
+}
+
+#components-layout-demo-custom-trigger .logo {
+    height: 32px;
+    background: white;
+    margin: 16px;
+}
+
+.ant-divider-horizontal{
+    margin: 5px 0;
+}
+label span {
+    width: 30%;
+    display: inline-block;
+}
+label input.ant-input {
+    width: 50%;
+}
+
+.ant-pagination {
+    text-align: center;
+}

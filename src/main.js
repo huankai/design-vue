@@ -12,6 +12,7 @@ import {
   Card,
   InputNumber,
   Radio,
+  Avatar,
   Icon,
   Checkbox,
   Tooltip,
@@ -41,6 +42,7 @@ Vue.use(Button);
 Vue.use(Card);
 Vue.use(InputNumber);
 Vue.use(Radio);
+Vue.use(Avatar);
 Vue.use(Icon);
 Vue.use(Checkbox);
 Vue.use(Tooltip);
