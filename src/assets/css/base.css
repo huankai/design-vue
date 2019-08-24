@@ -16,17 +16,23 @@
     margin: 16px;
 }
 
-.ant-divider-horizontal{
+.ant-divider-horizontal {
     margin: 5px 0;
 }
-label span {
+
+.search span.field {
     width: 30%;
+    font-weight: bold;
     display: inline-block;
 }
-label input.ant-input {
+
+.search input.ant-input {
     width: 50%;
 }
 
+button{
+    margin-right: 8px;
+}
 .ant-pagination {
     text-align: center;
 }

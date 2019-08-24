@@ -20,6 +20,7 @@ import {
   Table,
   Pagination,
   Layout,
+  Popconfirm,
   LocaleProvider,
   Menu,
   Badge,
@@ -50,6 +51,7 @@ Vue.use(Calendar);
 Vue.use(Table);
 Vue.use(Pagination);
 Vue.use(Layout);
+Vue.use(Popconfirm);
 Vue.use(LocaleProvider);
 Vue.use(Menu);
 Vue.use(Badge);
