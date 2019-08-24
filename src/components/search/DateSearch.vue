@@ -113,7 +113,7 @@
   }
 
   .ant-row .date .date-item {
-    padding: 3px 20px;
+    padding: 3px 0.5em;
     cursor: pointer;
     margin-right: 5px;
   }

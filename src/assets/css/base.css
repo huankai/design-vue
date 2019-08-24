@@ -26,8 +26,12 @@
     display: inline-block;
 }
 
-.search input.ant-input {
-    width: 50%;
+input.ant-input {
+    width: 80%;
+}
+
+.search input.ant-input{
+    width: 50% !important;
 }
 
 button{
