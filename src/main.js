@@ -2,6 +2,8 @@ import Vue from 'vue'
 import App from './App.vue'
 
 import "@/util/message"
+
+import router from "@/router";
 /*
  按需要导入 ant 的组件，这里只导入了 Button
  */
@@ -67,5 +69,6 @@ Vue.use(Modal);
 Vue.use(Dropdown);
 new Vue({
   "el": "#app",
+  router,
   render: h => h(App),
 });
