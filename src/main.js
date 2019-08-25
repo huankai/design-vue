@@ -1,5 +1,7 @@
 import Vue from 'vue'
 import App from './App.vue'
+
+import "@/util/message"
 /*
  按需要导入 ant 的组件，这里只导入了 Button
  */
@@ -28,9 +30,10 @@ import {
   Col,
   Row,
   Divider,
-  message,
   notification,
-  Modal
+  Modal,
+
+  Dropdown
 } from 'ant-design-vue';
 
 Vue.config.productionTip = false;
@@ -59,9 +62,9 @@ Vue.use(Breadcrumb);
 Vue.use(Col);
 Vue.use(Row);
 Vue.use(Divider);
-Vue.use(message);
 Vue.use(notification);
 Vue.use(Modal);
+Vue.use(Dropdown);
 new Vue({
   "el": "#app",
   render: h => h(App),

@@ -6,7 +6,9 @@
             :value="item.range"
             @click="changeSelectDate(item.range)">{{item.name}}
       </span>
-      <a-range-picker v-if="isCustom" @change="dateOnChange"/>
+      <a-range-picker v-if="isCustom" :showTime="showTime" :showToday="showToday"
+                      :format="showTime ? 'YYYY-MM-DD HH:mm: ss':'YYYY-MM-DD'"
+                      @change="dateOnChange"/>
     </span>
   </a-col>
 </template>
@@ -51,6 +53,14 @@
     export default {
         name: "DateSearch",
         props: {
+            showTime: {
+                type: Boolean,
+                default: false
+            },
+            showToday: {
+                type: Boolean,
+                default: true
+            },
             dateName: {
                 default: "日期"
             },
@@ -64,6 +74,7 @@
         data() {
             return {
                 isCustom: false,
+                dateItems: [],
                 selected: {
                     range: null,
                     start: null,
@@ -71,30 +82,28 @@
                 }
             }
         },
-        computed: {
-            dateItems() {
-                const dateItemList = [];
-                for (let range of this.dateRanges) {
-                    for (let dateItem of dateItems) {
-                        if (range === dateItem.range) {
-                            dateItemList.push(dateItem);
-                            break;
-                        }
+        created() {
+            const dateItemList = [];
+            for (let range of this.dateRanges) {
+                for (let dateItem of dateItems) {
+                    if (range === dateItem.range) {
+                        dateItemList.push(dateItem);
+                        break;
                     }
                 }
-                return dateItemList;
             }
+            this.dateItems = dateItemList;
         },
         methods: {
             changeSelectDate(range) {
                 if (this.selected.range !== range) {
                     this.selected.range = range;
                     this.isCustom = (range === "CUSTOM");
-                    dateItems.forEach(item => item.selected = (item.range === range));
+                    this.dateItems.forEach(item => item.selected = (item.range === range));
                 } else {
                     this.selected.range = null;
                     this.isCustom = false;
-                    dateItems.forEach(item => item.selected = false);
+                    this.dateItems.forEach(item => item.selected = false);
                 }
                 this.$emit("dateChange", this.selected);
             },

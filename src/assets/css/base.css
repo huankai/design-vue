@@ -30,13 +30,28 @@ input.ant-input {
     width: 80%;
 }
 
-.search input.ant-input{
+.search input.ant-input {
     width: 50% !important;
 }
 
-button{
+button {
     margin-right: 8px;
 }
+
+.ant-table-body table thead {
+    line-height: 10px;
+}
+
+.ant-table-body table tbody tr {
+    line-height: 8px;
+}
+
+.ant-table-body table tbody tr a {
+    margin-right: 12px;
+}
+
+
 .ant-pagination {
     text-align: center;
+    float: none !important;
 }

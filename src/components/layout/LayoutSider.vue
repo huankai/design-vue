@@ -31,12 +31,16 @@
       </a-sub-menu>
       <a-sub-menu key="sub2">
         <span slot="title"><a-icon type="laptop"/><span>字典管理</span></span>
-        <a-menu-item key="6"><span>省市区管理</span></a-menu-item>
-        <a-menu-item key="7"><span>数据字典</span></a-menu-item>
+        <a-menu-item key="6"><a-icon type="compass" /><span>省市区管理</span></a-menu-item>
+        <a-menu-item key="7"><a-icon type="profile" /><span>数据字典</span></a-menu-item>
       </a-sub-menu>
       <a-menu-item key="8">
         <a-icon type="file"/>
         <span>文件管理</span>
+      </a-menu-item>
+      <a-menu-item key="9">
+        <a-icon type="schedule" />
+        <span>定时任务</span>
       </a-menu-item>
       <!--<a-sub-menu key="sub3">
           <span slot="title"><a-icon type="notification"/><span>文件管理</span></span>
