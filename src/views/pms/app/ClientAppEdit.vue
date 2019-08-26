@@ -25,23 +25,26 @@
     </a-form-item>
     <a-form-item :label-col="formItemLayout.labelCol" :wrapper-col="formItemLayout.wrapperCol" label="Token过期时间">
       <a-input-number
-        v-decorator="['accessTokenValidity', {initialValue: 7200,rules:[{ required: true, message: 'Token过期时间必填'}] }]"
-        :min="60"
-        :max="18000"/>
-      <span class="ant-form-text">秒</span>
+        v-decorator="['accessTokenValidity', {initialValue: 2,rules:[{ required: true, message: 'Token过期时间必填'}] }]"
+        :min="0.5"
+        :max="5"/>
+      <span class="ant-form-text">小时</span>
     </a-form-item>
     <a-form-item :label-col="formItemLayout.labelCol" :wrapper-col="formItemLayout.wrapperCol" label="RefreshToken过期时间"
                  v-if="checkedAuthorizedGrantTypes.includes('refresh_token')">
-      <a-input-number v-decorator="['refreshTokenValidity', {initialValue: 86400 }]" :min="43200"
-                      :max="604800"/>
-      <span class="ant-form-text">秒</span>
+      <a-input-number
+        v-decorator="['refreshTokenValidity', {initialValue: 1 ,rules:[{required:enableRefreshToken,message:'RefreshToken过期时间必填'}]}]"
+        :min="1"
+        :max="10"/>
+      <span class="ant-form-text">天</span>
     </a-form-item>
     <a-form-item :label-col="formItemLayout.labelCol" :wrapper-col="formItemLayout.wrapperCol" label="回调地址">
       <a-input placeholder="请输入回调地址,不需要以http或https 开头"
                v-decorator="['redirectUri',{rules: [{ required: true, message: '回调地址必填' }]}]" autocomplete="off"/>
     </a-form-item>
     <a-form-item :label-col="formItemLayout.labelCol" :wrapper-col="formItemLayout.wrapperCol" label="是否自动认证">
-      <a-switch defaultChecked/><span class="ant-form-text">&nbsp;&nbsp;自动认证不会显示用户确认授权页</span>
+      <a-switch defaultChecked/>
+      <span class="ant-form-text">&nbsp;&nbsp;自动认证不会显示用户确认授权页</span>
     </a-form-item>
     <a-form-item :label-col="formItemLayout.labelCol" :wrapper-col="formItemLayout.wrapperCol" label="状态">
       <a-radio-group name="radioGroup" :defaultValue="1">
@@ -50,7 +53,7 @@
       </a-radio-group>
     </a-form-item>
     <a-form-item :label-col="formItemLayout.labelCol" :wrapper-col="formItemLayout.wrapperCol" label="应用头像">
-      <a-upload v-decorator="['upload', {valuePropName: 'fileList',getValueFromEvent: normFile,}]" name="logo"
+      <a-upload v-decorator="['upload', {valuePropName: 'fileList',getValueFromEvent: normFile}]" name="logo"
                 action="/upload" list-type="picture">
         <a-button>
           <a-icon type="upload"/>
@@ -98,6 +101,7 @@
     export default {
         data() {
             return {
+                enableRefreshToken: true,
                 authorizedGrantTypes,
                 checkedAuthorizedGrantTypes: ["authorization_code", "refresh_token"],
                 formItemLayout,
@@ -110,7 +114,7 @@
         mounted() {
             this.form.setFieldsValue({
                 "authorizedGrantTypes": this.checkedAuthorizedGrantTypes
-            })
+            });
         },
         methods: {
             normFile(e) {
@@ -122,6 +126,7 @@
             },
             handlerAuthorizedGrantTypesChange(checkedValues) {
                 this.checkedAuthorizedGrantTypes = checkedValues;
+                this.enableRefreshToken = this.checkedAuthorizedGrantTypes.includes("refresh_token");
             },
             handleSubmit() {
                 this.form.validateFields((errors, values) => {

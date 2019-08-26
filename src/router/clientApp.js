@@ -1,5 +1,6 @@
 const ClientApp = () => import("@/views/pms/app/ClientApp");
 const ClientAppEdit = () => import("@/views/pms/app/ClientAppEdit");
+const ClientAppDetail = () => import ("@/views/pms/app/ClientAppDetail");
 
 /**
  * client 应用
@@ -25,5 +26,11 @@ export default {
         title: "应用管理-修改"
       },
       component: ClientAppEdit
+    }, {
+      path: "/app/details",
+      meta: {
+        title: "应用管理-详情"
+      },
+      component: ClientAppDetail
     }]
 }

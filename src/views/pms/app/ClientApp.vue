@@ -63,6 +63,7 @@
             </a>
             <a href="javascript:void (0);">
               <a-popconfirm title="确定要删除吗？" placement="bottom" @confirm="handlerDelete(record)">
+                <a-icon slot="icon" type="question-circle" style="color: red"/>
                 <a-tooltip placement="topLeft" title="删除">
                   <a-icon type="delete" :style="{color: 'red'}"/>
                 </a-tooltip>
@@ -121,33 +122,33 @@
                     title: '应用编号',
                     align: 'center',
                     dataIndex: 'appCode',
-                    width: 100
+                    width: '10%'
                     // sorter: (a, b) => a.age - b.age
                 }, {
                     title: '应用名称',
                     align: 'center',
                     dataIndex: 'appName',
-                    width: 200
+                    width: "15%"
                 }, {
                     title: '应用状态',
                     align: 'center',
                     dataIndex: 'appStatusText',
-                    width: 100
+                    width: "10%"
                 }, {
                     title: '认证类型',
                     align: 'center',
                     dataIndex: 'authorizedGrantTypes',
-                    width: 300
+                    width: "35%"
                 }, {
                     title: '有效期',
                     dataIndex: 'expireDate',
-                    width: 100
+                    width: "15%"
                 }, {
                     title: '操作',
                     scopedSlots: {
                         customRender: "action"
                     },
-                    width: 80
+                    width: "20%"
                 }
                 ];
             }
