@@ -9,13 +9,13 @@
       <a-col :span="8">
         <label>
           <span class="field">应用编号: </span>
-          <a-input placeholder="请输入应用编号搜索"></a-input>
+          <a-input v-model="params.appCode" placeholder="请输入应用编号搜索"></a-input>
         </label>
       </a-col>
       <a-col :span="8">
         <label>
           <span class="field">应用名称: </span>
-          <a-input placeholder="请输入应用编号搜索"></a-input>
+          <a-input v-model="params.appName" placeholder="请输入应用编号搜索"></a-input>
         </label>
       </a-col>
       <a-col :span="8">
@@ -38,19 +38,36 @@
                @change="handleChange"
                :pagination="pagination">
           <span slot="action" slot-scope="text,record">
-<!--            <a href="javascript:void (0);" @click="handlerEdit(record)">-->
             <router-link :to="{path:'/app/edit',query:{id:record.id}}">
                 <a-tooltip placement="topLeft" title="编辑">
                   <a-icon type="edit"/>
                 </a-tooltip>
             </router-link>
-            <!--            </a>-->
+            <router-link :to="{path:'/app/details',query:{id:record.id}}">
+                <a-tooltip placement="topLeft" title="详情">
+                  <a-icon type="eye"/>
+                </a-tooltip>
+            </router-link>
+            <a href="javascript:void (0);">
+              <a-popconfirm title="确定要禁用吗？" placement="bottom" @confirm="handlerDisable(record)"
+                            v-if="record.appStatus === 1">
+                <a-tooltip placement="topLeft" title="禁用">
+                  <a-icon type="lock"/>
+                </a-tooltip>
+              </a-popconfirm>
+              <a-popconfirm v-else title="确定要启用吗？" placement="bottom" @confirm="handlerEnable(record)">
+                <a-tooltip placement="topLeft" title="启用">
+                  <a-icon type="unlock"/>
+                </a-tooltip>
+              </a-popconfirm>
+            </a>
             <a href="javascript:void (0);">
               <a-popconfirm title="确定要删除吗？" placement="bottom" @confirm="handlerDelete(record)">
                 <a-tooltip placement="topLeft" title="删除">
                   <a-icon type="delete" :style="{color: 'red'}"/>
                 </a-tooltip>
               </a-popconfirm>
+
             </a>
 
           </span>
@@ -61,38 +78,28 @@
 
 <script>
     import DateSearch from "@/components/search/DateSearch";
-
-    const data = [{
-        id: 1,
-        appCode: 'PMS',
-        appName: "统一权限管理",
-        startDate: "2018-01-01",
-        expireDate: "长期"
-    }, {
-        id: 2,
-        appCode: 'EMI',
-        appName: "统一字典管理",
-        startDate: "2018-01-01",
-        expireDate: "长期"
-    }, {
-        id: 3,
-        appCode: 'FS',
-        appName: "统一文件管理",
-        startDate: "2018-01-01",
-        expireDate: "长期"
-    }
-    ];
+    import {queryForPage} from "@/network/clientApp";
+    import {Order, PageQuery} from "@/util/pageQuery";
 
     export default {
         name: "ClientApp",
         components: {DateSearch},
+        created() {
+            let query = new PageQuery();
+            query.addOrder(Order.desc("appCode"));
+            console.log(query);
+            queryForPage(query).then(response => {
+                this.data = response.data;
+                this.pagination.total = response.totalRow;
+            });
+        },
         data() {
             return {
-                data,
+                data: [],
                 deleteCacheLoading: false,
                 loading: false,
                 pagination: {
-                    total: data.length,
+                    total: 0,
                     defaultPageSize: 10,
                     showTotal: (total, range) => {
                         return "共 " + total + " 条记录";
@@ -102,40 +109,45 @@
                     showSizeChanger: true
                 },
                 params: {
-                    userName: null,
-                    userType: null,
-                    userType2: null,
-                    userType3: 1
+                    appCode: null,
+                    appName: null
 
                 }
             }
         },
         computed: {
             columns() {
-                let {sortedInfo, filteredInfo} = this;
-                sortedInfo = sortedInfo || {};
-                filteredInfo = filteredInfo || {};
                 return [{
                     title: '应用编号',
                     align: 'center',
                     dataIndex: 'appCode',
-                    width: 150
+                    width: 100
                     // sorter: (a, b) => a.age - b.age
                 }, {
                     title: '应用名称',
                     align: 'center',
                     dataIndex: 'appName',
-                    width: 150
+                    width: 200
+                }, {
+                    title: '应用状态',
+                    align: 'center',
+                    dataIndex: 'appStatusText',
+                    width: 100
+                }, {
+                    title: '认证类型',
+                    align: 'center',
+                    dataIndex: 'authorizedGrantTypes',
+                    width: 300
                 }, {
                     title: '有效期',
                     dataIndex: 'expireDate',
-                    width: 400
+                    width: 100
                 }, {
                     title: '操作',
                     scopedSlots: {
                         customRender: "action"
                     },
-                    width: 400
+                    width: 80
                 }
                 ];
             }
@@ -148,6 +160,12 @@
                     this.pagination.total = this.data.length;
                     this.$message.success("删除成功");
                 }
+            },
+            handlerDisable() {
+
+            },
+            handlerEnable() {
+
             },
             searchBtn() {
                 console.log(this.params);
@@ -181,6 +199,3 @@
     }
 </script>
 
-<style scoped>
-
-</style>

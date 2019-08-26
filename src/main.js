@@ -4,6 +4,7 @@ import App from './App.vue'
 import "@/util/message"
 
 import router from "@/router";
+
 /*
  按需要导入 ant 的组件，这里只导入了 Button
  */
@@ -13,6 +14,8 @@ import {
   DatePicker,
   Select,
   Button,
+  Switch,
+  Upload,
   Card,
   InputNumber,
   Radio,
@@ -45,6 +48,8 @@ Vue.use(Input);
 Vue.use(DatePicker);
 Vue.use(Select);
 Vue.use(Button);
+Vue.use(Switch);
+Vue.use(Upload);
 Vue.use(Card);
 Vue.use(InputNumber);
 Vue.use(Radio);

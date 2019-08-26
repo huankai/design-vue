@@ -20,18 +20,22 @@
     margin: 5px 0;
 }
 
+.ant-layout-content {
+    overflow-y: auto;
+}
+
 .search span.field {
     width: 30%;
     font-weight: bold;
     display: inline-block;
 }
 
-input.ant-input {
-    width: 80%;
-}
+/*input.ant-input {*/
+/*    width: 80%;*/
+/*}*/
 
 .search input.ant-input {
-    width: 50% !important;
+    width: 50%;
 }
 
 button {

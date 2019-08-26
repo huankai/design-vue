@@ -7,7 +7,7 @@
             @click="changeSelectDate(item.range)">{{item.name}}
       </span>
       <a-range-picker v-if="isCustom" :showTime="showTime" :showToday="showToday"
-                      :format="showTime ? 'YYYY-MM-DD HH:mm: ss':'YYYY-MM-DD'"
+                      :format="showTime ? 'YYYY-MM-DD HH:mm:ss':'YYYY-MM-DD'"
                       @change="dateOnChange"/>
     </span>
   </a-col>
@@ -105,13 +105,16 @@
                     this.isCustom = false;
                     this.dateItems.forEach(item => item.selected = false);
                 }
-                this.$emit("dateChange", this.selected);
+                this.emitDateChange();
             },
             dateOnChange(date, dateString) {
                 this.selected.start = dateString[0];
                 this.selected.end = dateString[1];
-                this.$emit("dateChange", this.selected);
+                this.emitDateChange();
             },
+            emitDateChange() {
+                this.$emit("dateChange", this.selected);
+            }
         }
     }
 </script>

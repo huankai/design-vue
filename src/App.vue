@@ -28,7 +28,7 @@
         methods: {
             // 子组件传值到父类调用的方法
             updatecollapsed(collapsed) {
-              this.collapsed = collapsed;
+                this.collapsed = collapsed;
             }
         }
     }
@@ -36,5 +36,4 @@
 
 <style>
   @import "assets/css/base.css";
-
 </style>

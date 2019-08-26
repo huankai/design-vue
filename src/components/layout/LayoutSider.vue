@@ -1,83 +1,56 @@
 <template>
   <a-layout-sider :trigger="null" collapsible v-model="collapsed">
-    <div class="logo">
-
-    </div>
-    <a-menu theme="dark" mode="inline" :defaultSelectedKeys="['0']">
-      <a-menu-item key="0">
-        <router-link to="/">
-          <a-icon type="dashboard"/>
-          <span>首页</span>
-        </router-link>
-      </a-menu-item>
-      <a-sub-menu key="sub1">
-        <span slot="title"><a-icon type="user"/><span>权限管理</span></span>
-        <a-menu-item key="1">
-          <router-link to="/app">
-            <a-icon type="robot"/>
-            <span>应用管理</span>
+    <div class="logo"></div>
+    <a-menu theme="dark" mode="inline" :selectedKeys="selectedKeys" @select="handleSelect">
+      <template v-for="item in menuList">
+        <a-menu-item v-if="item.children == null || item.children.length === 0" :key="item.id">
+          <router-link :to="item.link">
+            <a-icon :type="item.icon"/>
+            <span>{{ item.name }}</span>
           </router-link>
         </a-menu-item>
-        <a-menu-item key="2">
-          <router-link to="/users">
-            <a-icon type="user"/>
-            <span>用户管理</span>
-          </router-link>
-        </a-menu-item>
-        <a-menu-item key="3">
-          <a-icon type="safety"/>
-          <span>角色管理</span>
-        </a-menu-item>
-        <a-menu-item key="4">
-          <a-icon type="safety"/>
-          <span>权限管理</span>
-        </a-menu-item>
-        <a-menu-item key="5">
-          <a-icon type="link"/>
-          <span>菜单管理</span>
-        </a-menu-item>
-      </a-sub-menu>
-      <a-sub-menu key="sub2">
-        <span slot="title"><a-icon type="laptop"/><span>字典管理</span></span>
-        <a-menu-item key="6">
-          <a-icon type="compass"/>
-          <span>省市区管理</span></a-menu-item>
-        <a-menu-item key="7">
-          <a-icon type="profile"/>
-          <span>数据字典</span></a-menu-item>
-      </a-sub-menu>
-      <a-menu-item key="8">
-        <a-icon type="file"/>
-        <span>文件管理</span>
-      </a-menu-item>
-      <a-menu-item key="9">
-        <a-icon type="schedule"/>
-        <span>定时任务</span>
-      </a-menu-item>
-      <!--<a-sub-menu key="sub3">
-          <span slot="title"><a-icon type="notification"/><span>文件管理</span></span>
-          <a-menu-item key="9"><span>option9</span></a-menu-item>
-          <a-menu-item key="10"><span>option10</span></a-menu-item>
-          <a-menu-item key="11"><span>option11</span></a-menu-item>
-          <a-menu-item key="12"><span>option12</span></a-menu-item>
-      </a-sub-menu>-->
+        <a-sub-menu v-else :key="item.id">
+          <span slot="title">
+            <a-icon :type="item.icon"/>
+            <span>{{item.name}}</span>
+          </span>
+          <a-menu-item v-for="children in item.children" :key="children.id">
+            <router-link :to="children.link">
+              <a-icon :type="children.icon"/>
+              <span>{{ children.name }}</span>
+            </router-link>
+          </a-menu-item>
+        </a-sub-menu>
+      </template>
     </a-menu>
   </a-layout-sider>
 </template>
-
 <script>
+    import {getMenuList} from "@/network/menu";
     export default {
         name: "LayoutSider",
         props: ["collapsed"],
         data() {
-            return {}
+            return {
+                menuList: [],
+                selectedKeys: []
+            }
         },
         methods: {
-            clickBtn() {
-                console.log("click...")
+            handleSelect({item, key, selectedKeys}) {
+                this.selectedKeys = selectedKeys;
             }
+        },
+        created() {
+            getMenuList().then(response => {
+                if (response != null) {
+                    this.menuList = response;
+                    if (response.length > 0) {
+                        this.selectedKeys = [response[0].id];
+                    }
+                }
+            });
         }
-
     }
 </script>
 

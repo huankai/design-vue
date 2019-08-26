@@ -3,66 +3,17 @@ import VueRouter from "vue-router"
 
 Vue.use(VueRouter);
 
-const Dashboard = () => import("@/views/dashboard/Dashboard");
-const ClientApp = () => import("@/views/pms/app/ClientApp");
-const ClientAppEdit = () => import("@/views/pms/app/ClientAppEdit");
-
-const User = () => import("@/views/pms/user/User");
+import Dashboard from "@/router/dashboard";
+import ClientApp from "@/router/clientApp"
+import User from "@/router/user"
 
 const router = new VueRouter({
   mode: "history",
+  // base: "/vue",
   routes: [
-    {
-      path: "",
-      meta: {
-        title: "首页"
-      },
-      component: Dashboard
-    },
-    {
-      path: "/app",
-      meta: {
-        title: "应用管理"
-      },
-      component: ClientApp,
-      // children: [
-      //   {
-      //     path: "add",
-      //     meta: {
-      //       title: "应用管理-添加"
-      //     },
-      //     component: ClientAppEdit
-      //   },
-      //   {
-      //     path: "/edit",
-      //     meta: {
-      //       title: "应用管理-修改"
-      //     },
-      //     component: ClientAppEdit
-      //   }
-      // ]
-    },
-    {
-      path: "/app/add",
-      meta: {
-        title: "应用管理-添加"
-      },
-      component: ClientAppEdit
-    },
-    {
-      path: "/app/edit",
-      meta: {
-        title: "应用管理-修改"
-      },
-      component: ClientAppEdit
-    },
-    {
-      path: "/users",
-      meta: {
-        title: "用户管理"
-      },
-      component: User
-    }
+    ...Dashboard.dashboard,
+    ...ClientApp.clientApp,
+    ...User.user
   ]
 });
 

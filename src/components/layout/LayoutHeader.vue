@@ -18,20 +18,18 @@
       <span>
           <a-avatar :size="32" icon="user" :src="'https://avatars1.githubusercontent.com/u/16852503'"/>
           <a-dropdown>
-            <a class="ant-dropdown-link" href="#">
-              系统管理员
-              <a-icon type="down"/>
+            <a class="ant-dropdown-link" href="javascript:void(0);">系统管理员&nbsp;<a-icon type="down"/>
             </a>
             <a-menu slot="overlay">
               <a-menu-item>
-                <a href="javascript:;">用户设置</a>
+                <a href="javascript:void (0);" @click="userSetting">用户设置</a>
               </a-menu-item>
               <a-menu-item>
-                <a href="javascript:;">修改密码</a>
+                <a href="javascript:void (0);" @click="updatePassword">修改密码</a>
               </a-menu-item>
               <a-menu-divider/>
               <a-menu-item>
-                <a href="javascript:;">安全退出</a>
+                <a href="javascript:void (0);" @click="logout">安全退出</a>
               </a-menu-item>
             </a-menu>
           </a-dropdown>
@@ -39,41 +37,38 @@
     </div>
   </a-layout-header>
 </template>
-
 <script>
+    import {getHeaderAppList} from "@/network/headerApp";
+
     export default {
         name: "LayoutHeader",
         props: ["collapsed"],
         data() {
             return {
-                appList: [
-                    {
-                        name: "统一权限系统",
-                        link: "https://www.taobao.com"
-                    },
-                    {
-                        name: "数据字典系统",
-                        link: "https://www.tmall.com"
-                    },
-                    {
-                        name: "文件系统",
-                        link: "https://www.jd.com"
-                    },
-                    {
-                        name: "消息系统",
-                        link: "https://www.pinduoduo.com"
-                    }
-                ]
+                appList: []
             }
         },
+        created() {
+            getHeaderAppList().then(response => {
+                this.appList = response;
+            })
+        },
         methods: {
+            userSetting() {
+                console.log("用户设置...")
+            },
+            updatePassword() {
+                console.log("修改密码...")
+            },
+            logout() {
+                console.log("安全退出...")
+            },
             collapsedClick() {
                 //组件传值到父类组件中
                 this.$emit("collapsedVal", !this.collapsed);
             },
             handlerAppSelect(value) {
                 window.open(value)
-
             },
             filterOption(input, option) {
                 return option.componentOptions.children[0].text.toLowerCase().indexOf(input.toLowerCase()) >= 0
@@ -91,5 +86,4 @@
   .header-right .header-item {
     margin-right: 30px;
   }
-
 </style>

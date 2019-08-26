@@ -2,7 +2,7 @@
  vue cli 配置，会与 webpack 中的配置合并
  */
 module.exports = {
-    publicPath: "/",
+    // publicPath: "/vue",
     devServer: {
         // 配置项目启动后自动打开浏览器
         open: true,
