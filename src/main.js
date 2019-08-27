@@ -23,6 +23,7 @@ import {
   Icon,
   Checkbox,
   Tooltip,
+  Spin,
   Calendar,
   Table,
   Pagination,
@@ -57,6 +58,7 @@ Vue.use(Avatar);
 Vue.use(Icon);
 Vue.use(Checkbox);
 Vue.use(Tooltip);
+Vue.use(Spin);
 Vue.use(Calendar);
 Vue.use(Table);
 Vue.use(Pagination);

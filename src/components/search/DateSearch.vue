@@ -87,6 +87,7 @@
             for (let range of this.dateRanges) {
                 for (let dateItem of dateItems) {
                     if (range === dateItem.range) {
+                        dateItem.selected = false;//初始化时，将选中状态设置为 false
                         dateItemList.push(dateItem);
                         break;
                     }

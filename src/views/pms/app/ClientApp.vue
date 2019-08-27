@@ -1,42 +1,42 @@
 <template>
-  <div class="search">
-    <a-row>
-      <date-search :showTime="false" :showToday="true" :dateName="'创建时间'"
-                   @dateChange="dateChange"/>
-    </a-row>
-    <a-divider dashed/>
-    <a-row>
-      <a-col :span="8">
-        <label>
-          <span class="field">应用编号: </span>
-          <a-input v-model="params.appCode" placeholder="请输入应用编号搜索"></a-input>
-        </label>
-      </a-col>
-      <a-col :span="8">
-        <label>
-          <span class="field">应用名称: </span>
-          <a-input v-model="params.appName" placeholder="请输入应用编号搜索"></a-input>
-        </label>
-      </a-col>
-      <a-col :span="8">
-        <div>
-          <a-button type="primary" icon="search" @click="searchBtn">搜索</a-button>
-          <!--          <a-popconfirm title="确定要删除缓存吗？" @confirm="deleteCache">-->
-          <!--            <a-icon slot="icon" type="question-circle" style="color:red"/>-->
-          <!--            <a-button type="danger" :loading="deleteCacheLoading" icon="delete">清除缓存</a-button>-->
-          <!--          </a-popconfirm>-->
-          <router-link to="/app/add">
-            <a-button type="primary" icon="plus">添加</a-button>
-          </router-link>
-        </div>
-      </a-col>
-    </a-row>
-    <a-divider dashed/>
-
-    <div>
-      <a-table rowKey="id" :columns="columns" :loading="loading" :dataSource="data"
-               @change="handleChange"
-               :pagination="pagination">
+  <div>
+    <div class="search">
+      <a-row>
+        <date-search :showTime="false" :showToday="true" :dateName="'创建时间'"
+                     @dateChange="dateChange"/>
+      </a-row>
+      <a-divider dashed/>
+      <a-row>
+        <a-col :span="8">
+          <label>
+            <span class="field">应用编号: </span>
+            <a-input v-model="params.appCode" placeholder="请输入应用编号搜索"></a-input>
+          </label>
+        </a-col>
+        <a-col :span="8">
+          <label>
+            <span class="field">应用名称: </span>
+            <a-input v-model="params.appName" placeholder="请输入应用编号搜索"></a-input>
+          </label>
+        </a-col>
+        <a-col :span="8">
+          <div>
+            <a-button type="primary" icon="search" @click="searchBtn">搜索</a-button>
+            <!--          <a-popconfirm title="确定要删除缓存吗？" @confirm="deleteCache">-->
+            <!--            <a-icon slot="icon" type="question-circle" style="color:red"/>-->
+            <!--            <a-button type="danger" :loading="deleteCacheLoading" icon="delete">清除缓存</a-button>-->
+            <!--          </a-popconfirm>-->
+            <router-link to="/app/add">
+              <a-button type="primary" icon="plus">添加</a-button>
+            </router-link>
+          </div>
+        </a-col>
+      </a-row>
+      <a-divider dashed/>
+    </div>
+    <a-table rowKey="id" :columns="columns" :loading="loading" :dataSource="data"
+             @change="handleChange"
+             :pagination="pagination">
           <span slot="action" slot-scope="text,record">
             <router-link :to="{path:'/app/edit',query:{id:record.id}}">
                 <a-tooltip placement="topLeft" title="编辑">
@@ -70,10 +70,8 @@
               </a-popconfirm>
 
             </a>
-
           </span>
-      </a-table>
-    </div>
+    </a-table>
   </div>
 </template>
 
@@ -122,7 +120,7 @@
                     title: '应用编号',
                     align: 'center',
                     dataIndex: 'appCode',
-                    width: '10%'
+                    width: '8%'
                     // sorter: (a, b) => a.age - b.age
                 }, {
                     title: '应用名称',
@@ -138,17 +136,17 @@
                     title: '认证类型',
                     align: 'center',
                     dataIndex: 'authorizedGrantTypes',
-                    width: "35%"
+                    width: "37%"
                 }, {
                     title: '有效期',
                     dataIndex: 'expireDate',
-                    width: "15%"
+                    width: "13%"
                 }, {
                     title: '操作',
                     scopedSlots: {
                         customRender: "action"
                     },
-                    width: "20%"
+                    width: "22%"
                 }
                 ];
             }

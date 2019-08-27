@@ -1,0 +1,55 @@
+{
+  "pageIndex": 1,
+  "pageSize": 10,
+  "totalRow": 6,
+  "data": [
+    {
+      "id": 1,
+      "fileName": "a.png",
+      "bucketName": "default",
+      "ext": "png",
+      "fileSize": "25KB",
+      "uploadDate": "2020-12-31 10:20:26"
+    },
+    {
+      "id": 2,
+      "fileName": "b.png",
+      "bucketName": "default",
+      "ext": "png",
+      "fileSize": "28KB",
+      "uploadDate": "2020-12-31 10:28:26"
+    },
+    {
+      "id": 3,
+      "fileName": "haha.png",
+      "bucketName": "default",
+      "ext": "png",
+      "fileSize": "1MB",
+      "uploadDate": "2020-12-30 00:20:26"
+    },
+    {
+      "id": 4,
+      "fileName": "hello.jpg",
+      "bucketName": "default",
+      "ext": "jpg",
+      "fileSize": "792KB",
+      "uploadDate": "2020-12-31 02:20:26"
+    },
+    {
+      "id": 5,
+      "fileName": "test.png",
+      "bucketName": "default",
+      "ext": "png",
+      "fileSize": "245KB",
+      "uploadDate": "2020-12-31 08:20:26"
+    },
+    {
+      "id": 6,
+      "fileName": "c.png",
+      "bucketName": "default",
+      "ext": "png",
+      "fileSize": "295KB",
+      "uploadDate": "2020-12-31 09:20:26"
+    }
+  ]
+}
