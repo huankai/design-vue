@@ -98,7 +98,7 @@
             return {
                 data: [],
                 deleteCacheLoading: false,
-                loading: false,
+                loading: {spinning: false, tip: "加载中..."},
                 pagination: {
                     total: 0,
                     defaultPageSize: 10,
@@ -184,8 +184,15 @@
             onChange() {
 
             },
-            handleChange(value) {
-                console.log(`selected ${value}`);
+            handleChange(pagination, filters, sorter) {
+                console.log(pagination);
+                console.log(filters);
+                // console.log(`sorter ${sorter}`);
+                console.log(sorter);
+                this.loading.spinning = true;
+                setTimeout(() => {
+                    this.loading.spinning = false;
+                }, 200);
             },
             handleBlur() {
                 console.log('blur');

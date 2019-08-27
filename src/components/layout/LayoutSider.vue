@@ -27,6 +27,7 @@
 </template>
 <script>
     import {getMenuList} from "@/network/menu";
+
     export default {
         name: "LayoutSider",
         props: ["collapsed"],
@@ -41,7 +42,11 @@
                 this.selectedKeys = selectedKeys;
             }
         },
+        mounted() {
+            console.log(this.$router.currentRoute)
+        },
         created() {
+
             getMenuList().then(response => {
                 if (response != null) {
                     this.menuList = response;

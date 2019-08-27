@@ -29,11 +29,18 @@
               </a-menu-item>
               <a-menu-divider/>
               <a-menu-item>
-                <a href="javascript:void (0);" @click="logout">安全退出</a>
+                <a href="javascript:void (0);" @click="visible = true">安全退出</a>
               </a-menu-item>
             </a-menu>
           </a-dropdown>
         </span>
+
+      <a-modal title="安全退出" :visible="visible" @ok="logout" @cancel="visible = false">
+        <p>
+          <a-icon type="question-circle" :style="{color:'red',fontSize:'20px'}"/>
+          确定要退出吗?
+        </p>
+      </a-modal>
     </div>
   </a-layout-header>
 </template>
@@ -45,7 +52,8 @@
         props: ["collapsed"],
         data() {
             return {
-                appList: []
+                appList: [],
+                visible: false
             }
         },
         created() {
@@ -55,13 +63,15 @@
         },
         methods: {
             userSetting() {
-                console.log("用户设置...")
+                this.$message.info("该功能正在开发中...");
             },
             updatePassword() {
-                console.log("修改密码...")
+                this.$message.info("该功能正在开发中...");
             },
             logout() {
-                console.log("安全退出...")
+                this.visible = false;
+                console.log("退出成功...");
+                this.$message.info("退出成功....");
             },
             collapsedClick() {
                 //组件传值到父类组件中

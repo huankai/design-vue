@@ -6,6 +6,21 @@ Vue.use(VueRouter);
 import Dashboard from "@/router/dashboard";
 import ClientApp from "@/router/clientApp"
 import User from "@/router/user"
+import Role from "@/router/role"
+import Permission from "@/router/permission"
+import Menu from "@/router/menu"
+
+/*
+  emi--- address
+ */
+import Address from "@/router/address";
+/*
+  emi--- dict
+ */
+import Dict from "@/router/dict"
+import Schedule from "@/router/schedule";
+import Files from "@/router/files";
+
 
 const router = new VueRouter({
   mode: "history",
@@ -13,7 +28,14 @@ const router = new VueRouter({
   routes: [
     ...Dashboard.dashboard,
     ...ClientApp.clientApp,
-    ...User.user
+    ...User.user,
+    ...Role.role,
+    ...Permission.permission,
+    ...Menu.menu,
+    ...Address.address,
+    ...Dict.dict,
+    ...Files.files,
+    ...Schedule.schedule
   ]
 });
 
