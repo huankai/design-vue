@@ -1,5 +1,5 @@
 <template>
-  <a-spin :spinning="loading">
+  <a-spin :spinning="loading" tip="保存中...">
     <a-form :form="form">
       <a-row :gutter="16">
         <a-col :span="12">

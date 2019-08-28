@@ -26,6 +26,7 @@ import {
   Spin,
   Calendar,
   Table,
+  Tag,
   Pagination,
   Layout,
   Popconfirm,
@@ -61,6 +62,7 @@ Vue.use(Tooltip);
 Vue.use(Spin);
 Vue.use(Calendar);
 Vue.use(Table);
+Vue.use(Tag);
 Vue.use(Pagination);
 Vue.use(Layout);
 Vue.use(Popconfirm);

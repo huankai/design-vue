@@ -1,9 +1,7 @@
 import axios from "axios"
 
-const BASE_URL = "/";
-
 const instance = axios.create({
-  baseURL: BASE_URL,
+  baseURL: "/",
   timeout: 50000
 });
 instance.interceptors.response.use(response => {
