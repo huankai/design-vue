@@ -128,7 +128,7 @@
                     dataIndex: 'appName',
                     width: "15%"
                 }, {
-                    title: '应用状态',
+                    title: '状态',
                     align: 'center',
                     dataIndex: 'appStatusText',
                     width: "10%"

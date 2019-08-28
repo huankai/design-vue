@@ -50,53 +50,53 @@
           <a-tag :color="record.color">{{record.stateText}}</a-tag>
       </span>
       <span slot="action" slot-scope="text,record">
-            <router-link :to="{path:'/schedule/edit',query:{id:record.id}}">
-                <a-tooltip placement="topLeft" title="编辑">
-                  <a-icon type="edit"/>
-                </a-tooltip>
-            </router-link>
-            <router-link :to="{path:'/schedule/detail',query:{id:record.id}}">
-                <a-tooltip placement="topLeft" title="详情">
-                  <a-icon type="eye"/>
-                </a-tooltip>
-            </router-link>
-          <a href="javascript:void (0);">
-              <a-popconfirm title="确定要暂停吗？" placement="bottom" @confirm="handlerDisable(record)">
-                <a-tooltip placement="topLeft" title="暂停">
-                  <a-icon type="pause-circle"/>
-                </a-tooltip>
-              </a-popconfirm>
-            </a>
-          <a href="javascript:void (0);">
-              <a-popconfirm title="确定要恢复吗？" placement="bottom" @confirm="handlerDisable(record)">
-                <a-tooltip placement="topLeft" title="恢复">
-                  <a-icon type="play-circle"/>
-                </a-tooltip>
-              </a-popconfirm>
-            </a>
-            <a href="javascript:void (0);">
-              <a-popconfirm title="确定要执行吗？" placement="bottom" @confirm="handlerDisable(record)">
-                <a-tooltip placement="topLeft" title="执行">
-                  <a-icon type="sync" :spin="true"/>
-                </a-tooltip>
-              </a-popconfirm>
-            </a>
+        <router-link :to="{path:'/schedule/edit',query:{id:record.id}}">
+          <a-tooltip placement="topLeft" title="编辑">
+            <a-icon type="edit"/>
+          </a-tooltip>
+        </router-link>
+        <router-link :to="{path:'/schedule/detail',query:{id:record.id}}">
+          <a-tooltip placement="topLeft" title="详情">
+            <a-icon type="eye"/>
+          </a-tooltip>
+        </router-link>
+        <a href="javascript:void (0);">
+          <a-popconfirm title="确定要暂停吗？" placement="bottom" @confirm="handlerDisable(record)">
+            <a-tooltip placement="topLeft" title="暂停">
+              <a-icon type="pause-circle"/>
+            </a-tooltip>
+          </a-popconfirm>
+        </a>
+        <a href="javascript:void (0);">
+            <a-popconfirm title="确定要恢复吗？" placement="bottom" @confirm="handlerDisable(record)">
+              <a-tooltip placement="topLeft" title="恢复">
+                <a-icon type="play-circle"/>
+              </a-tooltip>
+            </a-popconfirm>
+        </a>
+        <a href="javascript:void (0);">
+          <a-popconfirm title="确定要执行吗？" placement="bottom" @confirm="handlerDisable(record)">
+            <a-tooltip placement="topLeft" title="执行">
+              <a-icon type="sync" :spin="true"/>
+            </a-tooltip>
+          </a-popconfirm>
+        </a>
 
-            <router-link :to="{path:'/schedule/log',query:{id:record.id,jobName:record.jobName}}">
-                <a-tooltip placement="topLeft" title="查看日志">
-                  <a-icon type="message"/>
-                </a-tooltip>
-            </router-link>
-            <a href="javascript:void (0);">
-              <a-popconfirm title="确定要删除吗？" placement="bottom" @confirm="handlerDelete(record)">
-                <a-icon slot="icon" type="question-circle" style="color: red"/>
-                <a-tooltip placement="topLeft" title="删除">
-                  <a-icon type="delete" :style="{color: 'red'}"/>
-                </a-tooltip>
-              </a-popconfirm>
+        <router-link :to="{path:'/schedule/log',query:{id:record.id,jobName:record.jobName}}">
+            <a-tooltip placement="topLeft" title="查看日志">
+              <a-icon type="message"/>
+            </a-tooltip>
+        </router-link>
+        <a href="javascript:void (0);">
+          <a-popconfirm title="确定要删除吗？" placement="bottom" @confirm="handlerDelete(record)">
+            <a-icon slot="icon" type="question-circle" style="color: red"/>
+            <a-tooltip placement="topLeft" title="删除">
+              <a-icon type="delete" :style="{color: 'red'}"/>
+            </a-tooltip>
+          </a-popconfirm>
 
-            </a>
-          </span>
+        </a>
+      </span>
     </a-table>
   </div>
 </template>
@@ -170,7 +170,7 @@
                     width: "15%"
                 }, {
                     title: '状态',
-                    width: "10%",
+                    width: "5%",
                     scopedSlots: {
                         customRender: 'state'
                     }
@@ -178,13 +178,13 @@
                     title: '创建时间',
                     align: 'center',
                     dataIndex: 'createdDate',
-                    width: "15%"
+                    width: "20%"
                 }, {
                     title: '操作',
                     scopedSlots: {
                         customRender: "action"
                     },
-                    width: "20%"
+                    width: "25%"
                 }
                 ];
             }
@@ -210,7 +210,7 @@
             searchBtn() {
                 console.log(this.params);
                 this.$message.info("jobName:" + this.params.jobName + ",  state:"
-                + this.params.state);
+                    + this.params.state);
             },
             dateChange(selected) {
                 this.params.createdDate = selected;

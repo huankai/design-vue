@@ -3,7 +3,8 @@
     <div>
       <a-row>
         <a-col :span="8">
-          <a-form-item :label-col="{span: 8}" :wrapper-col="{span:16}" label="任务名称">{{this.$route.query.jobName}}</a-form-item>
+          <a-form-item :label-col="{span: 8}" :wrapper-col="{span:16}" label="任务名称">{{this.$route.query.jobName}}
+          </a-form-item>
         </a-col>
         <a-col :span="8">
           <a-form-item :label-col="{span: 8}" :wrapper-col="{span:16}" label="cron表达式">*/5 * * * * ?</a-form-item>
@@ -39,7 +40,8 @@
             <a-button type="primary" icon="search" @click="handerSearch">搜索</a-button>
             <router-link to="/schedule">
               <a-button type="default">
-                <a-icon type="undo"/>返回
+                <a-icon type="undo"/>
+                返回
               </a-button>
             </router-link>
           </div>
@@ -52,6 +54,10 @@
              :pagination="pagination">
       <span slot="state" slot-scope="record">
           <a-tag :color="record.color">{{record.stateText}}</a-tag>
+      </span>
+      <span slot="success" slot-scope="record">
+        <a-tag v-if="record" color="blue">成功</a-tag>
+        <a-tag v-else color="red">失败</a-tag>
       </span>
     </a-table>
   </div>
@@ -87,7 +93,7 @@
         },
         created() {
             let query = new PageQuery();
-            console.log("-->:",this.$route.params.id);
+            console.log("-->:", this.$route.params.id);
             queryForLogPage(query).then(response => {
                 this.data = response.data;
                 console.log(response.data);
@@ -100,7 +106,7 @@
                     title: '执行时间',
                     align: 'center',
                     dataIndex: 'startDate',
-                    width: '15%'
+                    width: '20%'
                     // sorter: (a, b) => a.age - b.age
                 }, {
                     title: '耗时(分)',
@@ -112,12 +118,16 @@
                     title: '状态',
                     align: 'center',
                     dataIndex: 'success',
-                    width: "10%"
+                    width: "5%",
+                    scopedSlots: {
+                        customRender: "success"
+                    }
+
                 }, {
                     title: '消息',
                     align: 'center',
                     dataIndex: 'message',
-                    width: "30%"
+                    width: "65%"
                 }
                 ];
             }
