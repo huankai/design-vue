@@ -104,7 +104,7 @@
                 return [{
                     title: '编号',
                     align: 'center',
-                    dataIndex: 'id',
+                    dataIndex: 'code',
                     width: '15%'
                     // sorter: (a, b) => a.age - b.age
                 }, {
@@ -141,9 +141,8 @@
         methods: {
             loadingData(queryPage) {
                 this.loading.spinning = true;
-                queryForPage(queryPage).then(response => {debugger
+                queryForPage(queryPage).then(response => {
                     this.data = response.data.data;
-                    console.log(response);
                     this.pagination.total = response.data.totalRow;
                 }).finally(() => this.loading.spinning = false);
             },

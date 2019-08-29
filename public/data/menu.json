@@ -1,41 +1,41 @@
 [
   {
-    "id": 1,
+    "id": "1",
     "link": "/",
     "icon": "dashboard",
     "name": "首页"
   },
   {
-    "id": 2,
+    "id": "2",
     "icon": "user",
     "name": "权限管理",
     "children": [
       {
-        "id": 21,
+        "id": "21",
         "link": "/app",
         "icon": "robot",
         "name": "应用管理"
       },
       {
-        "id": 22,
+        "id": "22",
         "link": "/users",
         "icon": "user",
         "name": "用户管理"
       },
       {
-        "id": 23,
+        "id": "23",
         "link": "/roles",
         "icon": "safety",
         "name": "角色管理"
       },
       {
-        "id": 24,
+        "id": "24",
         "link": "/permission",
         "icon": "safety",
         "name": "权限管理"
       },
       {
-        "id": 25,
+        "id": "25",
         "link": "/menu",
         "icon": "link",
         "name": "菜单管理"
@@ -43,18 +43,18 @@
     ]
   },
   {
-    "id": 3,
+    "id": "3",
     "icon": "laptop",
     "name": "字典管理",
     "children": [
       {
-        "id": 31,
+        "id": "31",
         "link": "/address",
         "icon": "compass",
         "name": "省市区管理"
       },
       {
-        "id": 32,
+        "id": "32",
         "link": "/dict",
         "icon": "profile",
         "name": "数据字典"
@@ -62,13 +62,13 @@
     ]
   },
   {
-    "id": 4,
+    "id": "4",
     "link": "/file",
     "icon": "file",
     "name": "文件管理"
   },
   {
-    "id": 5,
+    "id": "5",
     "link": "/schedule",
     "icon": "schedule",
     "name": "定时任务"

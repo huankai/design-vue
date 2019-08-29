@@ -7,6 +7,8 @@ import "@/util/validate"
 
 import router from "@/router";
 
+import store from "@/store";
+
 /*
  按需要导入 ant 的组件，这里只导入了 Button
  */
@@ -82,5 +84,6 @@ Vue.use(Dropdown);
 new Vue({
   "el": "#app",
   router,
+  store,
   render: h => h(App),
 });

@@ -6,7 +6,7 @@
           <a-form-item :label-col="formItemLayout.labelCol" has-feedback :wrapper-col="formItemLayout.wrapperCol"
                        label="自定义编号">
             <a-input
-              v-decorator="['code',{rules: [{ required: true, message: '地址编号必填,不能为空格，且不能超过20长度',max: 20,whitespace:true}]}]"
+              v-decorator="['code',{initialValue: addressData.code,rules: [{ required: true, message: '地址编号必填,不能为空格，且不能超过20长度',max: 20,whitespace:true}]}]"
               placeholder="请输入自定义编号"
               autocomplete="off"/>
           </a-form-item>
@@ -15,7 +15,7 @@
           <a-form-item :label-col="formItemLayout.labelCol" has-feedback :wrapper-col="formItemLayout.wrapperCol"
                        label="地址编号">
             <a-input
-              v-decorator="['fullName',{rules: [{ required: true, message: '地址编号必填，不能为空格，且不能超过20长度',max:20,whitespace:true }]}]"
+              v-decorator="['areaCode',{initialValue: addressData.areaCode,rules: [{ required: true, message: '地址编号必填，不能为空格，且不能超过20长度',max:20,whitespace:true }]}]"
               placeholder="请输入地址编号" autocomplete="off"/>
           </a-form-item>
         </a-col>
@@ -25,7 +25,7 @@
           <a-form-item :label-col="formItemLayout.labelCol" has-feedback :wrapper-col="formItemLayout.wrapperCol"
                        label="地址全称">
             <a-input
-              v-decorator="['fullName',{rules: [{ required: true, message: '地址全称必填，不能为空格，且不能超过20长度',max:20,whitespace:true }]}]"
+              v-decorator="['fullName',{initialValue: addressData.fullName,rules: [{ required: true, message: '地址全称必填，不能为空格，且不能超过20长度',max:20,whitespace:true }]}]"
               placeholder="请输入地址名称" autocomplete="off"/>
           </a-form-item>
         </a-col>
@@ -33,7 +33,7 @@
           <a-form-item :label-col="formItemLayout.labelCol" has-feedback :wrapper-col="formItemLayout.wrapperCol"
                        label="地址拼音">
             <a-input
-              v-decorator="['pinyin',{rules: [{ required: true, message: '地址拼音必填，不能为空格，且不能超过20长度',max:20,whitespace:true }]}]"
+              v-decorator="['pinyin',{initialValue: addressData.pinyin,rules: [{ required: true, message: '地址拼音必填，不能为空格，且不能超过20长度',max:20,whitespace:true }]}]"
               placeholder="请输入地址拼音" autocomplete="off"/>
           </a-form-item>
         </a-col>
@@ -44,7 +44,7 @@
           <a-form-item :label-col="formItemLayout.labelCol" has-feedback :wrapper-col="formItemLayout.wrapperCol"
                        label="地址简称">
             <a-input
-              v-decorator="['shortName',{rules: [{message: '地址全称不能为空格，且不能超过20长度',max:20,whitespace:true }]}]"
+              v-decorator="['shortName',{initialValue: addressData.shortName,rules: [{message: '地址全称不能为空格，且不能超过20长度',max:20,whitespace:true }]}]"
               placeholder="请输入地址简称" autocomplete="off"/>
           </a-form-item>
         </a-col>
@@ -52,7 +52,7 @@
           <a-form-item :label-col="formItemLayout.labelCol" has-feedback :wrapper-col="formItemLayout.wrapperCol"
                        label="邮政编码">
             <a-input
-              v-decorator="['postOffice',{rules: [{message: '邮政编码不能为空格，且不能超过10长度',max:10,whitespace:true }]}]"
+              v-decorator="['postOffice',{initialValue: addressData.postOffice,rules: [{message: '邮政编码不能为空格，且不能超过10长度',max:10,whitespace:true }]}]"
               placeholder="请输入邮政编码" autocomplete="off"/>
           </a-form-item>
         </a-col>
@@ -65,6 +65,7 @@
               placeholder="城市类型"
               optionFilterProp="children"
               style="width: 200px"
+              :value="addressData.cityType"
               :defaultValue="1">
               <a-select-option v-for="item in cityTypeOptions" :value="item.value">{{ item.name}}
               </a-select-option>
@@ -96,7 +97,7 @@
           <a-form-item :label-col="formItemLayout.labelCol" has-feedback :wrapper-col="formItemLayout.wrapperCol"
                        label="经度">
             <a-input
-              v-decorator="['longitude',{rules: [{pattern: 6,max:200,whitespace:true,min: 1,validator: this.$validator.isFloat}]}]"
+              v-decorator="['longitude',{initialValue: addressData.longitude,rules: [{pattern: 6,max:200,whitespace:true,min: 1,validator: this.$validator.isFloat}]}]"
               placeholder="请输入地址经度" autocomplete="off"/>
           </a-form-item>
         </a-col>
@@ -108,7 +109,7 @@
               v-decorator="['latitude',{rules: [{type: 'integer',transform: value => +value}]}]" 验证 integer 类型
              -->
             <a-input
-              v-decorator="['latitude',{rules: [{pattern: 6,max:200,min: 1,validator: this.$validator.isFloat}]}]"
+              v-decorator="['latitude',{initialValue: addressData.latitude,rules: [{pattern: 6,max:200,min: 1,validator: this.$validator.isFloat}]}]"
               placeholder="请输入纬度" autocomplete="off"/>
           </a-form-item>
         </a-col>
@@ -116,7 +117,7 @@
       <a-row :gutter="16">
         <a-col :span="24">
           <a-form-item :label-col="{span:3}" :wrapper-col="{span: 9}" label="描述">
-            <a-textarea placeholder="请输入描述信息... " :autosize="{minRows: 2,maxRows:5}"/>
+            <a-textarea placeholder="请输入描述信息... " v-model="addressData.description" :autosize="{minRows: 2,maxRows:5}"/>
           </a-form-item>
         </a-col>
       </a-row>
@@ -228,7 +229,8 @@
         },
         created() {
             findById(this.$route.query.id).then(response => {
-                console.log(response);
+                this.addressData = response.data;
+                console.log(this.addressData)
             })
         },
         methods: {

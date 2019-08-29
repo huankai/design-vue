@@ -26,6 +26,7 @@
   </a-layout-sider>
 </template>
 <script>
+    import {updateMenu} from "@/store/mutations-types";
     import {getMenuList} from "@/network/menu";
 
     export default {
@@ -38,22 +39,22 @@
             }
         },
         methods: {
-            handleSelect({item, key, selectedKeys}) {
+            handleSelect({item, key, selectedKeys}) {debugger;
                 this.selectedKeys = selectedKeys;
+                this.$store.commit(updateMenu, selectedKeys[0]);
+                console.log(this.$store.getters.getCurrentMenu)
             }
         },
-        mounted() {
-            console.log(this.$router.currentRoute)
-        },
         created() {
-
             getMenuList().then(response => {
                 if (response != null) {
                     this.menuList = response;
                     if (response.length > 0) {
-                        this.selectedKeys = [response[0].id];
+                        let currentMenuId = this.$store.getters.getCurrentMenu;
+                        this.selectedKeys = currentMenuId == null ? [response[0].id] : [currentMenuId];
                     }
                 }
+                console.log(this.selectedKeys);
             });
         }
     }
