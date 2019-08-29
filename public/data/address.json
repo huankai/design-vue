@@ -1,103 +1,162 @@
 {
-  "pageIndex": 1,
-  "pageSize": 10,
-  "totalRow": 12,
-  "data": [
-    {
-      "id": 1,
-      "code": "001",
-      "fullName": "广东省",
-      "postOffice": "510000",
-      "longitude": "88.3434324",
-      "latitude": "23.4545453234"
-    },
-    {
-      "id": 1,
-      "code": "jobName1",
-      "fullName": "default",
-      "postOffice": "taskJob1",
-      "longitude": 1,
-      "latitude": "已启动"
-    },
-    {
-      "id": 1,
-      "code": "jobName1",
-      "fullName": "default",
-      "postOffice": "taskJob1",
-      "longitude": 1,
-      "latitude": "已启动"
-    },
-    {
-      "id": 1,
-      "code": "jobName1",
-      "fullName": "default",
-      "postOffice": "taskJob1",
-      "longitude": 1,
-      "latitude": "已启动"
-    },
-    {
-      "id": 1,
-      "code": "jobName1",
-      "fullName": "default",
-      "postOffice": "taskJob1",
-      "longitude": 1,
-      "latitude": "已启动"
-    },
-    {
-      "id": 1,
-      "code": "jobName1",
-      "fullName": "default",
-      "postOffice": "taskJob1",
-      "longitude": 1,
-      "latitude": "已启动"
-    },
-    {
-      "id": 1,
-      "code": "jobName1",
-      "fullName": "default",
-      "postOffice": "taskJob1",
-      "longitude": 1,
-      "latitude": "已启动"
-    },
-    {
-      "id": 1,
-      "code": "jobName1",
-      "fullName": "default",
-      "postOffice": "taskJob1",
-      "longitude": 1,
-      "latitude": "已启动"
-    },
-    {
-      "id": 1,
-      "code": "jobName1",
-      "fullName": "default",
-      "postOffice": "taskJob1",
-      "longitude": 1,
-      "latitude": "已启动"
-    },
-    {
-      "id": 1,
-      "code": "jobName1",
-      "fullName": "default",
-      "postOffice": "taskJob1",
-      "longitude": 1,
-      "latitude": "已启动"
-    },
-    {
-      "id": 1,
-      "code": "jobName1",
-      "fullName": "default",
-      "postOffice": "taskJob1",
-      "longitude": 1,
-      "latitude": "已启动"
-    },
-    {
-      "id": 1,
-      "code": "jobName1",
-      "fullName": "default",
-      "postOffice": "taskJob1",
-      "longitude": 1,
-      "latitude": "已启动"
-    }
-  ]
+  "statusCode": 10200,
+  "message": "success",
+  "data": {
+    "data": [
+      {
+        "id": 309264627768889344,
+        "code": "吉林省",
+        "parentId": 309262461624782848,
+        "cityType": 0,
+        "fullName": "吉林省",
+        "areaCode": "吉林省",
+        "shortName": null,
+        "mergerName": "吉林省",
+        "postOffice": null,
+        "pinyin": null,
+        "longitude": 1.0,
+        "latitude": null,
+        "description": null
+      },
+      {
+        "id": 309264677815324672,
+        "code": "黑龙江省",
+        "parentId": 309262461624782848,
+        "cityType": 0,
+        "fullName": "黑龙江省",
+        "areaCode": "黑龙江省",
+        "shortName": null,
+        "mergerName": "黑龙江省",
+        "postOffice": null,
+        "pinyin": null,
+        "longitude": 1.0,
+        "latitude": null,
+        "description": null
+      },
+      {
+        "id": 309265534480945152,
+        "code": "上海市",
+        "parentId": 309262461624782848,
+        "cityType": 0,
+        "fullName": "上海市",
+        "areaCode": "上海市",
+        "shortName": null,
+        "mergerName": "上海市",
+        "postOffice": null,
+        "pinyin": null,
+        "longitude": 1.0,
+        "latitude": null,
+        "description": null
+      },
+      {
+        "id": 309265545478410240,
+        "code": "江苏省",
+        "parentId": 309262461624782848,
+        "cityType": 0,
+        "fullName": "江苏省",
+        "areaCode": "江苏省",
+        "shortName": null,
+        "mergerName": "江苏省",
+        "postOffice": null,
+        "pinyin": null,
+        "longitude": 1.0,
+        "latitude": null,
+        "description": null
+      },
+      {
+        "id": 309265870306283520,
+        "code": "浙江省",
+        "parentId": 309262461624782848,
+        "cityType": 0,
+        "fullName": "浙江省",
+        "areaCode": "浙江省",
+        "shortName": null,
+        "mergerName": "浙江省",
+        "postOffice": null,
+        "pinyin": null,
+        "longitude": 1.0,
+        "latitude": null,
+        "description": null
+      },
+      {
+        "id": 309265934269419520,
+        "code": "安徽省",
+        "parentId": 309262461624782848,
+        "cityType": 0,
+        "fullName": "安徽省",
+        "areaCode": "安徽省",
+        "shortName": null,
+        "mergerName": "安徽省",
+        "postOffice": null,
+        "pinyin": null,
+        "longitude": 1.0,
+        "latitude": null,
+        "description": null
+      },
+      {
+        "id": 309266152855572480,
+        "code": "福建省",
+        "parentId": 309262461624782848,
+        "cityType": 0,
+        "fullName": "福建省",
+        "areaCode": "福建省",
+        "shortName": null,
+        "mergerName": "福建省",
+        "postOffice": null,
+        "pinyin": null,
+        "longitude": 1.0,
+        "latitude": null,
+        "description": null
+      },
+      {
+        "id": 309266342647828480,
+        "code": "江西省",
+        "parentId": 309262461624782848,
+        "cityType": 0,
+        "fullName": "江西省",
+        "areaCode": "江西省",
+        "shortName": null,
+        "mergerName": "江西省",
+        "postOffice": null,
+        "pinyin": null,
+        "longitude": 1.0,
+        "latitude": null,
+        "description": null
+      },
+      {
+        "id": 309266429365063680,
+        "code": "山东省",
+        "parentId": 309262461624782848,
+        "cityType": 0,
+        "fullName": "山东省",
+        "areaCode": "山东省",
+        "shortName": null,
+        "mergerName": "山东省",
+        "postOffice": null,
+        "pinyin": null,
+        "longitude": 1.0,
+        "latitude": null,
+        "description": null
+      },
+      {
+        "id": 309267036326989824,
+        "code": "河南省",
+        "parentId": 309262461624782848,
+        "cityType": 0,
+        "fullName": "河南省",
+        "areaCode": "河南省",
+        "shortName": null,
+        "mergerName": "河南省",
+        "postOffice": null,
+        "pinyin": null,
+        "longitude": 1.0,
+        "latitude": null,
+        "description": null
+      }
+    ],
+    "totalRow": 35,
+    "pageIndex": 1,
+    "pageSize": 10,
+    "totalPage": 4
+  }
 }

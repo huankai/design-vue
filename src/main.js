@@ -3,6 +3,8 @@ import App from './App.vue'
 
 import "@/util/message"
 
+import "@/util/validate"
+
 import router from "@/router";
 
 /*
@@ -32,6 +34,7 @@ import {
   Popconfirm,
   LocaleProvider,
   Menu,
+  Tree,
   Badge,
   Breadcrumb,
   Col,
@@ -39,7 +42,6 @@ import {
   Divider,
   notification,
   Modal,
-
   Dropdown
 } from 'ant-design-vue';
 
@@ -68,6 +70,7 @@ Vue.use(Layout);
 Vue.use(Popconfirm);
 Vue.use(LocaleProvider);
 Vue.use(Menu);
+Vue.use(Tree);
 Vue.use(Badge);
 Vue.use(Breadcrumb);
 Vue.use(Col);

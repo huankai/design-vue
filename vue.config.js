@@ -22,6 +22,13 @@ module.exports = {
           "^/oauth2": "/oauth2"
         }
       },
+      "/emi": {
+        target: "http://127.0.0.1:7120",
+        changeOrigin: true,
+        pathRewrite: {
+          "^/emi": "/emi"
+        }
+      },
       "/api": {
         target: "http://localhost:7110",
         changeOrigin: true,

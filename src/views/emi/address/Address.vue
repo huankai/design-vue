@@ -17,7 +17,7 @@
         <a-col :span="8">
           <div>
             <a-button type="primary" icon="search" @click="searchBtn">搜索</a-button>
-            <a-button type="primary" icon="select" @click="searchBtn">导出</a-button>
+            <a-button type="primary" icon="file-excel" @click="searchBtn">导出</a-button>
             <router-link to="/address/add">
               <a-button type="primary" icon="plus">添加</a-button>
             </router-link>
@@ -42,7 +42,7 @@
         </router-link>
         <router-link :to="{path:'/address/child',query:{id:record.id,jobName:record.jobName}}">
             <a-tooltip placement="topLeft" title="查看子级">
-              <a-icon type="pic-center" />
+              <a-icon type="pic-center"/>
             </a-tooltip>
         </router-link>
         <a href="javascript:void (0);">
@@ -66,11 +66,9 @@
     export default {
         name: "Address",
         created() {
-            let query = new PageQuery();
-            queryForPage(query).then(response => {
-                this.data = response.data;
-                this.pagination.total = response.totalRow;
-            });
+            const query = new PageQuery();
+            query.param = this.params;
+            this.loadingData(query);
         },
         data() {
             return {
@@ -94,6 +92,7 @@
                 },
                 params: {
                     code: null,
+                    cityType: 1,
                     fullName: null,
                     createdDate: null
 
@@ -105,7 +104,7 @@
                 return [{
                     title: '编号',
                     align: 'center',
-                    dataIndex: 'code',
+                    dataIndex: 'id',
                     width: '15%'
                     // sorter: (a, b) => a.age - b.age
                 }, {
@@ -129,7 +128,7 @@
                     align: 'center',
                     dataIndex: 'latitude',
                     width: "15%",
-                },{
+                }, {
                     title: '操作',
                     scopedSlots: {
                         customRender: "action"
@@ -140,6 +139,14 @@
             }
         },
         methods: {
+            loadingData(queryPage) {
+                this.loading.spinning = true;
+                queryForPage(queryPage).then(response => {debugger
+                    this.data = response.data.data;
+                    console.log(response);
+                    this.pagination.total = response.data.totalRow;
+                }).finally(() => this.loading.spinning = false);
+            },
             handlerDelete(record) {
                 let index = this.data.indexOf(record);
                 if (index !== -1) {
@@ -158,9 +165,7 @@
                 this.params.state = value;
             },
             searchBtn() {
-                console.log(this.params);
-                this.$message.info("code:" + this.params.code + ",  fullName:"
-                    + this.params.fullName);
+                this.loadingData(new PageQuery(this.params));
             },
             dateChange(selected) {
                 this.params.createdDate = selected;
@@ -173,14 +178,7 @@
                 }, 2000);
             },
             handleChange(pagination, filters, sorter) {
-                console.log(pagination);
-                console.log(filters);
-                // console.log(`sorter ${sorter}`);
-                console.log(sorter);
-                this.loading.spinning = true;
-                setTimeout(() => {
-                    this.loading.spinning = false;
-                }, 200);
+                this.loadingData(new PageQuery(this.params, pagination.current, pagination.pageSize));
             },
             filterOption(input, option) {
                 return option.componentOptions.children[0].text.toLowerCase().indexOf(input.toLowerCase()) >= 0

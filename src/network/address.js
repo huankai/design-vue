@@ -1,4 +1,4 @@
-import {defaultRequest} from "@/network/request";
+import {emiRequest} from "@/network/request";
 
 /**
  *
@@ -7,10 +7,18 @@ import {defaultRequest} from "@/network/request";
  * @returns {AxiosPromise}
  */
 export function queryForPage(queryPage) {
-  return defaultRequest({
-    method: "GET",
+  return emiRequest({
+    method: "POST",
     data: queryPage,
-    url: "/data/address.json"
+    // url: "/data/address.json"
+    url: "city/list"
   });
 }
 
+
+export function findById(id) {
+  return emiRequest({
+    method: "GET",
+    url: "city/" + id
+  });
+}

@@ -6,18 +6,18 @@ class Order {
   /**
    * 查询字段
    */
-  #_field;
+  field;
 
   /**
    * 排序
    * @type {boolean}
    * @private
    */
-  #_desc = false;
+  desc = false;
 
-  constructor(field, desc) {
-    this._field = field;
-    this._desc = desc;
+  constructor(field, desc = false) {
+    this.field = field;
+    this.desc = desc;
   }
 
   static desc(field) {
@@ -26,14 +26,6 @@ class Order {
 
   static asc(field) {
     return new Order(field, true);
-  }
-
-  get field() {
-    return this.#_field;
-  }
-
-  get desc() {
-    return this.#_desc;
   }
 }
 
@@ -47,68 +39,41 @@ class PageQuery {
    * @type {number}
    * @private
    */
-  #_pageIndex;
+  pageIndex;
 
   /**
    * 每页显示记录数
    * @type {number}
    * @private
    */
-  #_pageSize;
+  pageSize;
 
   /**
    * 查询参数
    * @type {{}}
    * @private
    */
-  #_param = {};
+  param = {};
 
   /**
    * 查询排序
    * @type {Array}
    * @private
    */
-  #_orders = [];
+  orders = [];
 
-  constructor(pageIndex = 0, pageSize = 10) {
-    this._pageIndex = pageIndex;
-    this._pageSize = pageSize;
+  constructor(param = {}, pageIndex = 0, pageSize = 10) {
+    this.param = param;
+    this.pageIndex = pageIndex;
+    this.pageSize = pageSize;
   }
 
   addOrder(order) {
-    this.#_orders.push(order);
-  }
-
-  get param() {
-    return this.#_param;
+    this.orders.push(order);
   }
 
   set param(value) {
-    this.#_param = value;
-  }
-
-  get orders() {
-    return this.#_orders;
-  }
-
-  set orders(value) {
-    this.#_orders = value;
-  }
-
-  get pageIndex() {
-    return this._pageIndex;
-  }
-
-  set pageIndex(value) {
-    this._pageIndex = value;
-  }
-
-  get pageSize() {
-    return this._pageSize;
-  }
-
-  set pageSize(value) {
-    this._pageSize = value;
+    this.param = value;
   }
 }
 
