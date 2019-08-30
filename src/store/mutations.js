@@ -2,8 +2,8 @@ import {updateMenu, menuSessionStoreKey} from "@/store/mutations-types";
 
 export default {
 
-  [updateMenu](state, menuId) {
-    state.currentMenuId = menuId;
-    sessionStorage.setItem(menuSessionStoreKey, menuId);
+  [updateMenu](state, currentMenu) {
+    state.currentMenu = currentMenu;
+    sessionStorage.setItem(menuSessionStoreKey, JSON.stringify(currentMenu));
   }
 }

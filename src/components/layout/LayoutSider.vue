@@ -36,13 +36,20 @@
             return {
                 menuList: [],
                 selectedKeys: []
+                // openKeys: []
             }
         },
         methods: {
-            handleSelect({item, key, selectedKeys}) {debugger;
+            handleSelect({item, key, selectedKeys}) {
                 this.selectedKeys = selectedKeys;
-                this.$store.commit(updateMenu, selectedKeys[0]);
-                console.log(this.$store.getters.getCurrentMenu)
+                const currentMenu = {
+                    selectedKeys: selectedKeys
+                };
+                let parentOpenKey = item.parentMenu.$options.propsData.eventKey;//获取上级的菜单id
+                if (parentOpenKey) {//TODO 展开功能未实现
+                    currentMenu.openKeys = [parentOpenKey];
+                }
+                this.$store.commit(updateMenu, currentMenu);
             }
         },
         created() {
@@ -50,11 +57,11 @@
                 if (response != null) {
                     this.menuList = response;
                     if (response.length > 0) {
-                        let currentMenuId = this.$store.getters.getCurrentMenu;
-                        this.selectedKeys = currentMenuId == null ? [response[0].id] : [currentMenuId];
+                        let currentMenu = this.$store.getters.getCurrentMenu;
+                        this.selectedKeys = currentMenu.selectedKeys;
+                        // this.openKeys = currentMenu.openKeys;
                     }
                 }
-                console.log(this.selectedKeys);
             });
         }
     }

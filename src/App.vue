@@ -22,6 +22,7 @@
         data() {
             return {
                 locale: zhCN,
+                closeVisible: false,
                 collapsed: false
             }
         },

@@ -12,7 +12,7 @@ const state = {
   /*
     记录当前选中的菜单
    */
-  currentMenuId: null,
+  currentMenu: null,
 };
 
 export default new Vuex.Store({

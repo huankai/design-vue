@@ -15,6 +15,13 @@
           <a-select-option v-for="item in appList" :value="item.link">{{ item.name}}</a-select-option>
         </a-select>
       </span>
+      <span class="header-item">
+        <a-tooltip placement="topLeft" title="新消息">
+          <a-badge :count="5">
+            <a-icon type="sound" theme="twoTone"/>
+          </a-badge>
+        </a-tooltip>
+      </span>
       <span>
           <a-avatar :size="32" icon="user" :src="'https://avatars1.githubusercontent.com/u/16852503'"/>
           <a-dropdown>
@@ -95,5 +102,13 @@
 
   .header-right .header-item {
     margin-right: 30px;
+  }
+
+  i.anticon {
+    width: 20px;
+    height: 20px;
+    line-height: 20px;
+    font-size: 20px;
+    cursor: pointer;
   }
 </style>
