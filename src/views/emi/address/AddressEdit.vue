@@ -6,7 +6,7 @@
           <a-form-item :label-col="formItemLayout.labelCol" has-feedback :wrapper-col="formItemLayout.wrapperCol"
                        label="自定义编号">
             <a-input
-              v-decorator="['code',{initialValue: addressData.code,rules: [{ required: true, message: '地址编号必填,不能为空格，且不能超过20长度',max: 20,whitespace:true}]}]"
+              v-decorator="['code',{initialValue:addressData.code, rules: [{required: true, message: '地址编号必填,不能为空格，且不能超过20长度',max: 20,whitespace:true}]}]"
               placeholder="请输入自定义编号"
               autocomplete="off"/>
           </a-form-item>
@@ -15,7 +15,7 @@
           <a-form-item :label-col="formItemLayout.labelCol" has-feedback :wrapper-col="formItemLayout.wrapperCol"
                        label="地址编号">
             <a-input
-              v-decorator="['areaCode',{initialValue: addressData.areaCode,rules: [{ required: true, message: '地址编号必填，不能为空格，且不能超过20长度',max:20,whitespace:true }]}]"
+              v-decorator="['areaCode',{initialValue:addressData.areaCode, rules: [{required: true, message: '地址编号必填，不能为空格，且不能超过20长度',max:20,whitespace:true }]}]"
               placeholder="请输入地址编号" autocomplete="off"/>
           </a-form-item>
         </a-col>
@@ -25,7 +25,7 @@
           <a-form-item :label-col="formItemLayout.labelCol" has-feedback :wrapper-col="formItemLayout.wrapperCol"
                        label="地址全称">
             <a-input
-              v-decorator="['fullName',{initialValue: addressData.fullName,rules: [{ required: true, message: '地址全称必填，不能为空格，且不能超过20长度',max:20,whitespace:true }]}]"
+              v-decorator="['fullName',{initialValue:addressData.fullName,rules: [{ required: true, message: '地址全称必填，不能为空格，且不能超过20长度',max:20,whitespace:true }]}]"
               placeholder="请输入地址名称" autocomplete="off"/>
           </a-form-item>
         </a-col>
@@ -33,7 +33,7 @@
           <a-form-item :label-col="formItemLayout.labelCol" has-feedback :wrapper-col="formItemLayout.wrapperCol"
                        label="地址拼音">
             <a-input
-              v-decorator="['pinyin',{initialValue: addressData.pinyin,rules: [{ required: true, message: '地址拼音必填，不能为空格，且不能超过20长度',max:20,whitespace:true }]}]"
+              v-decorator="['pinyin',{initialValue:addressData.pinyin,rules: [{ required: true, message: '地址拼音必填，不能为空格，且不能超过20长度',max:20,whitespace:true }]}]"
               placeholder="请输入地址拼音" autocomplete="off"/>
           </a-form-item>
         </a-col>
@@ -44,7 +44,7 @@
           <a-form-item :label-col="formItemLayout.labelCol" has-feedback :wrapper-col="formItemLayout.wrapperCol"
                        label="地址简称">
             <a-input
-              v-decorator="['shortName',{initialValue: addressData.shortName,rules: [{message: '地址全称不能为空格，且不能超过20长度',max:20,whitespace:true }]}]"
+              v-decorator="['shortName',{initialValue:addressData.shortName,rules: [{message: '地址全称不能为空格，且不能超过20长度',max:20,whitespace:true }]}]"
               placeholder="请输入地址简称" autocomplete="off"/>
           </a-form-item>
         </a-col>
@@ -52,7 +52,7 @@
           <a-form-item :label-col="formItemLayout.labelCol" has-feedback :wrapper-col="formItemLayout.wrapperCol"
                        label="邮政编码">
             <a-input
-              v-decorator="['postOffice',{initialValue: addressData.postOffice,rules: [{message: '邮政编码不能为空格，且不能超过10长度',max:10,whitespace:true }]}]"
+              v-decorator="['postOffice',{initialValue:addressData.postOffice,rules: [{message: '邮政编码不能为空格，且不能超过10长度',max:10,whitespace:true }]}]"
               placeholder="请输入邮政编码" autocomplete="off"/>
           </a-form-item>
         </a-col>
@@ -63,32 +63,23 @@
             <a-select
               showSearch
               placeholder="城市类型"
+              v-decorator="['cityType',{initialValue:addressData.cityType}]"
               optionFilterProp="children"
-              style="width: 200px"
-              :value="addressData.cityType"
-              :defaultValue="1">
+              @change="handleCityTypeChange">
               <a-select-option v-for="item in cityTypeOptions" :value="item.value">{{ item.name}}
               </a-select-option>
             </a-select>
           </a-form-item>
         </a-col>
         <a-col :span="12">
-          <a-form-item :label-col="formItemLayout.labelCol" :wrapper-col="formItemLayout.wrapperCol" label="所属上级">
+          <a-form-item v-if="showSelectParent" :label-col="formItemLayout.labelCol"
+                       :wrapper-col="formItemLayout.wrapperCol" label="所属上级">
             <a-input disabled placeholder="请点击选择" autocomplete="off"
-                     v-decorator="['parentId',{rules: [{required:true,message: '上级不能为空'}]}]">
+                     v-decorator="['parentName',{initialValue:addressData.parentName,rules: [{required:showSelectParent,message: '上级不能为空'}]}]">
               <a-button slot="addonAfter" type="primary" @click="showParentAddressModal">
                 <a-icon type="select"/>&nbsp;请选择
               </a-button>
             </a-input>
-            <!--            <a-select-->
-            <!--              showSearch-->
-            <!--              placeholder="所属上级"-->
-            <!--              optionFilterProp="children"-->
-            <!--              style="width: 200px"-->
-            <!--              :defaultValue="1">-->
-            <!--              <a-select-option v-for="item in cityTypeOptions" :value="item.value">{{ item.name}}-->
-            <!--              </a-select-option>-->
-            <!--            </a-select>-->
           </a-form-item>
         </a-col>
       </a-row>
@@ -97,19 +88,20 @@
           <a-form-item :label-col="formItemLayout.labelCol" has-feedback :wrapper-col="formItemLayout.wrapperCol"
                        label="经度">
             <a-input
-              v-decorator="['longitude',{initialValue: addressData.longitude,rules: [{pattern: 6,max:200,whitespace:true,min: 1,validator: this.$validator.isFloat}]}]"
+              v-decorator="['longitude',{initialValue:addressData.longitude,rules: [{pattern: 6,max:200,whitespace:true,min: 1,validator: this.$validator.isFloat}]}]"
               placeholder="请输入地址经度" autocomplete="off"/>
           </a-form-item>
         </a-col>
         <a-col :span="12">
-          <a-form-item :label-col="formItemLayout.labelCol" has-feedback :wrapper-col="formItemLayout.wrapperCol"
+          <a-form-item :data-index="addressData.latitude" :label-col="formItemLayout.labelCol" has-feedback
+                       :wrapper-col="formItemLayout.wrapperCol"
                        label="纬度">
             <!--
               antd 使用 async-validator 在验证时，不会将 input 中的数据转换为指定的数字类型，可以使用  transform 转换
               v-decorator="['latitude',{rules: [{type: 'integer',transform: value => +value}]}]" 验证 integer 类型
              -->
             <a-input
-              v-decorator="['latitude',{initialValue: addressData.latitude,rules: [{pattern: 6,max:200,min: 1,validator: this.$validator.isFloat}]}]"
+              v-decorator="['latitude',{initialValue:addressData.latitude,rules: [{pattern: 6,max:200,min: 1,validator: this.$validator.isFloat}]}]"
               placeholder="请输入纬度" autocomplete="off"/>
           </a-form-item>
         </a-col>
@@ -117,7 +109,9 @@
       <a-row :gutter="16">
         <a-col :span="24">
           <a-form-item :label-col="{span:3}" :wrapper-col="{span: 9}" label="描述">
-            <a-textarea placeholder="请输入描述信息... " v-model="addressData.description" :autosize="{minRows: 2,maxRows:5}"/>
+            <a-textarea placeholder="请输入描述信息... "
+                        v-decorator="['description',{initialValue:addressData.description,rules: [{max:200,message:'最长不能超过200字'}]}]"
+                        :autosize="{minRows: 2,maxRows:5}"/>
           </a-form-item>
         </a-col>
       </a-row>
@@ -138,17 +132,24 @@
         </a-col>
       </a-row>
     </a-form>
-    <a-modal title="请选择上级" v-model="visibleParentModal" @ok="handleOk">
+    <a-modal title="请选择上级" width="70%" :visible="visibleParentModal" @ok="visibleParentModal = false"
+             @cancel="visibleParentModal = false">
       <div>
-        <a-input-search style="margin-bottom: 8px" placeholder="请输入名称搜索" @change="handlerSearchOnChange"/>
-        <a-tree :treeData="addressData"></a-tree>
+        <a-input-search style="margin-bottom: 8px" placeholder="请输入名称搜索" @search="handlerSearch"/>
+        <a-table rowKey="id" :columns="parentColumns" :rowSelection="rowSelection" :loading="parentLoading"
+                 :dataSource="parentData"
+                 @change="handleTableChange"
+                 :pagination="pagination">
+        </a-table>
       </div>
     </a-modal>
   </a-spin>
 </template>
 
 <script>
-    import {findById} from "@/network/address";
+    import {findById, getCityType} from "@/network/address";
+    import {queryForPage, saveOrUpdate} from "@/network/address";
+    import {PageQuery} from "@/util/pageQuery";
 
     const formItemLayout = {
         labelCol: {span: 6},
@@ -158,120 +159,147 @@
         labelCol: {span: 4},
         wrapperCol: {span: 8, offset: 4}
     };
-    const addressData = [{
-        title: '0-0',
-        key: '0-0',
-        children: [{
-            title: '0-0-0',
-            key: '0-0-0',
-            children: [
-                {title: '0-0-0-0', key: '0-0-0-0'},
-                {title: '0-0-0-1', key: '0-0-0-1'},
-                {title: '0-0-0-2', key: '0-0-0-2'},
-            ],
-        }, {
-            title: '0-0-1',
-            key: '0-0-1',
-            children: [
-                {title: '0-0-1-0', key: '0-0-1-0'},
-                {title: '0-0-1-1', key: '0-0-1-1'},
-                {title: '0-0-1-2', key: '0-0-1-2'},
-            ],
-        }, {
-            title: '0-0-2',
-            key: '0-0-2',
-        }],
-    }, {
-        title: '0-1',
-        key: '0-1',
-        children: [
-            {title: '0-1-0-0', key: '0-1-0-0'},
-            {title: '0-1-0-1', key: '0-1-0-1'},
-            {title: '0-1-0-2', key: '0-1-0-2'},
-        ],
-    }, {
-        title: '0-2',
-        key: '0-2',
-    }];
-    const cityTypeOptions = [
-        {
-            name: "国家",
-            value: 0,
-        }, {
-            name: "省",
-            value: 1,
-        }, {
-            name: "市",
-            value: 2,
-        }, {
-            name: "区/县",
-            value: 3,
-        }, {
-            name: "镇/乡",
-            value: 4,
-        }
-    ];
+
     export default {
         name: "AddressEdit",
         data() {
             return {
                 visibleParentModal: false,
                 loading: false,
-                address: {latitude: 0},
-                addressData,
+                addressData: {
+                    cityType: 1
+                },
                 formItemLayout,
                 formTailLayout,
-                cityTypeOptions
+                cityTypeOptions: [],
+                rowSelection: {
+                    columnWidth: '5%',
+                    type: 'radio',
+                    selectedRowKeys: [],
+                    onChange: (selectedRowKeys, selectedRows) => {
+                        this.rowSelection.selectedRowKeys = selectedRowKeys;
+                        this.addressData.parentId = null;
+                        this.form.setFieldsValue({
+                            parentName: null
+                        });
+                    },
+                    onSelect: (record, selected, selectedRows) => {
+                        this.form.setFieldsValue({
+                            parentName: record.fullName
+                        });
+                        this.addressData.parentId = record.id;
+                    }
+                },
+                parentColumns: [{
+                    title: '自定义编号',
+                    align: 'center',
+                    dataIndex: 'code',
+                    width: '15%'
+                }, {
+                    title: '编号(国标)',
+                    align: 'center',
+                    dataIndex: 'areaCode',
+                    width: '15%'
+                }, {
+                    title: '名称',
+                    align: 'center',
+                    dataIndex: 'fullName',
+                    width: '15%'
+                }, {
+                    title: '全称',
+                    align: 'center',
+                    dataIndex: 'mergerName',
+                    width: '25%'
+                }
+                ],
+                parentLoading: false,
+                parentData: [],
+                parentSearchParam: {},
+                pagination: {
+                    total: 0,
+                    current: 0,
+                    defaultPageSize: 10,
+                    showTotal: (total, range) => {
+                        return "共 " + total + " 条记录";
+                    },
+                    pageSizeOptions: ['10', '20', '50', '100'],
+                    showQuickJumper: true,
+                    showSizeChanger: true
+                }
             };
         },
         beforeCreate() {
-            this.form = this.$form.createForm(this)
+            this.form = this.$form.createForm(this);
         },
         created() {
-            findById(this.$route.query.id).then(response => {
-                this.addressData = response.data;
-                console.log(this.addressData)
-            })
+            getCityType().then(response => {
+                this.cityTypeOptions = response.data;
+            });
+            let id = this.$route.query.id;
+            if (id) {
+                findById(id).then(response => {
+                    this.addressData = response.data;
+                })
+            } else {
+                let parentId = this.$route.query.parentId;
+                if (parentId) {
+                    findById(parentId).then(response => {
+                        this.addressData.cityType = response.data.cityType + 1;
+                        this.addressData.parentId = parentId;
+                        this.addressData.parentName = response.data.fullName;
+                    })
+                }
+            }
+        },
+        computed: {
+            showSelectParent() {
+                return this.addressData.cityType !== 0;
+            }
         },
         methods: {
-            floatValidate(rule, value, callback) {
-                if (!isNaN(parseFloat(value))) {
-                    callback();
-                }
-                callback("不是合法的小数")
-
+            handleTableChange(pagination) {
+                this.pagination.current = pagination.current;
+                this.pagination.defaultPageSize = pagination.pageSize;
+                this.loadParentData();
             },
-            handleOk() {
-                this.$message.info("正在开发中...")
+            handleCityTypeChange(value) {
+                this.addressData.cityType = value;
+                this.addressData.parentId = null;
+                this.addressData.parentName = null;
             },
             showParentAddressModal() {
                 this.visibleParentModal = true;
+                this.parentSearchParam.fullName = null;
+                this.loadParentData();
             },
-            handlerSearchOnChange() {
-                this.$message.info("正在开发中...")
+            loadParentData(fullName) {
+                this.parentLoading = true;
+                this.parentSearchParam.cityType = this.addressData.cityType - 1;
+                this.parentSearchParam.fullName = fullName;
+                queryForPage(new PageQuery(this.parentSearchParam, this.pagination.current, this.pagination.defaultPageSize))
+                    .then(response => {
+                        this.parentData = response.data.data;
+                        this.pagination.total = response.data.totalRow;
+                        this.rowSelection.selectedRowKeys = [this.addressData.parentId];
+                    }).finally(() => this.parentLoading = false);
             },
-            showSecret() {
-                this.$message.info("正在开发中...")
-            },
-            normFile(e) {
-                console.log('Upload event:', e);
-                if (Array.isArray(e)) {
-                    return e;
-                }
-                return e && e.fileList;
-            },
-            handlerAuthorizedGrantTypesChange(checkedValues) {
-                this.checkedAuthorizedGrantTypes = checkedValues;
-                this.enableRefreshToken = this.checkedAuthorizedGrantTypes.includes("refresh_token");
+            handlerSearch(value) {
+                this.loadParentData(value);
             },
             handleSubmit() {
                 this.form.validateFields((errors, values) => {
                     if (!errors) {
                         this.loading = true;
-                        setTimeout(() => {
-                            this.loading = false;
-                            this.$router.replace("/app");
-                        }, 1500);
+                        saveOrUpdate(Object.assign(this.addressData, this.form.getFieldsValue())).then(response => {
+                            if (response.statusCode === 10200) {
+                                this.$message.success(response.message || "保存成功");
+                                this.$router.replace("/address");
+                            } else {
+                                this.$message.error(response.message || "保存失败");
+                            }
+                        }).catch(err => {
+                            this.$message.error(err.response.data.message || "操作失败");
+                        }).finally(() => this.loading = false);
                     }
                 });
             }

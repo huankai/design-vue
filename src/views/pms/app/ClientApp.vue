@@ -10,13 +10,13 @@
         <a-col :span="8">
           <label>
             <span class="field">应用编号: </span>
-            <a-input v-model="params.appCode" placeholder="请输入应用编号搜索"></a-input>
+            <a-input v-model="params.appCode" placeholder="请输入应用编号"></a-input>
           </label>
         </a-col>
         <a-col :span="8">
           <label>
             <span class="field">应用名称: </span>
-            <a-input v-model="params.appName" placeholder="请输入应用编号搜索"></a-input>
+            <a-input v-model="params.appName" placeholder="请输入应用编号"></a-input>
           </label>
         </a-col>
         <a-col :span="8">

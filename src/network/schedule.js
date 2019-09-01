@@ -1,20 +1,57 @@
-import {defaultRequest} from "@/network/request";
+import {scheduleRequest} from "@/network/request";
 
 /**
  * 获取定时任务
  * @returns {*}
  */
 export function queryForPage(queryPage) {
-  return defaultRequest({
-    method: "GET",
-    url: "/data/schedule.json"
+  return scheduleRequest({
+    method: "POST",
+    data: queryPage,
+    url: "/job/list"
   });
 }
 
+export function pause(id) {
+  return scheduleRequest({
+    method: "POST",
+    params: {
+      id
+    },
+    url: "/job/pause"
+  })
+}
+export function resume(id) {
+  return scheduleRequest({
+    method: "POST",
+    params: {
+      id
+    },
+    url: "/job/resume"
+  })
+}
+export function trigger(id) {
+  return scheduleRequest({
+    method: "POST",
+    params: {
+      id
+    },
+    url: "/job/trigger"
+  })
+}
+
 export function findById(id) {
-  return defaultRequest({
+  return scheduleRequest({
     method: "GET",
-    url: "/data/schedule.json"
+    url: "/job/" + id
+  });
+}
+
+export function deleteById(id) {
+  return scheduleRequest({
+    method: "POST",
+    params: {id},
+    url: "/job/remove"
   });
 }
 
@@ -23,8 +60,25 @@ export function findById(id) {
  * @returns {*}
  */
 export function queryForLogPage(queryPage) {
-  return defaultRequest({
+  return scheduleRequest({
+    method: "POST",
+    data: queryPage,
+    url: "/joblog/page"
+  });
+}
+
+
+export function saveOrUpdate(schedule) {
+  return scheduleRequest({
+    method: "POST",
+    data: schedule,
+    url: "/job"
+  });
+}
+
+export function getTaskBeans() {
+  return scheduleRequest({
     method: "GET",
-    url: "/data/scheduleLog.json"
+    url: "/job/getTasks"
   });
 }

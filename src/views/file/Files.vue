@@ -10,7 +10,7 @@
         <a-col :span="8">
           <label>
             <span class="field">文件名: </span>
-            <a-input v-model="params.fileName" placeholder="请输入文件名搜索"></a-input>
+            <a-input v-model="params.fileName" placeholder="请输入文件名"></a-input>
           </label>
         </a-col>
         <a-col :span="8">

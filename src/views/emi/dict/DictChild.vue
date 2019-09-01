@@ -5,20 +5,23 @@
         <a-col :span="8">
           <label>
             <span class="field">编号: </span>
-            <a-input v-model="params.baseCode" placeholder="请输入编号"></a-input>
+            <a-input v-model="params.childCode" placeholder="请输入编号搜索"></a-input>
           </label>
         </a-col>
         <a-col :span="8">
           <label>
             <span class="field">名称: </span>
-            <a-input v-model="params.codeName" placeholder="请输入名称"></a-input>
+            <a-input v-model="params.codeName" placeholder="请输入名称搜索"></a-input>
           </label>
         </a-col>
         <a-col :span="8">
           <div>
             <a-button type="primary" icon="search" @click="searchBtn">搜索</a-button>
-            <router-link to="/dict/add">
+            <router-link :to="{path:'/childDict/add',query:{baseCodeId:this.$route.query.id}}">
               <a-button type="primary" icon="plus">添加</a-button>
+            </router-link>
+            <router-link to="/dict">
+              <a-button type="default" icon="undo">返回</a-button>
             </router-link>
           </div>
         </a-col>
@@ -28,20 +31,19 @@
     <a-table rowKey="id" :columns="columns" :loading="loading" :dataSource="data"
              @change="handleChange"
              :pagination="pagination">
+      <span slot="state" slot-scope="record">
+          <a-tag v-if="record.state" color="blue">是</a-tag>
+          <a-tag v-else color="red">否</a-tag>
+      </span>
       <span slot="isGbSlot" slot-scope="record">
           <a-tag v-if="record.isGb" color="blue">是</a-tag>
           <a-tag v-else color="red">否</a-tag>
       </span>
       <span slot="action" slot-scope="text,record">
-        <router-link :to="{path:'/dict/edit',query:{id:record.id}}">
+        <router-link :to="{path:'/childDict/edit',query:{id:record.id}}">
           <a-tooltip placement="topLeft" title="编辑">
             <a-icon type="edit"/>
           </a-tooltip>
-        </router-link>
-        <router-link :to="{path:'/dict/child',query:{id:record.id}}">
-            <a-tooltip placement="topLeft" title="查看子级">
-              <a-icon type="pic-center"/>
-            </a-tooltip>
         </router-link>
         <a href="javascript:void (0);">
           <a-popconfirm title="确定要删除吗？" placement="bottom" @confirm="handlerDelete(record)">
@@ -58,20 +60,19 @@
 </template>
 
 <script>
-    import {queryForPage, deleteById} from "@/network/dict";
+    import {queryChildForPage, findById, deleteChildById} from "@/network/dict";
     import {Order, PageQuery} from "@/util/pageQuery";
 
     export default {
         name: "Dict",
         created() {
-            const query = new PageQuery();
-            query.param = this.params;
-            this.loadingData(query);
+            this.renderData(this.$route.query.id);
         },
         data() {
             return {
                 visible: false,
                 data: [],
+                parentDict: null,
                 searchLoading: false,
                 deleteCacheLoading: false,
                 loading: {spinning: false, tip: "加载中..."},
@@ -86,7 +87,7 @@
                     showSizeChanger: true
                 },
                 params: {
-                    baseCode: null,
+                    childCode: null,
                     codeName: null
 
                 }
@@ -94,10 +95,18 @@
         },
         computed: {
             columns() {
+                const _this = this;
                 return [{
+                    title: '上级名称',
+                    align: 'center',
+                    width: '15%',
+                    customRender: function (text, record, index) {
+                        return _this.parentDict.codeName;
+                    }
+                }, {
                     title: '编号',
                     align: 'center',
-                    dataIndex: 'baseCode',
+                    dataIndex: 'childCode',
                     width: '15%',
                     sorter: true
                 }, {
@@ -106,11 +115,23 @@
                     dataIndex: 'codeName',
                     width: '15%'
                 }, {
+                    title: '值',
+                    align: 'center',
+                    dataIndex: 'codeValue',
+                    width: '15%'
+                }, {
                     title: '是否国标',
                     align: 'center',
-                    width: '15%',
+                    width: '10%',
                     scopedSlots: {
                         customRender: 'isGbSlot'
+                    }
+                }, {
+                    title: '是否有效',
+                    align: 'center',
+                    width: '10%',
+                    scopedSlots: {
+                        customRender: 'state'
                     }
                 }, {
                     title: '操作',
@@ -126,9 +147,20 @@
             dataExport() {
                 this.$message.info("正在开发中...")
             },
+            renderData(id) {
+                findById(id).then(response => {
+                    this.params.baseCodeId = response.data.id;
+                    this.parentDict = response.data;
+                    const query = new PageQuery();
+                    query.param = this.params;
+                    this.loadingData(query);
+                }).catch(err => {
+                    this.$message.error(err.response.data.message || "查询失败")
+                });
+            },
             loadingData(queryPage) {
                 this.loading.spinning = true;
-                queryForPage(queryPage).then(response => {
+                queryChildForPage(queryPage).then(response => {
                     this.data = response.data.data;
                     this.pagination.total = response.data.totalRow;
                 }).catch(err => {
@@ -136,9 +168,10 @@
                 }).finally(() => this.loading.spinning = false);
             },
             handlerDelete(record) {
-                deleteById(record.id).then(response => {
-                    this.$message.success(response.message || "操作成功");
-                }).catch(err => {
+                deleteChildById(record.id)
+                    .then(response => {
+                        this.$message.success(response.message || "操作成功");
+                    }).catch(err => {
                     this.$message.error(err.response.data.message || "操作失败")
                 }).finally(() => {
                     this.loadingData(new PageQuery(this.params));

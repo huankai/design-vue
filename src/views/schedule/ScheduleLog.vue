@@ -1,16 +1,16 @@
 <template>
-  <div>
+  <a-spin :spinning="loading">
     <div>
       <a-row>
         <a-col :span="8">
-          <a-form-item :label-col="{span: 8}" :wrapper-col="{span:16}" label="任务名称">{{this.$route.query.jobName}}
+          <a-form-item :label-col="{span: 8}" :wrapper-col="{span:16}" label="任务名称">
           </a-form-item>
         </a-col>
         <a-col :span="8">
-          <a-form-item :label-col="{span: 8}" :wrapper-col="{span:16}" label="cron表达式">*/5 * * * * ?</a-form-item>
+          <a-form-item :label-col="{span: 8}" :wrapper-col="{span:16}" label="cron表达式"></a-form-item>
         </a-col>
         <a-col :span="8">
-          <a-form-item :label-col="{span: 8}" :wrapper-col="{span:16}" label="任务状态">已启动</a-form-item>
+          <a-form-item :label-col="{span: 8}" :wrapper-col="{span:16}" label="任务状态"></a-form-item>
         </a-col>
       </a-row>
     </div>
@@ -60,7 +60,7 @@
         <a-tag v-else color="red">失败</a-tag>
       </span>
     </a-table>
-  </div>
+  </a-spin>
 </template>
 
 <script>
@@ -78,7 +78,8 @@
                     {name: "成功", value: true},
                     {name: "失败", value: false}
                 ],
-                loading: {spinning: false, tip: "加载中..."},
+                params: {},
+                loading: false,
                 pagination: {
                     total: 0,
                     defaultPageSize: 10,
@@ -92,13 +93,8 @@
             }
         },
         created() {
-            let query = new PageQuery();
-            console.log("-->:", this.$route.params.id);
-            queryForLogPage(query).then(response => {
-                this.data = response.data;
-                console.log(response.data);
-                this.pagination.total = response.totalRow;
-            });
+            this.params.jobId = this.$route.query.id;
+            this.loadData(new PageQuery({"jobId": this.params.jobId}));
         },
         computed: {
             columns() {
@@ -106,8 +102,8 @@
                     title: '执行时间',
                     align: 'center',
                     dataIndex: 'startDate',
-                    width: '20%'
-                    // sorter: (a, b) => a.age - b.age
+                    width: '20%',
+                    sorter: true
                 }, {
                     title: '耗时(分)',
                     align: 'center',
@@ -139,15 +135,18 @@
             handerSearch() {
                 this.$message.info("该功能正在开发中...");
             },
+            loadData(pageQuery) {
+                queryForLogPage(pageQuery).then(response => {
+                    this.data = response.data.data;
+                    this.pagination.total = response.data.totalRow;
+                }).catch(err => {
+                    this.$message.error(err.response.data.message || "操作失败");
+                }).finally(() => this.loading = false);
+            },
             handleChange(pagination, filters, sorter) {
-                console.log(pagination);
-                console.log(filters);
-                // console.log(`sorter ${sorter}`);
-                console.log(sorter);
-                this.loading.spinning = true;
-                setTimeout(() => {
-                    this.loading.spinning = false;
-                }, 200);
+                this.loading = true;
+                let orders = sorter.order ? [new Order(sorter.field, sorter.order === "descend")] : [];
+                this.loadingData(new PageQuery(this.params, pagination.current, pagination.pageSize, orders));
             }
         }
     }

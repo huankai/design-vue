@@ -2,15 +2,10 @@
   <div>
     <div class="search">
       <a-row>
-        <date-search :showTime="false" :showToday="true" :dateName="'创建时间'"
-                     @dateChange="dateChange"/>
-      </a-row>
-      <a-divider dashed/>
-      <a-row>
         <a-col :span="8">
           <label>
             <span class="field">任务名称: </span>
-            <a-input v-model="params.jobName" placeholder="请输入任务名称搜索"></a-input>
+            <a-input v-model="params.jobName" placeholder="请输入任务名称"></a-input>
           </label>
         </a-col>
         <a-col :span="8">
@@ -47,7 +42,7 @@
              @change="handleChange"
              :pagination="pagination">
       <span slot="state" slot-scope="record">
-          <a-tag :color="record.color">{{record.stateText}}</a-tag>
+          <a-tag :color="record.stateColor">{{record.stateText}}</a-tag>
       </span>
       <span slot="action" slot-scope="text,record">
         <router-link :to="{path:'/schedule/edit',query:{id:record.id}}">
@@ -55,34 +50,29 @@
             <a-icon type="edit"/>
           </a-tooltip>
         </router-link>
-        <router-link :to="{path:'/schedule/detail',query:{id:record.id}}">
-          <a-tooltip placement="topLeft" title="详情">
-            <a-icon type="eye"/>
-          </a-tooltip>
-        </router-link>
-        <a href="javascript:void (0);">
-          <a-popconfirm title="确定要暂停吗？" placement="bottom" @confirm="handlerDisable(record)">
+        <a href="javascript:void (0);" v-if="record.state !== 2">
+          <a-popconfirm title="确定要暂停吗？" placement="bottom" @confirm="handlerPause(record)">
             <a-tooltip placement="topLeft" title="暂停">
               <a-icon type="pause-circle"/>
             </a-tooltip>
           </a-popconfirm>
         </a>
-        <a href="javascript:void (0);">
-            <a-popconfirm title="确定要恢复吗？" placement="bottom" @confirm="handlerDisable(record)">
+        <a v-else href="javascript:void (0);">
+            <a-popconfirm title="确定要恢复吗？" placement="bottom" @confirm="handlerResume(record)">
               <a-tooltip placement="topLeft" title="恢复">
                 <a-icon type="play-circle"/>
               </a-tooltip>
             </a-popconfirm>
         </a>
         <a href="javascript:void (0);">
-          <a-popconfirm title="确定要执行吗？" placement="bottom" @confirm="handlerDisable(record)">
-            <a-tooltip placement="topLeft" title="执行">
+          <a-popconfirm title="确定要立即执行吗？" placement="bottom" @confirm="handlerTrigger(record)">
+            <a-tooltip placement="topLeft" title="立即执行">
               <a-icon type="sync" :spin="true"/>
             </a-tooltip>
           </a-popconfirm>
         </a>
 
-        <router-link :to="{path:'/schedule/log',query:{id:record.id,jobName:record.jobName}}">
+        <router-link :to="{path:'/schedule/log',query:{id:record.id}}">
             <a-tooltip placement="topLeft" title="查看日志">
               <a-icon type="message"/>
             </a-tooltip>
@@ -102,18 +92,16 @@
 </template>
 
 <script>
-    import DateSearch from "@/components/search/DateSearch";
-    import {queryForPage} from "@/network/schedule";
+    import {deleteById, pause, queryForPage, resume, trigger} from "@/network/schedule";
     import {Order, PageQuery} from "@/util/pageQuery";
 
     export default {
         name: "Schedule",
-        components: {DateSearch},
         created() {
             let query = new PageQuery();
             queryForPage(query).then(response => {
-                this.data = response.data;
-                this.pagination.total = response.totalRow;
+                this.data = response.data.data;
+                this.pagination.total = response.data.totalRow;
             });
         },
         data() {
@@ -151,13 +139,11 @@
                     align: 'center',
                     dataIndex: 'jobName',
                     width: '15%'
-                    // sorter: (a, b) => a.age - b.age
                 }, {
                     title: '组名',
                     align: 'center',
                     dataIndex: 'jobGroup',
                     width: '10%'
-                    // sorter: (a, b) => a.age - b.age
                 }, {
                     title: 'bean名称',
                     align: 'center',
@@ -175,11 +161,6 @@
                         customRender: 'state'
                     }
                 }, {
-                    title: '创建时间',
-                    align: 'center',
-                    dataIndex: 'createdDate',
-                    width: "20%"
-                }, {
                     title: '操作',
                     scopedSlots: {
                         customRender: "action"
@@ -191,15 +172,41 @@
         },
         methods: {
             handlerDelete(record) {
-                let index = this.data.indexOf(record);
-                if (index !== -1) {
-                    this.data.splice(index, 1);
-                    this.pagination.total = this.data.length;
-                    this.$message.success("删除成功");
-                }
+                deleteById(record.id).then(response => {
+                    this.$message.success(response.message || "操作成功");
+                }).finally(() => {
+                    this.loadingData(new PageQuery(this.params));
+                });
             },
-            handlerDisable() {
-
+            loadingData(queryPage) {
+                this.loading.spinning = true;
+                queryForPage(queryPage).then(response => {
+                    this.data = response.data.data;
+                    this.pagination.total = response.data.totalRow;
+                }).catch(err => {
+                    this.$message.error(err.response.data.message || "操作失败");
+                }).finally(() => this.loading.spinning = false);
+            },
+            handlerPause(record) {
+                pause(record.id).then(response => {
+                    this.$message.success(response.message || "操作成功");
+                }).finally(() => {
+                    this.loadingData(new PageQuery(this.params));
+                });
+            },
+            handlerResume(record) {debugger
+                resume(record.id).then(response => {
+                    this.$message.success(response.message || "操作成功");
+                }).finally(() => {
+                    this.loadingData(new PageQuery(this.params));
+                });
+            },
+            handlerTrigger(record) {
+                trigger(record.id).then(response => {
+                    this.$message.success(response.message || "操作成功");
+                }).finally(() => {
+                    this.loadingData(new PageQuery(this.params));
+                });
             },
             handlerEnable() {
 

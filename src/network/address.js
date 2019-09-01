@@ -15,10 +15,31 @@ export function queryForPage(queryPage) {
   });
 }
 
+export function getCityType() {
+  return emiRequest({
+    method: "GET",
+    url: "city/cityType",
+  });
+}
 
 export function findById(id) {
   return emiRequest({
     method: "GET",
     url: "city/" + id
   });
+}
+
+export function deleteById(id) {
+  return emiRequest({
+    method: "POST",
+    url: "city/" + id
+  })
+}
+
+export function saveOrUpdate(city) {
+  return emiRequest({
+    method: "POST",
+    data: city,
+    url: "city"
+  })
 }

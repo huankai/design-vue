@@ -1,7 +1,8 @@
 <template>
   <a-layout-sider :trigger="null" collapsible v-model="collapsed">
     <div class="logo"></div>
-    <a-menu theme="dark" mode="inline" :selectedKeys="selectedKeys" @select="handleSelect">
+    <a-menu theme="dark" mode="inline" :selectedKeys="selectedKeys"
+            @select="handleSelect">
       <template v-for="item in menuList">
         <a-menu-item v-if="item.children == null || item.children.length === 0" :key="item.id">
           <router-link :to="item.link">
@@ -35,11 +36,18 @@
         data() {
             return {
                 menuList: [],
-                selectedKeys: []
-                // openKeys: []
+                selectedKeys: [],
+                defaultOpenKeys: []
             }
         },
+        // watch: {
+        //     "$route": "flushSider",
+        // },
         methods: {
+            // 能否通过 watch $route 来配置默认选中的 菜单???,不能拿到 menu 的 id 值，无法在 route 中的 meta 中设置
+            // flushSider(newValue, oldValue) {
+            //   debugger;
+            // },
             handleSelect({item, key, selectedKeys}) {
                 this.selectedKeys = selectedKeys;
                 const currentMenu = {
@@ -58,8 +66,18 @@
                     this.menuList = response;
                     if (response.length > 0) {
                         let currentMenu = this.$store.getters.getCurrentMenu;
-                        this.selectedKeys = currentMenu.selectedKeys;
-                        // this.openKeys = currentMenu.openKeys;
+                        console.log(currentMenu);
+                        if (currentMenu != null) {
+                            if (currentMenu.selectedKeys != null) {
+                                this.selectedKeys = currentMenu.selectedKeys;
+                            }
+                            if (currentMenu.openKeys != null) {
+                                this.defaultOpenKeys = currentMenu.openKeys;
+                            }
+                        } else {
+                            this.selectedKeys = [response[0].id];
+                        }
+                        console.log(this.defaultOpenKeys);
                     }
                 }
             });

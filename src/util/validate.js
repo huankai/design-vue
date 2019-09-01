@@ -22,6 +22,7 @@ Vue.prototype.$validator = {
     }
     if (isNaN(value)) {
       callback("不是合法的小数");
+      return;
     }
     if (rule.whitespace && StringUtils.isBlank(value)) {
       callback("值不能为空白字符串");
@@ -40,6 +41,27 @@ Vue.prototype.$validator = {
     }
     new RegExp("^([0-9]+$)|(^[0-9]+\\.?[0-9]{1," + pattern + "}$)")
       .test(value) ? callback() : callback(rule.message || "最多保留" + pattern + "位小数");
+  },
+  isNumber(rule, value, callback) {
+    if (!rule.required && StringUtils.isEmpty(value)) {
+      callback();
+      return;
+    }
+    if (rule.whitespace && StringUtils.isBlank(value)) {
+      callback("值不能为空白字符串");
+      return;
+    }
+    let max = rule.max;
+    if (max !== undefined && value > max) {
+      callback(rule.message || "最大值不能超过:" + max);
+      return;
+    }
+    let min = rule.min;
+    if (min !== undefined && value < min) {
+      callback(rule.message || "最小值不能小于:" + min);
+      return;
+    }
+    isNaN(parseInt(value)) ? callback("不是合法的整数") : callback();
   },
 
   /**

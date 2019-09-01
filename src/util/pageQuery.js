@@ -62,10 +62,11 @@ class PageQuery {
    */
   orders = [];
 
-  constructor(param = {}, pageIndex = 0, pageSize = 10) {
+  constructor(param = {}, pageIndex = 0, pageSize = 10, orders = []) {
     this.param = param;
     this.pageIndex = pageIndex;
     this.pageSize = pageSize;
+    this.orders = orders;
   }
 
   addOrder(order) {

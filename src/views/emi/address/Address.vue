@@ -4,20 +4,20 @@
       <a-row>
         <a-col :span="8">
           <label>
-            <span class="field">编号: </span>
-            <a-input v-model="params.code" placeholder="请输入名称搜索"></a-input>
+            <span class="field">自定义编号: </span>
+            <a-input v-model="params.code" placeholder="请输入自定义编号"></a-input>
           </label>
         </a-col>
         <a-col :span="8">
           <label>
             <span class="field">名称: </span>
-            <a-input v-model="params.fullName" placeholder="请输入名称搜索"></a-input>
+            <a-input v-model="params.fullName" placeholder="请输入名称"></a-input>
           </label>
         </a-col>
         <a-col :span="8">
           <div>
             <a-button type="primary" icon="search" @click="searchBtn">搜索</a-button>
-            <a-button type="primary" icon="file-excel" @click="searchBtn">导出</a-button>
+            <a-button type="primary" icon="file-excel" @click="visible = true">导出</a-button>
             <router-link to="/address/add">
               <a-button type="primary" icon="plus">添加</a-button>
             </router-link>
@@ -35,12 +35,7 @@
             <a-icon type="edit"/>
           </a-tooltip>
         </router-link>
-        <router-link :to="{path:'/address/detail',query:{id:record.id}}">
-          <a-tooltip placement="topLeft" title="详情">
-            <a-icon type="eye"/>
-          </a-tooltip>
-        </router-link>
-        <router-link :to="{path:'/address/child',query:{id:record.id,jobName:record.jobName}}">
+        <router-link :to="{path:'/address/child',query:{id:record.id}}">
             <a-tooltip placement="topLeft" title="查看子级">
               <a-icon type="pic-center"/>
             </a-tooltip>
@@ -56,11 +51,29 @@
         </a>
       </span>
     </a-table>
+    <a-modal title="导出数据" :visible="visible" @ok="dataExport" @cancel="visible = false">
+      <a-form>
+        <a-row :gutter="16">
+          <a-col :span="12">
+            <a-form-item label="导出格式" :label-col="{span:8}">
+              <a-radio-group name="exportFormat" :defaultValue="1">
+                <a-radio :value="1">Excel</a-radio>
+                <a-radio :value="2">JSON</a-radio>
+              </a-radio-group>
+            </a-form-item>
+            <a-form-item label="过滤条件" :label-col="{span:8}">
+              <a-switch/>
+            </a-form-item>
+          </a-col>
+
+        </a-row>
+      </a-form>
+    </a-modal>
   </div>
 </template>
 
 <script>
-    import {queryForPage} from "@/network/address";
+    import {queryForPage, deleteById} from "@/network/address";
     import {Order, PageQuery} from "@/util/pageQuery";
 
     export default {
@@ -72,12 +85,9 @@
         },
         data() {
             return {
+                visible: false,
                 data: [],
-                stateList: [
-                    {name: "启用", value: 1},
-                    {name: "停止", value: 2},
-                    {name: "删除", value: 0}
-                ],
+                searchLoading: false,
                 deleteCacheLoading: false,
                 loading: {spinning: false, tip: "加载中..."},
                 pagination: {
@@ -92,9 +102,8 @@
                 },
                 params: {
                     code: null,
-                    cityType: 1,
-                    fullName: null,
-                    createdDate: null
+                    cityType: 1,//// 一级默认显示省
+                    fullName: null
 
                 }
             }
@@ -102,32 +111,37 @@
         computed: {
             columns() {
                 return [{
-                    title: '编号',
+                    title: '自定义编号',
                     align: 'center',
                     dataIndex: 'code',
-                    width: '15%'
-                    // sorter: (a, b) => a.age - b.age
+                    width: '15%',
+                    sorter: true
+                }, {
+                    title: '编号(国标)',
+                    align: 'center',
+                    dataIndex: 'areaCode',
+                    width: '15%',
+                    sorter: true
                 }, {
                     title: '名称',
                     align: 'center',
                     dataIndex: 'fullName',
                     width: '15%'
-                    // sorter: (a, b) => a.age - b.age
+                }, {
+                    title: '简称',
+                    align: 'center',
+                    dataIndex: 'shortName',
+                    width: '15%'
+                }, {
+                    title: '级别',
+                    align: 'center',
+                    dataIndex: 'cityTypeText',
+                    width: "10%"
                 }, {
                     title: '邮编',
                     align: 'center',
                     dataIndex: 'postOffice',
-                    width: "15%"
-                }, {
-                    title: '经度',
-                    align: 'center',
-                    dataIndex: 'longitude',
-                    width: "15%"
-                }, {
-                    title: '纬度',
-                    align: 'center',
-                    dataIndex: 'latitude',
-                    width: "15%",
+                    width: "10%"
                 }, {
                     title: '操作',
                     scopedSlots: {
@@ -139,53 +153,34 @@
             }
         },
         methods: {
+            dataExport() {
+                this.$message.info("正在开发中...")
+            },
             loadingData(queryPage) {
                 this.loading.spinning = true;
                 queryForPage(queryPage).then(response => {
                     this.data = response.data.data;
                     this.pagination.total = response.data.totalRow;
+                }).catch(err => {
+                    this.$message.error(err.response.data.message || "操作失败");
                 }).finally(() => this.loading.spinning = false);
             },
             handlerDelete(record) {
-                let index = this.data.indexOf(record);
-                if (index !== -1) {
-                    this.data.splice(index, 1);
-                    this.pagination.total = this.data.length;
-                    this.$message.success("删除成功");
-                }
-            },
-            handlerDisable() {
-
-            },
-            handlerEnable() {
-
-            },
-            handleStateChange(value) {
-                this.params.state = value;
+                deleteById(record.id).then(response => {
+                    this.$message.success(response.message || "操作成功");
+                }).catch(err => {
+                    this.$message.error(err.response.data.message || "操作失败")
+                }).finally(() => {
+                    this.loadingData(new PageQuery(this.params));
+                });
             },
             searchBtn() {
                 this.loadingData(new PageQuery(this.params));
             },
-            dateChange(selected) {
-                this.params.createdDate = selected;
-            },
-            deleteCache() {
-                this.deleteCacheLoading = true;
-                const _this = this;
-                setTimeout(() => {
-                    _this.deleteCacheLoading = false;
-                }, 2000);
-            },
             handleChange(pagination, filters, sorter) {
-                this.loadingData(new PageQuery(this.params, pagination.current, pagination.pageSize));
-            },
-            filterOption(input, option) {
-                return option.componentOptions.children[0].text.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                let orders = sorter.order ? [new Order(sorter.field, sorter.order === "descend")] : [];
+                this.loadingData(new PageQuery(this.params, pagination.current, pagination.pageSize, orders));
             }
         }
     }
 </script>
-
-<style scoped>
-
-</style>

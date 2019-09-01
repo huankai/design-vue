@@ -18,24 +18,30 @@
       },
       {
         "id": "22",
+        "link": "/org",
+        "icon": "bank",
+        "name": "机构管理"
+      },
+      {
+        "id": "23",
         "link": "/users",
         "icon": "user",
         "name": "用户管理"
       },
       {
-        "id": "23",
+        "id": "24",
         "link": "/roles",
         "icon": "safety",
         "name": "角色管理"
       },
       {
-        "id": "24",
+        "id": "25",
         "link": "/permission",
         "icon": "safety",
         "name": "权限管理"
       },
       {
-        "id": "25",
+        "id": "26",
         "link": "/menu",
         "icon": "link",
         "name": "菜单管理"
@@ -58,6 +64,12 @@
         "link": "/dict",
         "icon": "profile",
         "name": "数据字典"
+      },
+      {
+        "id": "33",
+        "link": "/params",
+        "icon": "environment",
+        "name": "参数配置"
       }
     ]
   },
@@ -72,5 +84,11 @@
     "link": "/schedule",
     "icon": "schedule",
     "name": "定时任务"
+  },
+  {
+    "id": "6",
+    "link": "/message",
+    "icon": "message",
+    "name": "待办事项"
   }
 ]
