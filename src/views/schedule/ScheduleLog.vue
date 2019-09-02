@@ -3,14 +3,15 @@
     <div>
       <a-row>
         <a-col :span="8">
-          <a-form-item :label-col="{span: 8}" :wrapper-col="{span:16}" label="任务名称">
+          <a-form-item :label-col="{span: 8}" :wrapper-col="{span:16}" label="任务名称">{{ schedule.jobName}}
           </a-form-item>
         </a-col>
         <a-col :span="8">
-          <a-form-item :label-col="{span: 8}" :wrapper-col="{span:16}" label="cron表达式"></a-form-item>
+          <a-form-item :label-col="{span: 8}" :wrapper-col="{span:16}" label="cron表达式">{{ schedule.cronExpression }}
+          </a-form-item>
         </a-col>
         <a-col :span="8">
-          <a-form-item :label-col="{span: 8}" :wrapper-col="{span:16}" label="任务状态"></a-form-item>
+          <a-form-item :label-col="{span: 8}" :wrapper-col="{span:16}" label="任务状态">{{ schedule.stateText}}</a-form-item>
         </a-col>
       </a-row>
     </div>
@@ -30,6 +31,7 @@
               placeholder="状态"
               optionFilterProp="children"
               style="width: 200px"
+              @change="handleStateChange"
               :allowClear="true">
               <a-select-option v-for="item in stateList" :value="item.value">{{ item.name}}</a-select-option>
             </a-select>
@@ -37,7 +39,7 @@
         </a-col>
         <a-col :span="8">
           <div>
-            <a-button type="primary" icon="search" @click="handerSearch">搜索</a-button>
+            <a-button type="primary" icon="search" @click="handlerSearch">搜索</a-button>
             <router-link to="/schedule">
               <a-button type="default">
                 <a-icon type="undo"/>
@@ -65,8 +67,8 @@
 
 <script>
     import DateSearch from "@/components/search/DateSearch";
-    import {queryForLogPage} from "@/network/schedule";
-    import {Order, PageQuery} from "@/util/pageQuery";
+    import {findById, queryForLogPage} from "@/network/schedule";
+    import {ConditionParam, DateRangeCondition, Order, PageQuery, SimpleCondition} from "@/util/pageQuery";
 
     export default {
         name: "ScheduleLog",
@@ -74,11 +76,13 @@
         data() {
             return {
                 data: [],
+                schedule: {},
                 stateList: [
-                    {name: "成功", value: true},
-                    {name: "失败", value: false}
+                    {name: "成功", value: 1},
+                    {name: "失败", value: 0}
                 ],
-                params: {},
+                params: new ConditionParam([new SimpleCondition("jobId", null), new SimpleCondition("success", null)],
+                    [new DateRangeCondition(null, "startDate")]),
                 loading: false,
                 pagination: {
                     total: 0,
@@ -93,8 +97,11 @@
             }
         },
         created() {
-            this.params.jobId = this.$route.query.id;
-            this.loadData(new PageQuery({"jobId": this.params.jobId}));
+            findById(this.$route.query.id).then(response => {
+                this.schedule = response.data;
+                this.params.updateSimpleValue("jobId", response.data.id);
+                this.loadingData(new PageQuery(this.params));
+            });
         },
         computed: {
             columns() {
@@ -114,7 +121,7 @@
                     title: '状态',
                     align: 'center',
                     dataIndex: 'success',
-                    width: "5%",
+                    width: "10%",
                     scopedSlots: {
                         customRender: "success"
                     }
@@ -123,28 +130,30 @@
                     title: '消息',
                     align: 'center',
                     dataIndex: 'message',
-                    width: "65%"
+                    width: "60%"
                 }
                 ];
             }
         },
         methods: {
             dateChange(selected) {
-                this.$message.info(selected.range);
+                this.params.updateDateRangeValue("startDate", selected);
+                console.log(this.params);
             },
-            handerSearch() {
-                this.$message.info("该功能正在开发中...");
+            handleStateChange(value) {
+                this.params.updateSimpleValue("success", value);
             },
-            loadData(pageQuery) {
+            handlerSearch() {
+                this.loadingData(new PageQuery(this.params));
+            },
+            loadingData(pageQuery) {
+                this.loading = true;
                 queryForLogPage(pageQuery).then(response => {
                     this.data = response.data.data;
                     this.pagination.total = response.data.totalRow;
-                }).catch(err => {
-                    this.$message.error(err.response.data.message || "操作失败");
                 }).finally(() => this.loading = false);
             },
             handleChange(pagination, filters, sorter) {
-                this.loading = true;
                 let orders = sorter.order ? [new Order(sorter.field, sorter.order === "descend")] : [];
                 this.loadingData(new PageQuery(this.params, pagination.current, pagination.pageSize, orders));
             }

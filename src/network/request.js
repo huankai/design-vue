@@ -34,23 +34,25 @@ const emiInstance = axios.create({
   baseURL: "/emi"
 });
 emiInstance.interceptors.response.use(response => {
+    // if (response.data instanceof Blob) { // 如果是下载文件请求
+    //   const filename = decodeURI(res.headers.get('Content-Disposition').split('filename=')[1]); // 获取后端headers里面的文件名
+    //   if (window.navigator.msSaveOrOpenBlob) {
+    //     navigator.msSaveBlob(blob, filename)  // 兼容ie10
+    //   } else {
+    //     const a = document.createElement('a');
+    //     document.body.appendChild(a); // 兼容火狐，将a标签添加到body当中
+    //     a.href = window.URL.createObjectURL(blob);
+    //     a.download = filename;
+    //     a.target = '_blank'; // a标签增加target属性
+    //     a.click();
+    //     a.remove();  // 移除a标签
+    //     window.URL.revokeObjectURL(url);
+    //     fileDownload(response.data, decodeURI(escape(fileName)));
+    //     return;
+    //   }
+    // }
     if (response.status === 200) {
-      if (response.data instanceof Blob) { // 如果是下载文件请求
-        const filename = decodeURI(res.headers.get('Content-Disposition').split('filename=')[1]); // 获取后端headers里面的文件名
-        if (window.navigator.msSaveOrOpenBlob) {
-          navigator.msSaveBlob(blob, filename)  // 兼容ie10
-        } else {
-          const a = document.createElement('a');
-          document.body.appendChild(a); // 兼容火狐，将a标签添加到body当中
-          a.href = window.URL.createObjectURL(blob);
-          a.download = filename;
-          a.target = '_blank'; // a标签增加target属性
-          a.click();
-          a.remove();  // 移除a标签
-          window.URL.revokeObjectURL(url);
-          fileDownload(response.data, decodeURI(escape(fileName)));
-          return;
-        }
+      if (response.data.statusCode === 10200) {
         return response.data;
       }
     }
@@ -84,7 +86,9 @@ const scheduleInstance = axios.create({
 });
 scheduleInstance.interceptors.response.use(response => {
   if (response.status === 200) {
-    return response.data;
+    if (response.data.statusCode === 10200) {
+      return response.data;
+    }
   }
   message.error(response.data.message || response.message || "请稍后再试");
 }, error => {

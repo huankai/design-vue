@@ -17,7 +17,7 @@
         <a-col :span="8">
           <div>
             <a-button type="primary" icon="search" @click="searchBtn">搜索</a-button>
-            <a-button type="primary" icon="file-excel" @click="visible = true">导出</a-button>
+<!--            <a-button type="primary" icon="file-excel" @click="visible = true">导出</a-button>-->
             <router-link to="/address/add">
               <a-button type="primary" icon="plus">添加</a-button>
             </router-link>
@@ -155,11 +155,12 @@
         },
         methods: {
             dataExport() {
-                this.visible = false;
-                this.exportLoading = true;
-                getExportData(this.params).then(response => {
-                    fileDownLoad(response, "file.json");
-                }).finally(() => this.exportLoading = false);
+                // this.visible = false;
+                // this.exportLoading = true;
+                // getExportData(this.params).then(response => {
+                //     fileDownLoad(response, "file.json");
+                // }).finally(() => this.exportLoading = false);
+                this.$message.info("正在开发中...");
             },
             loadingData(queryPage) {
                 this.loading.spinning = true;
@@ -171,11 +172,7 @@
             handlerDelete(record) {
                 deleteById(record.id).then(response => {
                     this.$message.success(response.message || "操作成功");
-                }).catch(err => {
-                    this.$message.error(err.response.data.message || "操作失败")
-                }).finally(() => {
-                    this.loadingData(new PageQuery(this.params));
-                });
+                }).finally(() => this.loadingData(new PageQuery(this.params)));
             },
             searchBtn() {
                 this.loadingData(new PageQuery(this.params));

@@ -175,8 +175,6 @@
                     const query = new PageQuery();
                     query.param = this.params;
                     this.loadingData(query);
-                }).catch(err => {
-                    this.$message.error(err.response.data.message || "查询失败")
                 });
             },
             loadingData(queryPage) {
@@ -184,15 +182,11 @@
                 queryForPage(queryPage).then(response => {
                     this.data = response.data.data;
                     this.pagination.total = response.data.totalRow;
-                }).catch(err => {
-                    this.$message.error(err.response.data.message || "操作失败");
                 }).finally(() => this.loading.spinning = false);
             },
             handlerDelete(record) {
                 deleteById(record.id).then(response => {
                     this.$message.success(response.data.message || "操作成功");
-                }).catch(err => {
-                    this.$message.error(err.response.data.message || "操作失败")
                 }).finally(() => {
                     this.loadingData(new PageQuery(this.params));
                 });

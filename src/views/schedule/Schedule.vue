@@ -18,6 +18,7 @@
               style="width: 200px"
               :allowClear="true"
               @change="handleStateChange"
+              :value="params.state"
               :filterOption="filterOption">
               <a-select-option v-for="item in stateList" :value="item.value">{{ item.name}}</a-select-option>
             </a-select>
@@ -98,11 +99,7 @@
     export default {
         name: "Schedule",
         created() {
-            let query = new PageQuery();
-            queryForPage(query).then(response => {
-                this.data = response.data.data;
-                this.pagination.total = response.data.totalRow;
-            });
+            this.loadingData(new PageQuery());
         },
         data() {
             return {
@@ -126,9 +123,7 @@
                 },
                 params: {
                     jobName: null,
-                    state: null,
-                    createdDate: null
-
+                    state: null
                 }
             }
         },
@@ -183,8 +178,6 @@
                 queryForPage(queryPage).then(response => {
                     this.data = response.data.data;
                     this.pagination.total = response.data.totalRow;
-                }).catch(err => {
-                    this.$message.error(err.response.data.message || "操作失败");
                 }).finally(() => this.loading.spinning = false);
             },
             handlerPause(record) {
@@ -194,7 +187,7 @@
                     this.loadingData(new PageQuery(this.params));
                 });
             },
-            handlerResume(record) {debugger
+            handlerResume(record) {
                 resume(record.id).then(response => {
                     this.$message.success(response.message || "操作成功");
                 }).finally(() => {
@@ -215,20 +208,15 @@
                 this.params.state = value;
             },
             searchBtn() {
-                console.log(this.params);
-                this.$message.info("jobName:" + this.params.jobName + ",  state:"
-                    + this.params.state);
+                this.loadingData(new PageQuery(this.params));
             },
-            dateChange(selected) {
-                this.params.createdDate = selected;
-            },
-            deleteCache() {
-                this.deleteCacheLoading = true;
-                const _this = this;
-                setTimeout(() => {
-                    _this.deleteCacheLoading = false;
-                }, 2000);
-            },
+            // deleteCache() {
+            //     this.deleteCacheLoading = true;
+            //     const _this = this;
+            //     setTimeout(() => {
+            //         _this.deleteCacheLoading = false;
+            //     }, 2000);
+            // },
             handleChange(pagination, filters, sorter) {
                 console.log(pagination);
                 console.log(filters);

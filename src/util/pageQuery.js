@@ -78,4 +78,112 @@ class PageQuery {
   }
 }
 
-export {Order, PageQuery};
+class ConditionParam {
+
+  /**
+   * simple condition
+   * @type {Array}
+   */
+  simple = [];
+
+  /**
+   * date Range Condition
+   * @type {Array}
+   */
+  dateRange = [];
+
+  constructor(simple = [], dateRange = []) {
+    this.simple = simple;
+    this.dateRange = dateRange;
+  }
+
+  addSimple(simpleCondition) {
+    if (null != simpleCondition && simpleCondition instanceof SimpleCondition) {
+      this.simple.push(simpleCondition);
+    }
+  }
+
+  updateSimpleValue(field, newValue) {
+    this.simple.forEach(item => {
+      if (item.field === field) {
+        item.value = newValue;
+      }
+    })
+  }
+
+  updateDateRangeValue(field, newValue) {
+    this.dateRange.forEach(item => {
+      if (item.field === field) {
+        item.range = newValue.range;
+        item.start = newValue.start;
+        item.end = newValue.end;
+      }
+    })
+  }
+
+  addDateRange(dateRangeCondition) {
+    if (null != dateRangeCondition && dateRangeCondition instanceof DateRangeCondition) {
+      this.dateRange.push(dateRangeCondition);
+    }
+  }
+}
+
+const EQ = "EQ";
+
+const LIKEANYWHERE = "LIKEANYWHERE";
+
+class SimpleCondition {
+
+  /**
+   * field
+   */
+  field;
+
+  /**
+   * operator
+   */
+  operator;
+
+  /**
+   * value
+   */
+  value;
+
+  constructor(field, value, operator = EQ) {
+    this.field = field;
+    this.value = value;
+    this.operator = operator;
+  }
+}
+
+class DateRangeCondition {
+
+  /**
+   * range
+   */
+  range;
+
+  /**
+   * field
+   */
+  field;
+
+  /**
+   * 开始值
+   */
+  start;
+
+  /**
+   * 结束值
+   */
+  end;
+
+  constructor(range, field, start, end) {
+    this.range = range;
+    this.field = field;
+    this.start = start;
+    this.end = end;
+  }
+}
+
+export {Order, PageQuery, EQ, LIKEANYWHERE, ConditionParam, SimpleCondition, DateRangeCondition};

@@ -122,9 +122,7 @@
                 findChildById(id).then(response => {
                     this.childDict = response.data.childCode;
                     this.baseCodeName = response.data.baseCodeName;
-                }).catch(err => {
-                    this.$message.error((err.response.data.message || "获取信息失败"))
-                })
+                });
             } else {
                 let baseCodeId = this.$route.query.baseCodeId;
                 if (baseCodeId) {
@@ -140,19 +138,11 @@
                 this.form.validateFields((errors, values) => {
                     if (!errors) {
                         this.loading = true;
-                        console.log(this.childDict, this.form.getFieldsValue());
-                        console.log(Object.assign(this.childDict, this.form.getFieldsValue()));
-                        saveOrUpdateChild(Object.assign(this.childDict, this.form.getFieldsValue())).then(response => {
-                            if (response.statusCode === 10200) {
+                        saveOrUpdateChild(Object.assign(this.childDict, this.form.getFieldsValue()))
+                            .then(response => {
                                 this.$message.success(response.message || "保存成功");
                                 this.$router.replace({name: "dictChild", query: {"id": this.childDict.baseCodeId}});
-                            } else {
-                                this.$message.error(response.message || "保存失败");
-                            }
-                        }).catch(err => {
-                            debugger
-                            this.$message.error(err.response.data.message || "操作失败");
-                        }).finally(() => this.loading = false);
+                            }).finally(() => this.loading = false);
                     }
                 });
             }

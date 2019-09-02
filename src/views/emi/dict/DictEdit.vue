@@ -98,16 +98,11 @@
                 this.form.validateFields((errors, values) => {
                     if (!errors) {
                         this.loading = true;
-                        saveOrUpdate(Object.assign(this.dict, this.form.getFieldsValue())).then(response => {
-                            if (response.statusCode === 10200) {
+                        saveOrUpdate(Object.assign(this.dict, this.form.getFieldsValue()))
+                            .then(response => {
                                 this.$message.success(response.message || "保存成功");
                                 this.$router.replace("/dict");
-                            } else {
-                                this.$message.error(response.message || "保存失败");
-                            }
-                        }).catch(err => {debugger
-                            this.$message.error(err.response.data.message || "操作失败");
-                        }).finally(() => this.loading = false);
+                            }).finally(() => this.loading = false);
                     }
                 });
             }

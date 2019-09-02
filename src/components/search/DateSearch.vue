@@ -106,6 +106,8 @@
                     this.isCustom = false;
                     this.dateItems.forEach(item => item.selected = false);
                 }
+                this.selected.start = null;
+                this.selected.end = null;
                 this.emitDateChange();
             },
             dateOnChange(date, dateString) {
