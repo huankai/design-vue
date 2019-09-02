@@ -15,6 +15,15 @@ export function queryForPage(queryPage) {
   });
 }
 
+export function getExportData(city) {
+  return emiRequest({
+    method: "GET",
+    data: city,
+    responseType: "blob",
+    url: "city/export"
+  })
+}
+
 export function getCityType() {
   return emiRequest({
     method: "GET",

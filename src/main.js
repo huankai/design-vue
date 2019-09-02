@@ -42,7 +42,6 @@ import {
   Col,
   Row,
   Divider,
-  notification,
   Modal,
   Dropdown
 } from 'ant-design-vue';
@@ -78,12 +77,11 @@ Vue.use(Breadcrumb);
 Vue.use(Col);
 Vue.use(Row);
 Vue.use(Divider);
-Vue.use(notification);
 Vue.use(Modal);
 Vue.use(Dropdown);
 new Vue({
   "el": "#app",
   router,
   store,
-  render: h => h(App),
+  render: h => h(App)
 });

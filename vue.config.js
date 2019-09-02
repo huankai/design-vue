@@ -29,11 +29,11 @@ module.exports = {
           "^/emi": "/emi"
         }
       },
-      "/schedule": {
+      "/quartz": {
         target: "http://127.0.0.1:8889",
         changeOrigin: true,
         pathRewrite: {
-          "^/schedule": "/schedule"
+          "^/quartz": "/quartz"
         }
       },
       "/api": {

@@ -131,8 +131,6 @@
                 queryForPage(queryPage).then(response => {
                     this.data = response.data.data;
                     this.pagination.total = response.data.totalRow;
-                }).catch(err => {
-                    this.$message.error(err.response.data.message || "操作失败");
                 }).finally(() => this.loading.spinning = false);
             },
             handlerDelete(record) {

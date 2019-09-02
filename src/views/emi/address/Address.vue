@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <a-spin :spinning="exportLoading" tip="下载中...">
     <div class="search">
       <a-row>
         <a-col :span="8">
@@ -65,17 +65,17 @@
               <a-switch/>
             </a-form-item>
           </a-col>
-
         </a-row>
       </a-form>
     </a-modal>
-  </div>
+  </a-spin>
 </template>
 
 <script>
-    import {queryForPage, deleteById} from "@/network/address";
+    import {queryForPage, deleteById, getExportData} from "@/network/address";
     import {Order, PageQuery} from "@/util/pageQuery";
 
+    let fileDownLoad = require("js-file-download");
     export default {
         name: "Address",
         created() {
@@ -86,6 +86,7 @@
         data() {
             return {
                 visible: false,
+                exportLoading: false,
                 data: [],
                 searchLoading: false,
                 deleteCacheLoading: false,
@@ -154,15 +155,17 @@
         },
         methods: {
             dataExport() {
-                this.$message.info("正在开发中...")
+                this.visible = false;
+                this.exportLoading = true;
+                getExportData(this.params).then(response => {
+                    fileDownLoad(response, "file.json");
+                }).finally(() => this.exportLoading = false);
             },
             loadingData(queryPage) {
                 this.loading.spinning = true;
                 queryForPage(queryPage).then(response => {
                     this.data = response.data.data;
                     this.pagination.total = response.data.totalRow;
-                }).catch(err => {
-                    this.$message.error(err.response.data.message || "操作失败");
                 }).finally(() => this.loading.spinning = false);
             },
             handlerDelete(record) {
