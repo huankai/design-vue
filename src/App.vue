@@ -11,28 +11,28 @@
 </template>
 
 <script>
-    import zhCN from "ant-design-vue/lib/locale-provider/zh_CN"
-    import LayoutSider from "@/components/layout/LayoutSider";
-    import LayoutHeader from "@/components/layout/LayoutHeader";
-    import LayoutContent from "@/components/layout/LayoutContent";
+  import zhCN from "ant-design-vue/lib/locale-provider/zh_CN"
+  import LayoutSider from "@/components/layout/LayoutSider";
+  import LayoutHeader from "@/components/layout/LayoutHeader";
+  import LayoutContent from "@/components/layout/LayoutContent";
 
-    export default {
-        name: 'app',
-        components: {LayoutSider, LayoutHeader, LayoutContent},
-        data() {
-            return {
-                locale: zhCN,
-                closeVisible: false,
-                collapsed: false
-            }
-        },
-        methods: {
-            // 子组件传值到父类调用的方法
-            updatecollapsed(collapsed) {
-                this.collapsed = collapsed;
-            }
-        }
+  export default {
+    name: 'app',
+    components: {LayoutSider, LayoutHeader, LayoutContent},
+    data() {
+      return {
+        locale: zhCN,
+        closeVisible: false,
+        collapsed: false
+      }
+    },
+    methods: {
+      // 子组件传值到父类调用的方法
+      updatecollapsed(collapsed) {
+        this.collapsed = collapsed;
+      }
     }
+  }
 </script>
 
 <style>

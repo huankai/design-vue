@@ -1,5 +1,5 @@
 <template>
-  <a-spin :spinning="loading">
+  <div>
     <div>
       <a-row>
         <a-col :span="8">
@@ -62,7 +62,7 @@
         <a-tag v-else color="red">失败</a-tag>
       </span>
     </a-table>
-  </a-spin>
+  </div>
 </template>
 
 <script>

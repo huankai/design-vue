@@ -62,132 +62,132 @@
 </template>
 
 <script>
-    import DateSearch from "@/components/search/DateSearch";
-    import {queryForPage} from "@/network/files";
-    import {Order, PageQuery} from "@/util/pageQuery";
+  import DateSearch from "@/components/search/DateSearch";
+  import {queryForPage} from "@/network/files";
+  import {Order, PageQuery} from "@/util/pageQuery";
 
-    export default {
-        name: "Files",
-        components: {DateSearch},
-        created() {
-            let query = new PageQuery();
-            console.log(query);
-            queryForPage(query).then(response => {
-                this.data = response.data;
-                this.pagination.total = response.totalRow;
-            });
+  export default {
+    name: "Files",
+    components: {DateSearch},
+    created() {
+      let query = new PageQuery();
+      console.log(query);
+      queryForPage(query).then(response => {
+        this.data = response.data;
+        this.pagination.total = response.totalRow;
+      });
+    },
+    data() {
+      return {
+        data: [],
+        deleteCacheLoading: false,
+        loading: {spinning: false, tip: "加载中..."},
+        pagination: {
+          total: 0,
+          defaultPageSize: 10,
+          showTotal: (total, range) => {
+            return "共 " + total + " 条记录";
+          },
+          pageSizeOptions: ['10', '20', '50', '100'],
+          showQuickJumper: true,
+          showSizeChanger: true
         },
-        data() {
-            return {
-                data: [],
-                deleteCacheLoading: false,
-                loading: {spinning: false, tip: "加载中..."},
-                pagination: {
-                    total: 0,
-                    defaultPageSize: 10,
-                    showTotal: (total, range) => {
-                        return "共 " + total + " 条记录";
-                    },
-                    pageSizeOptions: ['10', '20', '50', '100'],
-                    showQuickJumper: true,
-                    showSizeChanger: true
-                },
-                params: {
-                    appCode: null,
-                    appName: null
+        params: {
+          appCode: null,
+          appName: null
 
-                }
-            }
-        },
-        computed: {
-            columns() {
-                return [{
-                    title: '文件名',
-                    align: 'center',
-                    dataIndex: 'fileName',
-                    width: '25%'
-                }, {
-                    title: 'bucket名称',
-                    align: 'center',
-                    dataIndex: 'bucketName',
-                    width: '15%'
-                }, {
-                    title: '扩展名',
-                    align: 'center',
-                    dataIndex: 'ext',
-                    width: "10%"
-                }, {
-                    title: '文件大小',
-                    align: 'center',
-                    dataIndex: 'fileSize',
-                    width: "10%"
-                }, {
-                    title: '上传时间',
-                    align: 'center',
-                    dataIndex: 'uploadDate',
-                    width: "20%"
-                }, {
-                    title: '操作',
-                    scopedSlots: {
-                        customRender: "action"
-                    },
-                    width: "20%"
-                }
-                ];
-            }
-        },
-        methods: {
-            handlerDelete(record) {
-                let index = this.data.indexOf(record);
-                if (index !== -1) {
-                    this.data.splice(index, 1);
-                    this.pagination.total = this.data.length;
-                    this.$message.success("删除成功");
-                }
-            },
-            handlerDisable() {
-
-            },
-            handlerEnable() {
-
-            },
-            searchBtn() {
-                console.log(this.params);
-            },
-            dateChange(selected) {
-                this.params.createDate = selected;
-            },
-            deleteCache() {
-                this.deleteCacheLoading = true;
-                const _this = this;
-                setTimeout(() => {
-                    _this.deleteCacheLoading = false;
-                }, 2000);
-            },
-            onChange() {
-
-            },
-            handleChange(pagination, filters, sorter) {
-                console.log(pagination);
-                console.log(filters);
-                // console.log(`sorter ${sorter}`);
-                console.log(sorter);
-                this.loading.spinning = true;
-                setTimeout(() => {
-                    this.loading.spinning = false;
-                }, 200);
-            },
-            handleBlur() {
-                console.log('blur');
-            },
-            handleFocus() {
-                console.log('focus');
-            },
-            filterOption(input, option) {
-                return option.componentOptions.children[0].text.toLowerCase().indexOf(input.toLowerCase()) >= 0
-            }
         }
+      }
+    },
+    computed: {
+      columns() {
+        return [{
+          title: '文件名',
+          align: 'center',
+          dataIndex: 'fileName',
+          width: '25%'
+        }, {
+          title: 'bucket名称',
+          align: 'center',
+          dataIndex: 'bucketName',
+          width: '15%'
+        }, {
+          title: '扩展名',
+          align: 'center',
+          dataIndex: 'ext',
+          width: "10%"
+        }, {
+          title: '文件大小',
+          align: 'center',
+          dataIndex: 'fileSize',
+          width: "10%"
+        }, {
+          title: '上传时间',
+          align: 'center',
+          dataIndex: 'uploadDate',
+          width: "20%"
+        }, {
+          title: '操作',
+          scopedSlots: {
+            customRender: "action"
+          },
+          width: "20%"
+        }
+        ];
+      }
+    },
+    methods: {
+      handlerDelete(record) {
+        let index = this.data.indexOf(record);
+        if (index !== -1) {
+          this.data.splice(index, 1);
+          this.pagination.total = this.data.length;
+          this.$message.success("删除成功");
+        }
+      },
+      handlerDisable() {
+
+      },
+      handlerEnable() {
+
+      },
+      searchBtn() {
+        console.log(this.params);
+      },
+      dateChange(selected) {
+        this.params.createDate = selected;
+      },
+      deleteCache() {
+        this.deleteCacheLoading = true;
+        const _this = this;
+        setTimeout(() => {
+          _this.deleteCacheLoading = false;
+        }, 2000);
+      },
+      onChange() {
+
+      },
+      handleChange(pagination, filters, sorter) {
+        console.log(pagination);
+        console.log(filters);
+        // console.log(`sorter ${sorter}`);
+        console.log(sorter);
+        this.loading.spinning = true;
+        setTimeout(() => {
+          this.loading.spinning = false;
+        }, 200);
+      },
+      handleBlur() {
+        console.log('blur');
+      },
+      handleFocus() {
+        console.log('focus');
+      },
+      filterOption(input, option) {
+        return option.componentOptions.children[0].text.toLowerCase().indexOf(input.toLowerCase()) >= 0
+      }
     }
+  }
 </script>
 
 <style scoped>

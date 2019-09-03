@@ -28,23 +28,23 @@
 </template>
 
 <script>
-    const formItemLayout = {
-        labelCol: {span: 4},
-        wrapperCol: {span: 8}
-    };
-    const formTailLayout = {
-        labelCol: {span: 4},
-        wrapperCol: {span: 8, offset: 4}
-    };
-    export default {
-        name: "ClientAppDetail",
-        data() {
-            return {
-                formItemLayout,
-                formTailLayout
-            };
-        }
+  const formItemLayout = {
+    labelCol: {span: 4},
+    wrapperCol: {span: 8}
+  };
+  const formTailLayout = {
+    labelCol: {span: 4},
+    wrapperCol: {span: 8, offset: 4}
+  };
+  export default {
+    name: "ClientAppDetail",
+    data() {
+      return {
+        formItemLayout,
+        formTailLayout
+      };
     }
+  }
 </script>
 
 <style scoped>

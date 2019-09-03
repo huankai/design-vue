@@ -29,6 +29,13 @@ module.exports = {
           "^/emi": "/emi"
         }
       },
+      "/pms": {
+        target: "http://127.0.0.1:7110",
+        changeOrigin: true,
+        pathRewrite: {
+          "^/pms": "/pms"
+        }
+      },
       "/quartz": {
         target: "http://127.0.0.1:8889",
         changeOrigin: true,

@@ -1,4 +1,4 @@
-import {defaultRequest} from "@/network/request";
+import {pmsRequest} from "@/network/request";
 
 /**
  *
@@ -7,10 +7,46 @@ import {defaultRequest} from "@/network/request";
  * @returns {AxiosPromise}
  */
 export function queryForPage(queryPage) {
-  return defaultRequest({
-    method: "GET",
+  return pmsRequest({
+    method: "POST",
     data: queryPage,
-    url: "/data/clientApp.json"
+    url: "/app/list"
   });
+}
+
+export function disableApp(id) {
+  return pmsRequest({
+    method: "POST",
+    params: {
+      id
+    },
+    url: "/app/disabled"
+  })
+}
+
+export function enableApp(id) {
+  return pmsRequest({
+    method: "POST",
+    params: {
+      id
+    },
+    url: "/app/enabled"
+  })
+}
+
+export function findById(id) {
+  return pmsRequest({
+    method: "GET",
+    url: "/app/" + id
+  })
+}
+
+export function saveOrUpdate(clientApp) {
+  return pmsRequest({
+    method: "POST",
+    data: clientApp,
+    url: "/app"
+  })
+
 }
 

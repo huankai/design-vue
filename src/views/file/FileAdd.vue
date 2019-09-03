@@ -5,9 +5,9 @@
 </template>
 
 <script>
-    export default {
-        name: "FileAdd"
-    }
+  export default {
+    name: "FileAdd"
+  }
 </script>
 
 <style scoped>

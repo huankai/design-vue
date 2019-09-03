@@ -76,6 +76,34 @@ export function emiRequest(options) {
 }
 
 
+/* ------------------------------------ pms ----------------------------------------------- */
+
+const pmsInstance = axios.create({
+  baseURL: "/pms"
+});
+pmsInstance.interceptors.response.use(response => {
+  if (response.status === 200) {
+    if (response.data.statusCode === 10200) {
+      return response.data;
+    }
+  }
+  message.error(response.data.message || response.message || "请稍后再试");
+}, error => {
+  let message = "请稍后再试";
+  if (error.response) {
+    if (error.response.status === 403) {
+      message = error.response.data.message || "您无权限访问";
+    } else {
+      message = error.response.data.message || "操作失败";
+    }
+  }
+  message.error(message);
+});
+
+export function pmsRequest(options) {
+  return pmsInstance(options);
+}
+
 /* ------------------------------------ schedule ----------------------------------------------- */
 /**
  * scheduleInstance
