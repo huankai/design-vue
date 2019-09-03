@@ -73,18 +73,18 @@
 </template>
 
 <script>
-    const formItemLayout = {
-        labelCol: {span: 3},
-        wrapperCol: {span: 9}
-    };
-    export default {
-        name: "ScheduleDetail",
-        data() {
-            return {
-                formItemLayout
-            }
-        },
-    }
+  const formItemLayout = {
+    labelCol: {span: 3},
+    wrapperCol: {span: 9}
+  };
+  export default {
+    name: "ScheduleDetail",
+    data() {
+      return {
+        formItemLayout
+      }
+    },
+  }
 </script>
 
 <style scoped>

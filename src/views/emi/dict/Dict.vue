@@ -58,97 +58,97 @@
 </template>
 
 <script>
-    import {queryForPage, deleteById} from "@/network/dict";
-    import {Order, PageQuery} from "@/util/pageQuery";
+  import {queryForPage, deleteById} from "@/network/dict";
+  import {Order, PageQuery} from "@/util/pageQuery";
 
-    export default {
-        name: "Dict",
-        created() {
-            const query = new PageQuery();
-            query.param = this.params;
-            this.loadingData(query);
+  export default {
+    name: "Dict",
+    created() {
+      const query = new PageQuery();
+      query.param = this.params;
+      this.loadingData(query);
+    },
+    data() {
+      return {
+        visible: false,
+        data: [],
+        searchLoading: false,
+        deleteCacheLoading: false,
+        loading: {spinning: false, tip: "加载中..."},
+        pagination: {
+          total: 0,
+          defaultPageSize: 10,
+          showTotal: (total, range) => {
+            return "共 " + total + " 条记录";
+          },
+          pageSizeOptions: ['10', '20', '50', '100'],
+          showQuickJumper: true,
+          showSizeChanger: true
         },
-        data() {
-            return {
-                visible: false,
-                data: [],
-                searchLoading: false,
-                deleteCacheLoading: false,
-                loading: {spinning: false, tip: "加载中..."},
-                pagination: {
-                    total: 0,
-                    defaultPageSize: 10,
-                    showTotal: (total, range) => {
-                        return "共 " + total + " 条记录";
-                    },
-                    pageSizeOptions: ['10', '20', '50', '100'],
-                    showQuickJumper: true,
-                    showSizeChanger: true
-                },
-                params: {
-                    baseCode: null,
-                    codeName: null
+        params: {
+          baseCode: null,
+          codeName: null
 
-                }
-            }
-        },
-        computed: {
-            columns() {
-                return [{
-                    title: '编号',
-                    align: 'center',
-                    dataIndex: 'baseCode',
-                    width: '15%',
-                    sorter: true
-                }, {
-                    title: '名称',
-                    align: 'center',
-                    dataIndex: 'codeName',
-                    width: '15%'
-                }, {
-                    title: '是否国标',
-                    align: 'center',
-                    width: '15%',
-                    scopedSlots: {
-                        customRender: 'isGbSlot'
-                    }
-                }, {
-                    title: '操作',
-                    scopedSlots: {
-                        customRender: "action"
-                    },
-                    width: "25%"
-                }
-                ];
-            }
-        },
-        methods: {
-            dataExport() {
-                this.$message.info("正在开发中...")
-            },
-            loadingData(queryPage) {
-                this.loading.spinning = true;
-                queryForPage(queryPage).then(response => {
-                    this.data = response.data.data;
-                    this.pagination.total = response.data.totalRow;
-                }).finally(() => this.loading.spinning = false);
-            },
-            handlerDelete(record) {
-                deleteById(record.id).then(response => {
-                    this.$message.success(response.message || "操作成功");
-                }).finally(() => {
-                    this.loadingData(new PageQuery(this.params));
-                });
-            },
-            searchBtn() {
-                this.loadingData(new PageQuery(this.params));
-            },
-            handleChange(pagination, filters, sorter) {
-                let orders = sorter.order ? [new Order(sorter.field, sorter.order === "descend")] : [];
-                this.loadingData(new PageQuery(this.params, pagination.current, pagination.pageSize, orders));
-            }
         }
+      }
+    },
+    computed: {
+      columns() {
+        return [{
+          title: '编号',
+          align: 'center',
+          dataIndex: 'baseCode',
+          width: '15%',
+          sorter: true
+        }, {
+          title: '名称',
+          align: 'center',
+          dataIndex: 'codeName',
+          width: '15%'
+        }, {
+          title: '是否国标',
+          align: 'center',
+          width: '15%',
+          scopedSlots: {
+            customRender: 'isGbSlot'
+          }
+        }, {
+          title: '操作',
+          scopedSlots: {
+            customRender: "action"
+          },
+          width: "25%"
+        }
+        ];
+      }
+    },
+    methods: {
+      dataExport() {
+        this.$message.info("正在开发中...")
+      },
+      loadingData(queryPage) {
+        this.loading.spinning = true;
+        queryForPage(queryPage).then(response => {
+          this.data = response.data.data;
+          this.pagination.total = response.data.totalRow;
+        }).finally(() => this.loading.spinning = false);
+      },
+      handlerDelete(record) {
+        deleteById(record.id).then(response => {
+          this.$message.success(response.message || "操作成功");
+        }).finally(() => {
+          this.loadingData(new PageQuery(this.params));
+        });
+      },
+      searchBtn() {
+        this.loadingData(new PageQuery(this.params));
+      },
+      handleChange(pagination, filters, sorter) {
+        let orders = sorter.order ? [new Order(sorter.field, sorter.order === "descend")] : [];
+        this.loadingData(new PageQuery(this.params, pagination.current, pagination.pageSize, orders));
+      }
     }
+  }
 </script>
 
 <style scoped>

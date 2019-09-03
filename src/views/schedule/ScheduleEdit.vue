@@ -50,7 +50,9 @@
         <a-col :span="24">
           <a-form-item :label-col="{span:3}" :wrapper-col="{span: 9}"
                        label="调度参数">
-            <a-textarea placeholder="请输入调度参数... " v-decorator="['params',{initialValue:schedule.params,rules: [{max:200,message:'最长不能超过300字'}]}]" :autosize="{minRows: 2,maxRows:5}"/>
+            <a-textarea placeholder="请输入调度参数... "
+                        v-decorator="['params',{initialValue:schedule.params,rules: [{max:200,message:'最长不能超过300字'}]}]"
+                        :autosize="{minRows: 2,maxRows:5}"/>
           </a-form-item>
         </a-col>
       </a-row>
@@ -110,59 +112,59 @@
 </template>
 
 <script>
-    import {findById, getTaskBeans, saveOrUpdate} from "@/network/schedule";
+  import {findById, getTaskBeans, saveOrUpdate} from "@/network/schedule";
 
-    const formItemLayout = {
-        labelCol: {span: 3},
-        wrapperCol: {span: 9}
-    };
-    export default {
-        name: "ScheduleEdit",
-        data() {
-            return {
-                loading: false,
-                formItemLayout,
-                taskBeans: [],
-                schedule: {
-                    state: 1,
-                    jobGroup: "default",
-                    triggerGroup: "default"
+  const formItemLayout = {
+    labelCol: {span: 3},
+    wrapperCol: {span: 9}
+  };
+  export default {
+    name: "ScheduleEdit",
+    data() {
+      return {
+        loading: false,
+        formItemLayout,
+        taskBeans: [],
+        schedule: {
+          state: 1,
+          jobGroup: "default",
+          triggerGroup: "default"
 
-                }
-            }
-        },
-        beforeCreate() {
-            this.form = this.$form.createForm(this)
-        },
-        created() {
-            getTaskBeans().then(response => {
-                this.taskBeans = response.data;
-            });
-            let id = this.$route.query.id;
-            if (id) {
-                findById(id).then(response => {
-                    this.schedule = response.data;
-                })
-            }
-        },
-        methods: {
-            handleSubmit() {
-                this.form.validateFields((errors, values) => {
-                    if (!errors) {
-                        this.loading = true;
-                        saveOrUpdate(Object.assign(this.schedule, this.form.getFieldsValue())).then(response => {
-                            if (response.statusCode === 10200) {
-                                this.$message.success(response.message || "保存成功");
-                                this.$router.replace("/schedule");
-                            } else {
-                                this.$message.error(response.message || "保存失败");
-                            }
-                        }).finally(() => this.loading = false);
-                    }
-                });
-            }
         }
+      }
+    },
+    beforeCreate() {
+      this.form = this.$form.createForm(this)
+    },
+    created() {
+      getTaskBeans().then(response => {
+        this.taskBeans = response.data;
+      });
+      let id = this.$route.query.id;
+      if (id) {
+        findById(id).then(response => {
+          this.schedule = response.data;
+        })
+      }
+    },
+    methods: {
+      handleSubmit() {
+        this.form.validateFields((errors, values) => {
+          if (!errors) {
+            this.loading = true;
+            saveOrUpdate(Object.assign(this.schedule, this.form.getFieldsValue())).then(response => {
+              if (response.statusCode === 10200) {
+                this.$message.success(response.message || "保存成功");
+                this.$router.replace("/schedule");
+              } else {
+                this.$message.error(response.message || "保存失败");
+              }
+            }).finally(() => this.loading = false);
+          }
+        });
+      }
     }
+  }
 </script>
 
 <style scoped>

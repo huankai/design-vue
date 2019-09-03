@@ -17,7 +17,7 @@
         <a-col :span="8">
           <div>
             <a-button type="primary" icon="search" @click="searchBtn">搜索</a-button>
-<!--            <a-button type="primary" icon="file-excel" @click="visible = true">导出</a-button>-->
+            <!--            <a-button type="primary" icon="file-excel" @click="visible = true">导出</a-button>-->
             <router-link to="/address/add">
               <a-button type="primary" icon="plus">添加</a-button>
             </router-link>
@@ -72,115 +72,115 @@
 </template>
 
 <script>
-    import {queryForPage, deleteById, getExportData} from "@/network/address";
-    import {Order, PageQuery} from "@/util/pageQuery";
+  import {queryForPage, deleteById, getExportData} from "@/network/address";
+  import {Order, PageQuery} from "@/util/pageQuery";
 
-    let fileDownLoad = require("js-file-download");
-    export default {
-        name: "Address",
-        created() {
-            const query = new PageQuery();
-            query.param = this.params;
-            this.loadingData(query);
+  let fileDownLoad = require("js-file-download");
+  export default {
+    name: "Address",
+    created() {
+      const query = new PageQuery();
+      query.param = this.params;
+      this.loadingData(query);
+    },
+    data() {
+      return {
+        visible: false,
+        exportLoading: false,
+        data: [],
+        searchLoading: false,
+        deleteCacheLoading: false,
+        loading: {spinning: false, tip: "加载中..."},
+        pagination: {
+          total: 0,
+          defaultPageSize: 10,
+          showTotal: (total, range) => {
+            return "共 " + total + " 条记录";
+          },
+          pageSizeOptions: ['10', '20', '50', '100'],
+          showQuickJumper: true,
+          showSizeChanger: true
         },
-        data() {
-            return {
-                visible: false,
-                exportLoading: false,
-                data: [],
-                searchLoading: false,
-                deleteCacheLoading: false,
-                loading: {spinning: false, tip: "加载中..."},
-                pagination: {
-                    total: 0,
-                    defaultPageSize: 10,
-                    showTotal: (total, range) => {
-                        return "共 " + total + " 条记录";
-                    },
-                    pageSizeOptions: ['10', '20', '50', '100'],
-                    showQuickJumper: true,
-                    showSizeChanger: true
-                },
-                params: {
-                    code: null,
-                    cityType: 1,//// 一级默认显示省
-                    fullName: null
+        params: {
+          code: null,
+          cityType: 1,//// 一级默认显示省
+          fullName: null
 
-                }
-            }
-        },
-        computed: {
-            columns() {
-                return [{
-                    title: '自定义编号',
-                    align: 'center',
-                    dataIndex: 'code',
-                    width: '15%',
-                    sorter: true
-                }, {
-                    title: '编号(国标)',
-                    align: 'center',
-                    dataIndex: 'areaCode',
-                    width: '15%',
-                    sorter: true
-                }, {
-                    title: '名称',
-                    align: 'center',
-                    dataIndex: 'fullName',
-                    width: '15%'
-                }, {
-                    title: '简称',
-                    align: 'center',
-                    dataIndex: 'shortName',
-                    width: '15%'
-                }, {
-                    title: '级别',
-                    align: 'center',
-                    dataIndex: 'cityTypeText',
-                    width: "10%"
-                }, {
-                    title: '邮编',
-                    align: 'center',
-                    dataIndex: 'postOffice',
-                    width: "10%"
-                }, {
-                    title: '操作',
-                    scopedSlots: {
-                        customRender: "action"
-                    },
-                    width: "25%"
-                }
-                ];
-            }
-        },
-        methods: {
-            dataExport() {
-                // this.visible = false;
-                // this.exportLoading = true;
-                // getExportData(this.params).then(response => {
-                //     fileDownLoad(response, "file.json");
-                // }).finally(() => this.exportLoading = false);
-                this.$message.info("正在开发中...");
-            },
-            loadingData(queryPage) {
-                this.loading.spinning = true;
-                queryForPage(queryPage).then(response => {
-                    this.data = response.data.data;
-                    this.pagination.total = response.data.totalRow;
-                }).finally(() => this.loading.spinning = false);
-            },
-            handlerDelete(record) {
-                deleteById(record.id).then(response => {
-                    this.$message.success(response.message || "操作成功");
-                }).finally(() => this.loadingData(new PageQuery(this.params)));
-            },
-            searchBtn() {
-                this.loadingData(new PageQuery(this.params));
-            },
-            handleChange(pagination, filters, sorter) {
-                let orders = sorter.order ? [new Order(sorter.field, sorter.order === "descend")] : [];
-                this.loadingData(new PageQuery(this.params, pagination.current, pagination.pageSize, orders));
-            }
         }
+      }
+    },
+    computed: {
+      columns() {
+        return [{
+          title: '自定义编号',
+          align: 'center',
+          dataIndex: 'code',
+          width: '15%',
+          sorter: true
+        }, {
+          title: '编号(国标)',
+          align: 'center',
+          dataIndex: 'areaCode',
+          width: '15%',
+          sorter: true
+        }, {
+          title: '名称',
+          align: 'center',
+          dataIndex: 'fullName',
+          width: '15%'
+        }, {
+          title: '简称',
+          align: 'center',
+          dataIndex: 'shortName',
+          width: '15%'
+        }, {
+          title: '级别',
+          align: 'center',
+          dataIndex: 'cityTypeText',
+          width: "10%"
+        }, {
+          title: '邮编',
+          align: 'center',
+          dataIndex: 'postOffice',
+          width: "10%"
+        }, {
+          title: '操作',
+          scopedSlots: {
+            customRender: "action"
+          },
+          width: "25%"
+        }
+        ];
+      }
+    },
+    methods: {
+      dataExport() {
+        // this.visible = false;
+        // this.exportLoading = true;
+        // getExportData(this.params).then(response => {
+        //     fileDownLoad(response, "file.json");
+        // }).finally(() => this.exportLoading = false);
+        this.$message.info("正在开发中...");
+      },
+      loadingData(queryPage) {
+        this.loading.spinning = true;
+        queryForPage(queryPage).then(response => {
+          this.data = response.data.data;
+          this.pagination.total = response.data.totalRow;
+        }).finally(() => this.loading.spinning = false);
+      },
+      handlerDelete(record) {
+        deleteById(record.id).then(response => {
+          this.$message.success(response.message || "操作成功");
+        }).finally(() => this.loadingData(new PageQuery(this.params)));
+      },
+      searchBtn() {
+        this.loadingData(new PageQuery(this.params));
+      },
+      handleChange(pagination, filters, sorter) {
+        let orders = sorter.order ? [new Order(sorter.field, sorter.order === "descend")] : [];
+        this.loadingData(new PageQuery(this.params, pagination.current, pagination.pageSize, orders));
+      }
     }
+  }
 </script>

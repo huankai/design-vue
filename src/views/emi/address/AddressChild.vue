@@ -17,7 +17,7 @@
         <a-col :span="12">
           <div>
             <a-button type="primary" icon="search" @click="searchBtn">搜索</a-button>
-            <a-button type="primary" icon="file-excel" @click="visible = true">导出</a-button>
+<!--            <a-button type="primary" icon="file-excel" @click="visible = true">导出</a-button>-->
             <router-link :to="{path: '/address/add',query:{parentId:this.$route.query.id}}">
               <a-button type="primary" icon="plus">添加</a-button>
             </router-link>
@@ -76,128 +76,128 @@
 </template>
 
 <script>
-    import {queryForPage, findById, deleteById} from "@/network/address";
-    import {Order, PageQuery} from "@/util/pageQuery";
+  import {queryForPage, findById, deleteById} from "@/network/address";
+  import {Order, PageQuery} from "@/util/pageQuery";
 
-    export default {
-        name: "AddressChild",
-        created() {
-            this.renderData(this.$route.query.id);
+  export default {
+    name: "AddressChild",
+    created() {
+      this.renderData(this.$route.query.id);
+    },
+    watch: {
+      // 因为点击下级的时候，也会在当前页面渲染，这里监听 $route 的变化，会调用  flushPage 重新渲染数据.
+      "$route": "flushPage",
+    },
+    data() {
+      return {
+        visible: false,
+        data: [],
+        parentAddress: null,
+        searchLoading: false,
+        deleteCacheLoading: false,
+        loading: {spinning: false, tip: "加载中..."},
+        pagination: {
+          total: 0,
+          defaultPageSize: 10,
+          showTotal: (total, range) => {
+            return "共 " + total + " 条记录";
+          },
+          pageSizeOptions: ['10', '20', '50', '100'],
+          showQuickJumper: true,
+          showSizeChanger: true
         },
-        watch: {
-            // 因为点击下级的时候，也会在当前页面渲染，这里监听 $route 的变化，会调用  flushPage 重新渲染数据.
-            "$route": "flushPage",
-        },
-        data() {
-            return {
-                visible: false,
-                data: [],
-                parentAddress: null,
-                searchLoading: false,
-                deleteCacheLoading: false,
-                loading: {spinning: false, tip: "加载中..."},
-                pagination: {
-                    total: 0,
-                    defaultPageSize: 10,
-                    showTotal: (total, range) => {
-                        return "共 " + total + " 条记录";
-                    },
-                    pageSizeOptions: ['10', '20', '50', '100'],
-                    showQuickJumper: true,
-                    showSizeChanger: true
-                },
-                params: {
-                    code: null,
-                    parentId: null,
-                    fullName: null
+        params: {
+          code: null,
+          parentId: null,
+          fullName: null
 
-                }
-            }
-        },
-        computed: {
-            columns() {
-                const _this = this;
-                return [{
-                    title: '上级名称',
-                    align: 'center',
-                    width: '15%',
-                    customRender: function (text, record, index) {
-                        return _this.parentAddress.fullName;
-                    }
-                }, {
-                    title: '自定义编号',
-                    align: 'center',
-                    dataIndex: 'code',
-                    width: '15%',
-                    sorter: true
-                }, {
-                    title: '编号(国标)',
-                    align: 'center',
-                    dataIndex: 'areaCode',
-                    width: '15%',
-                    sorter: true
-                }, {
-                    title: '名称',
-                    align: 'center',
-                    dataIndex: 'fullName',
-                    width: '15%'
-                }, {
-                    title: '级别',
-                    align: 'center',
-                    dataIndex: 'cityTypeText',
-                    width: "10%"
-                }, {
-                    title: '邮编',
-                    align: 'center',
-                    dataIndex: 'postOffice',
-                    width: "10%"
-                }, {
-                    title: '操作',
-                    scopedSlots: {
-                        customRender: "action"
-                    },
-                    width: "20%"
-                }
-                ];
-            }
-        },
-        methods: {
-            flushPage(newValue, oldValue) {
-                this.renderData(newValue.query.id);
-            },
-            dataExport() {
-                this.$message.info("正在开发中...")
-            },
-            renderData(id) {
-                findById(id).then(response => {
-                    this.params.parentId = response.data.id;
-                    this.parentAddress = response.data;
-                    const query = new PageQuery();
-                    query.param = this.params;
-                    this.loadingData(query);
-                });
-            },
-            loadingData(queryPage) {
-                this.loading.spinning = true;
-                queryForPage(queryPage).then(response => {
-                    this.data = response.data.data;
-                    this.pagination.total = response.data.totalRow;
-                }).finally(() => this.loading.spinning = false);
-            },
-            handlerDelete(record) {
-                deleteById(record.id).then(response => {
-                    this.$message.success(response.data.message || "操作成功");
-                }).finally(() => {
-                    this.loadingData(new PageQuery(this.params));
-                });
-            },
-            searchBtn() {
-                this.loadingData(new PageQuery(this.params));
-            },
-            handleChange(pagination, filters, sorter) {
-                let orders = sorter.order ? [new Order(sorter.field, sorter.order === "descend")] : [];
-                this.loadingData(new PageQuery(this.params, pagination.current, pagination.pageSize, orders));
-            }
         }
+      }
+    },
+    computed: {
+      columns() {
+        const _this = this;
+        return [{
+          title: '上级名称',
+          align: 'center',
+          width: '15%',
+          customRender: function (text, record, index) {
+            return _this.parentAddress.fullName;
+          }
+        }, {
+          title: '自定义编号',
+          align: 'center',
+          dataIndex: 'code',
+          width: '15%',
+          sorter: true
+        }, {
+          title: '编号(国标)',
+          align: 'center',
+          dataIndex: 'areaCode',
+          width: '15%',
+          sorter: true
+        }, {
+          title: '名称',
+          align: 'center',
+          dataIndex: 'fullName',
+          width: '15%'
+        }, {
+          title: '级别',
+          align: 'center',
+          dataIndex: 'cityTypeText',
+          width: "10%"
+        }, {
+          title: '邮编',
+          align: 'center',
+          dataIndex: 'postOffice',
+          width: "10%"
+        }, {
+          title: '操作',
+          scopedSlots: {
+            customRender: "action"
+          },
+          width: "20%"
+        }
+        ];
+      }
+    },
+    methods: {
+      flushPage(newValue, oldValue) {
+        this.renderData(newValue.query.id);
+      },
+      dataExport() {
+        this.$message.info("正在开发中...")
+      },
+      renderData(id) {
+        findById(id).then(response => {
+          this.params.parentId = response.data.id;
+          this.parentAddress = response.data;
+          const query = new PageQuery();
+          query.param = this.params;
+          this.loadingData(query);
+        });
+      },
+      loadingData(queryPage) {
+        this.loading.spinning = true;
+        queryForPage(queryPage).then(response => {
+          this.data = response.data.data;
+          this.pagination.total = response.data.totalRow;
+        }).finally(() => this.loading.spinning = false);
+      },
+      handlerDelete(record) {
+        deleteById(record.id).then(response => {
+          this.$message.success(response.data.message || "操作成功");
+        }).finally(() => {
+          this.loadingData(new PageQuery(this.params));
+        });
+      },
+      searchBtn() {
+        this.loadingData(new PageQuery(this.params));
+      },
+      handleChange(pagination, filters, sorter) {
+        let orders = sorter.order ? [new Order(sorter.field, sorter.order === "descend")] : [];
+        this.loadingData(new PageQuery(this.params, pagination.current, pagination.pageSize, orders));
+      }
     }
+  }
 </script>

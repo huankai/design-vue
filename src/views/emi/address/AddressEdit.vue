@@ -147,157 +147,157 @@
 </template>
 
 <script>
-    import {findById, getCityType} from "@/network/address";
-    import {queryForPage, saveOrUpdate} from "@/network/address";
-    import {PageQuery} from "@/util/pageQuery";
+  import {findById, getCityType} from "@/network/address";
+  import {queryForPage, saveOrUpdate} from "@/network/address";
+  import {PageQuery} from "@/util/pageQuery";
 
-    const formItemLayout = {
-        labelCol: {span: 6},
-        wrapperCol: {span: 18}
-    };
-    const formTailLayout = {
-        labelCol: {span: 4},
-        wrapperCol: {span: 8, offset: 4}
-    };
+  const formItemLayout = {
+    labelCol: {span: 6},
+    wrapperCol: {span: 18}
+  };
+  const formTailLayout = {
+    labelCol: {span: 4},
+    wrapperCol: {span: 8, offset: 4}
+  };
 
-    export default {
-        name: "AddressEdit",
-        data() {
-            return {
-                visibleParentModal: false,
-                loading: false,
-                addressData: {
-                    cityType: 1
-                },
-                formItemLayout,
-                formTailLayout,
-                cityTypeOptions: [],
-                rowSelection: {
-                    columnWidth: '5%',
-                    type: 'radio',
-                    selectedRowKeys: [],
-                    onChange: (selectedRowKeys, selectedRows) => {
-                        this.rowSelection.selectedRowKeys = selectedRowKeys;
-                        this.addressData.parentId = null;
-                        this.form.setFieldsValue({
-                            parentName: null
-                        });
-                    },
-                    onSelect: (record, selected, selectedRows) => {
-                        this.form.setFieldsValue({
-                            parentName: record.fullName
-                        });
-                        this.addressData.parentId = record.id;
-                    }
-                },
-                parentColumns: [{
-                    title: '自定义编号',
-                    align: 'center',
-                    dataIndex: 'code',
-                    width: '15%'
-                }, {
-                    title: '编号(国标)',
-                    align: 'center',
-                    dataIndex: 'areaCode',
-                    width: '15%'
-                }, {
-                    title: '名称',
-                    align: 'center',
-                    dataIndex: 'fullName',
-                    width: '15%'
-                }, {
-                    title: '全称',
-                    align: 'center',
-                    dataIndex: 'mergerName',
-                    width: '25%'
-                }
-                ],
-                parentLoading: false,
-                parentData: [],
-                parentSearchParam: {},
-                pagination: {
-                    total: 0,
-                    current: 0,
-                    defaultPageSize: 10,
-                    showTotal: (total, range) => {
-                        return "共 " + total + " 条记录";
-                    },
-                    pageSizeOptions: ['10', '20', '50', '100'],
-                    showQuickJumper: true,
-                    showSizeChanger: true
-                }
-            };
+  export default {
+    name: "AddressEdit",
+    data() {
+      return {
+        visibleParentModal: false,
+        loading: false,
+        addressData: {
+          cityType: 1
         },
-        beforeCreate() {
-            this.form = this.$form.createForm(this);
-        },
-        created() {
-            getCityType().then(response => {
-                this.cityTypeOptions = response.data;
+        formItemLayout,
+        formTailLayout,
+        cityTypeOptions: [],
+        rowSelection: {
+          columnWidth: '5%',
+          type: 'radio',
+          selectedRowKeys: [],
+          onChange: (selectedRowKeys, selectedRows) => {
+            this.rowSelection.selectedRowKeys = selectedRowKeys;
+            this.addressData.parentId = null;
+            this.form.setFieldsValue({
+              parentName: null
             });
-            let id = this.$route.query.id;
-            if (id) {
-                findById(id).then(response => {
-                    this.addressData = response.data;
-                })
-            } else {
-                let parentId = this.$route.query.parentId;
-                if (parentId) {
-                    findById(parentId).then(response => {
-                        this.addressData.cityType = response.data.cityType + 1;
-                        this.addressData.parentId = parentId;
-                        this.addressData.parentName = response.data.fullName;
-                    })
-                }
-            }
+          },
+          onSelect: (record, selected, selectedRows) => {
+            this.form.setFieldsValue({
+              parentName: record.fullName
+            });
+            this.addressData.parentId = record.id;
+          }
         },
-        computed: {
-            showSelectParent() {
-                return this.addressData.cityType !== 0;
-            }
-        },
-        methods: {
-            handleTableChange(pagination) {
-                this.pagination.current = pagination.current;
-                this.pagination.defaultPageSize = pagination.pageSize;
-                this.loadParentData();
-            },
-            handleCityTypeChange(value) {
-                this.addressData.cityType = value;
-                this.addressData.parentId = null;
-                this.addressData.parentName = null;
-            },
-            showParentAddressModal() {
-                this.visibleParentModal = true;
-                this.parentSearchParam.fullName = null;
-                this.loadParentData();
-            },
-            loadParentData(fullName) {
-                this.parentLoading = true;
-                this.parentSearchParam.cityType = this.addressData.cityType - 1;
-                this.parentSearchParam.fullName = fullName;
-                queryForPage(new PageQuery(this.parentSearchParam, this.pagination.current, this.pagination.defaultPageSize))
-                    .then(response => {
-                        this.parentData = response.data.data;
-                        this.pagination.total = response.data.totalRow;
-                        this.rowSelection.selectedRowKeys = [this.addressData.parentId];
-                    }).finally(() => this.parentLoading = false);
-            },
-            handlerSearch(value) {
-                this.loadParentData(value);
-            },
-            handleSubmit() {
-                this.form.validateFields((errors, values) => {
-                    if (!errors) {
-                        this.loading = true;
-                        saveOrUpdate(Object.assign(this.addressData, this.form.getFieldsValue()))
-                            .then(response => {
-                                this.$message.success(response.message || "保存成功");
-                                this.$router.replace("/address");
-                            }).finally(() => this.loading = false);
-                    }
-                });
-            }
+        parentColumns: [{
+          title: '自定义编号',
+          align: 'center',
+          dataIndex: 'code',
+          width: '15%'
+        }, {
+          title: '编号(国标)',
+          align: 'center',
+          dataIndex: 'areaCode',
+          width: '15%'
+        }, {
+          title: '名称',
+          align: 'center',
+          dataIndex: 'fullName',
+          width: '15%'
+        }, {
+          title: '全称',
+          align: 'center',
+          dataIndex: 'mergerName',
+          width: '25%'
         }
+        ],
+        parentLoading: false,
+        parentData: [],
+        parentSearchParam: {},
+        pagination: {
+          total: 0,
+          current: 0,
+          defaultPageSize: 10,
+          showTotal: (total, range) => {
+            return "共 " + total + " 条记录";
+          },
+          pageSizeOptions: ['10', '20', '50', '100'],
+          showQuickJumper: true,
+          showSizeChanger: true
+        }
+      };
+    },
+    beforeCreate() {
+      this.form = this.$form.createForm(this);
+    },
+    created() {
+      getCityType().then(response => {
+        this.cityTypeOptions = response.data;
+      });
+      let id = this.$route.query.id;
+      if (id) {
+        findById(id).then(response => {
+          this.addressData = response.data;
+        })
+      } else {
+        let parentId = this.$route.query.parentId;
+        if (parentId) {
+          findById(parentId).then(response => {
+            this.addressData.cityType = response.data.cityType + 1;
+            this.addressData.parentId = parentId;
+            this.addressData.parentName = response.data.fullName;
+          })
+        }
+      }
+    },
+    computed: {
+      showSelectParent() {
+        return this.addressData.cityType !== 0;
+      }
+    },
+    methods: {
+      handleTableChange(pagination) {
+        this.pagination.current = pagination.current;
+        this.pagination.defaultPageSize = pagination.pageSize;
+        this.loadParentData();
+      },
+      handleCityTypeChange(value) {
+        this.addressData.cityType = value;
+        this.addressData.parentId = null;
+        this.addressData.parentName = null;
+      },
+      showParentAddressModal() {
+        this.visibleParentModal = true;
+        this.parentSearchParam.fullName = null;
+        this.loadParentData();
+      },
+      loadParentData(fullName) {
+        this.parentLoading = true;
+        this.parentSearchParam.cityType = this.addressData.cityType - 1;
+        this.parentSearchParam.fullName = fullName;
+        queryForPage(new PageQuery(this.parentSearchParam, this.pagination.current, this.pagination.defaultPageSize))
+          .then(response => {
+            this.parentData = response.data.data;
+            this.pagination.total = response.data.totalRow;
+            this.rowSelection.selectedRowKeys = [this.addressData.parentId];
+          }).finally(() => this.parentLoading = false);
+      },
+      handlerSearch(value) {
+        this.loadParentData(value);
+      },
+      handleSubmit() {
+        this.form.validateFields((errors, values) => {
+          if (!errors) {
+            this.loading = true;
+            saveOrUpdate(Object.assign(this.addressData, this.form.getFieldsValue()))
+              .then(response => {
+                this.$message.success(response.message || "保存成功");
+                this.$router.replace("/address");
+              }).finally(() => this.loading = false);
+          }
+        });
+      }
     }
+  }
 </script>

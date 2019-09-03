@@ -11,7 +11,8 @@
           </a-form-item>
         </a-col>
         <a-col :span="8">
-          <a-form-item :label-col="{span: 8}" :wrapper-col="{span:16}" label="任务状态">{{ schedule.stateText}}</a-form-item>
+          <a-form-item :label-col="{span: 8}" :wrapper-col="{span:16}" label="任务状态">{{ schedule.stateText}}
+          </a-form-item>
         </a-col>
       </a-row>
     </div>
@@ -66,99 +67,101 @@
 </template>
 
 <script>
-    import DateSearch from "@/components/search/DateSearch";
-    import {findById, queryForLogPage} from "@/network/schedule";
-    import {ConditionParam, DateRangeCondition, Order, PageQuery, SimpleCondition} from "@/util/pageQuery";
+  import DateSearch from "@/components/search/DateSearch";
+  import {findById, queryForLogPage} from "@/network/schedule";
+  import {ConditionParam, DateRangeCondition, Order, PageQuery, SimpleCondition} from "@/util/pageQuery";
 
-    export default {
-        name: "ScheduleLog",
-        components: {DateSearch},
-        data() {
-            return {
-                data: [],
-                schedule: {},
-                stateList: [
-                    {name: "成功", value: 1},
-                    {name: "失败", value: 0}
-                ],
-                params: new ConditionParam([new SimpleCondition("jobId", null), new SimpleCondition("success", null)],
-                    [new DateRangeCondition(null, "startDate")]),
-                loading: false,
-                pagination: {
-                    total: 0,
-                    defaultPageSize: 10,
-                    showTotal: (total, range) => {
-                        return "共 " + total + " 条记录";
-                    },
-                    pageSizeOptions: ['10', '20', '50', '100'],
-                    showQuickJumper: true,
-                    showSizeChanger: true
-                },
-            }
+  export default {
+    name: "ScheduleLog",
+    components: {DateSearch},
+    data() {
+      return {
+        data: [],
+        schedule: {},
+        stateList: [
+          {name: "成功", value: 1},
+          {name: "失败", value: 0}
+        ],
+        params: new ConditionParam([new SimpleCondition("jobId", null), new SimpleCondition("success", null)],
+          [new DateRangeCondition(null, "startDate")]),
+        loading: false,
+        pagination: {
+          total: 0,
+          defaultPageSize: 10,
+          showTotal: (total, range) => {
+            return "共 " + total + " 条记录";
+          },
+          pageSizeOptions: ['10', '20', '50', '100'],
+          showQuickJumper: true,
+          showSizeChanger: true
         },
-        created() {
-            findById(this.$route.query.id).then(response => {
-                this.schedule = response.data;
-                this.params.updateSimpleValue("jobId", response.data.id);
-                this.loadingData(new PageQuery(this.params));
-            });
-        },
-        computed: {
-            columns() {
-                return [{
-                    title: '执行时间',
-                    align: 'center',
-                    dataIndex: 'startDate',
-                    width: '20%',
-                    sorter: true
-                }, {
-                    title: '耗时(分)',
-                    align: 'center',
-                    dataIndex: 'takeTime',
-                    width: '10%'
-                    // sorter: (a, b) => a.age - b.age
-                }, {
-                    title: '状态',
-                    align: 'center',
-                    dataIndex: 'success',
-                    width: "10%",
-                    scopedSlots: {
-                        customRender: "success"
-                    }
+      }
+    },
+    created() {
+      findById(this.$route.query.id).then(response => {
+        this.schedule = response.data;
+        this.params.updateSimpleValue("jobId", response.data.id);
+        let pageQuery = new PageQuery(this.params);
+        pageQuery.addOrder(new Order("startDate", true));
+        this.loadingData(pageQuery);
+      });
+    },
+    computed: {
+      columns() {
+        return [{
+          title: '执行时间',
+          align: 'center',
+          dataIndex: 'startDate',
+          width: '20%',
+          sorter: true
+        }, {
+          title: '耗时(分)',
+          align: 'center',
+          dataIndex: 'takeTime',
+          width: '10%'
+          // sorter: (a, b) => a.age - b.age
+        }, {
+          title: '状态',
+          align: 'center',
+          dataIndex: 'success',
+          width: "10%",
+          scopedSlots: {
+            customRender: "success"
+          }
 
-                }, {
-                    title: '消息',
-                    align: 'center',
-                    dataIndex: 'message',
-                    width: "60%"
-                }
-                ];
-            }
-        },
-        methods: {
-            dateChange(selected) {
-                this.params.updateDateRangeValue("startDate", selected);
-                console.log(this.params);
-            },
-            handleStateChange(value) {
-                this.params.updateSimpleValue("success", value);
-            },
-            handlerSearch() {
-                this.loadingData(new PageQuery(this.params));
-            },
-            loadingData(pageQuery) {
-                this.loading = true;
-                queryForLogPage(pageQuery).then(response => {
-                    this.data = response.data.data;
-                    this.pagination.total = response.data.totalRow;
-                }).finally(() => this.loading = false);
-            },
-            handleChange(pagination, filters, sorter) {
-                let orders = sorter.order ? [new Order(sorter.field, sorter.order === "descend")] : [];
-                this.loadingData(new PageQuery(this.params, pagination.current, pagination.pageSize, orders));
-            }
+        }, {
+          title: '消息',
+          align: 'center',
+          dataIndex: 'message',
+          width: "60%"
         }
+        ];
+      }
+    },
+    methods: {
+      dateChange(selected) {
+        this.params.updateDateRangeValue("startDate", selected);
+        console.log(this.params);
+      },
+      handleStateChange(value) {
+        this.params.updateSimpleValue("success", value);
+      },
+      handlerSearch() {
+        this.loadingData(new PageQuery(this.params));
+      },
+      loadingData(pageQuery) {
+        this.loading = true;
+        queryForLogPage(pageQuery).then(response => {
+          this.data = response.data.data;
+          this.pagination.total = response.data.totalRow;
+        }).finally(() => this.loading = false);
+      },
+      handleChange(pagination, filters, sorter) {
+        let orders = sorter.order ? [new Order(sorter.field, sorter.order === "descend")] : [];
+        this.loadingData(new PageQuery(this.params, pagination.current, pagination.pageSize, orders));
+      }
     }
+  }
 </script>
 
 <style scoped>

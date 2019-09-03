@@ -93,145 +93,136 @@
 </template>
 
 <script>
-    import {deleteById, pause, queryForPage, resume, trigger} from "@/network/schedule";
-    import {Order, PageQuery} from "@/util/pageQuery";
+  import {deleteById, pause, queryForPage, resume, trigger} from "@/network/schedule";
+  import {Order, PageQuery} from "@/util/pageQuery";
 
-    export default {
-        name: "Schedule",
-        created() {
-            this.loadingData(new PageQuery());
+  export default {
+    name: "Schedule",
+    created() {
+      this.loadingData(new PageQuery());
+    },
+    data() {
+      return {
+        data: [],
+        stateList: [
+          {name: "启用", value: 1},
+          {name: "停止", value: 2},
+          {name: "删除", value: 0}
+        ],
+        deleteCacheLoading: false,
+        loading: {spinning: false, tip: "加载中..."},
+        pagination: {
+          total: 0,
+          defaultPageSize: 10,
+          showTotal: (total, range) => {
+            return "共 " + total + " 条记录";
+          },
+          pageSizeOptions: ['10', '20', '50', '100'],
+          showQuickJumper: true,
+          showSizeChanger: true
         },
-        data() {
-            return {
-                data: [],
-                stateList: [
-                    {name: "启用", value: 1},
-                    {name: "停止", value: 2},
-                    {name: "删除", value: 0}
-                ],
-                deleteCacheLoading: false,
-                loading: {spinning: false, tip: "加载中..."},
-                pagination: {
-                    total: 0,
-                    defaultPageSize: 10,
-                    showTotal: (total, range) => {
-                        return "共 " + total + " 条记录";
-                    },
-                    pageSizeOptions: ['10', '20', '50', '100'],
-                    showQuickJumper: true,
-                    showSizeChanger: true
-                },
-                params: {
-                    jobName: null,
-                    state: null
-                }
-            }
-        },
-        computed: {
-            columns() {
-                return [{
-                    title: '名称',
-                    align: 'center',
-                    dataIndex: 'jobName',
-                    width: '15%'
-                }, {
-                    title: '组名',
-                    align: 'center',
-                    dataIndex: 'jobGroup',
-                    width: '10%'
-                }, {
-                    title: 'bean名称',
-                    align: 'center',
-                    dataIndex: 'beanName',
-                    width: "10%"
-                }, {
-                    title: 'cron 表达式',
-                    align: 'center',
-                    dataIndex: 'cronExpression',
-                    width: "15%"
-                }, {
-                    title: '状态',
-                    width: "5%",
-                    scopedSlots: {
-                        customRender: 'state'
-                    }
-                }, {
-                    title: '操作',
-                    scopedSlots: {
-                        customRender: "action"
-                    },
-                    width: "25%"
-                }
-                ];
-            }
-        },
-        methods: {
-            handlerDelete(record) {
-                deleteById(record.id).then(response => {
-                    this.$message.success(response.message || "操作成功");
-                }).finally(() => {
-                    this.loadingData(new PageQuery(this.params));
-                });
-            },
-            loadingData(queryPage) {
-                this.loading.spinning = true;
-                queryForPage(queryPage).then(response => {
-                    this.data = response.data.data;
-                    this.pagination.total = response.data.totalRow;
-                }).finally(() => this.loading.spinning = false);
-            },
-            handlerPause(record) {
-                pause(record.id).then(response => {
-                    this.$message.success(response.message || "操作成功");
-                }).finally(() => {
-                    this.loadingData(new PageQuery(this.params));
-                });
-            },
-            handlerResume(record) {
-                resume(record.id).then(response => {
-                    this.$message.success(response.message || "操作成功");
-                }).finally(() => {
-                    this.loadingData(new PageQuery(this.params));
-                });
-            },
-            handlerTrigger(record) {
-                trigger(record.id).then(response => {
-                    this.$message.success(response.message || "操作成功");
-                }).finally(() => {
-                    this.loadingData(new PageQuery(this.params));
-                });
-            },
-            handlerEnable() {
-
-            },
-            handleStateChange(value) {
-                this.params.state = value;
-            },
-            searchBtn() {
-                this.loadingData(new PageQuery(this.params));
-            },
-            // deleteCache() {
-            //     this.deleteCacheLoading = true;
-            //     const _this = this;
-            //     setTimeout(() => {
-            //         _this.deleteCacheLoading = false;
-            //     }, 2000);
-            // },
-            handleChange(pagination, filters, sorter) {
-                console.log(pagination);
-                console.log(filters);
-                // console.log(`sorter ${sorter}`);
-                console.log(sorter);
-                this.loading.spinning = true;
-                setTimeout(() => {
-                    this.loading.spinning = false;
-                }, 200);
-            },
-            filterOption(input, option) {
-                return option.componentOptions.children[0].text.toLowerCase().indexOf(input.toLowerCase()) >= 0
-            }
+        params: {
+          jobName: null,
+          state: null
         }
+      }
+    },
+    computed: {
+      columns() {
+        return [{
+          title: '名称',
+          align: 'center',
+          dataIndex: 'jobName',
+          width: '15%'
+        }, {
+          title: '组名',
+          align: 'center',
+          dataIndex: 'jobGroup',
+          width: '10%'
+        }, {
+          title: 'bean名称',
+          align: 'center',
+          dataIndex: 'beanName',
+          width: "10%"
+        }, {
+          title: 'cron 表达式',
+          align: 'center',
+          dataIndex: 'cronExpression',
+          width: "15%"
+        }, {
+          title: '状态',
+          width: "5%",
+          scopedSlots: {
+            customRender: 'state'
+          }
+        }, {
+          title: '操作',
+          scopedSlots: {
+            customRender: "action"
+          },
+          width: "25%"
+        }
+        ];
+      }
+    },
+    methods: {
+      handlerDelete(record) {
+        deleteById(record.id).then(response => {
+          this.$message.success(response.message || "操作成功");
+        }).finally(() => {
+          this.loadingData(new PageQuery(this.params));
+        });
+      },
+      loadingData(queryPage) {
+        this.loading.spinning = true;
+        queryForPage(queryPage).then(response => {
+          this.data = response.data.data;
+          this.pagination.total = response.data.totalRow;
+        }).finally(() => this.loading.spinning = false);
+      },
+      handlerPause(record) {
+        pause(record.id).then(response => {
+          this.$message.success(response.message || "操作成功");
+        }).finally(() => {
+          this.loadingData(new PageQuery(this.params));
+        });
+      },
+      handlerResume(record) {
+        resume(record.id).then(response => {
+          this.$message.success(response.message || "操作成功");
+        }).finally(() => {
+          this.loadingData(new PageQuery(this.params));
+        });
+      },
+      handlerTrigger(record) {
+        trigger(record.id).then(response => {
+          this.$message.success(response.message || "操作成功");
+        }).finally(() => {
+          this.loadingData(new PageQuery(this.params));
+        });
+      },
+      handleStateChange(value) {
+        this.params.state = value;
+      },
+      searchBtn() {
+        this.loadingData(new PageQuery(this.params));
+      },
+      // deleteCache() {
+      //     this.deleteCacheLoading = true;
+      //     const _this = this;
+      //     setTimeout(() => {
+      //         _this.deleteCacheLoading = false;
+      //     }, 2000);
+      // },
+      handleChange(pagination, filters, sorter) {
+        let orders = sorter.order ? [new Order(sorter.field, sorter.order === "descend")] : [];
+        this.loadingData(new PageQuery(this.params, pagination.current, pagination.pageSize, orders));
+      },
+      filterOption(input, option) {
+        return option.componentOptions.children[0].text.toLowerCase().indexOf(input.toLowerCase()) >= 0
+      }
     }
+  }
 </script>
 
 <style scoped>

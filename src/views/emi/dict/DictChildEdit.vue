@@ -88,66 +88,66 @@
 </template>
 
 <script>
-    import {findById, findChildById, saveOrUpdateChild} from "@/network/dict";
+  import {findById, findChildById, saveOrUpdateChild} from "@/network/dict";
 
-    const formItemLayout = {
-        labelCol: {span: 3},
-        wrapperCol: {span: 9}
-    };
-    const formTailLayout = {
-        labelCol: {span: 4},
-        wrapperCol: {span: 8, offset: 4}
-    };
-    export default {
-        name: "DictChildEdit",
-        data() {
-            return {
-                loading: false,
-                baseCodeName: null,
-                formItemLayout,
-                formTailLayout,
-                childDict: {
-                    isGb: false,
-                    state: false
-                }
-
-            };
-        },
-        beforeCreate() {
-            this.form = this.$form.createForm(this);
-        },
-        created() {
-            let id = this.$route.query.id;
-            if (id) {
-                findChildById(id).then(response => {
-                    this.childDict = response.data.childCode;
-                    this.baseCodeName = response.data.baseCodeName;
-                });
-            } else {
-                let baseCodeId = this.$route.query.baseCodeId;
-                if (baseCodeId) {
-                    this.childDict.baseCodeId = baseCodeId;
-                    findById(baseCodeId).then(response => {
-                        this.baseCodeName = response.data.codeName;
-                    });
-                }
-            }
-        },
-        methods: {
-            handleSubmit() {
-                this.form.validateFields((errors, values) => {
-                    if (!errors) {
-                        this.loading = true;
-                        saveOrUpdateChild(Object.assign(this.childDict, this.form.getFieldsValue()))
-                            .then(response => {
-                                this.$message.success(response.message || "保存成功");
-                                this.$router.replace({name: "dictChild", query: {"id": this.childDict.baseCodeId}});
-                            }).finally(() => this.loading = false);
-                    }
-                });
-            }
+  const formItemLayout = {
+    labelCol: {span: 3},
+    wrapperCol: {span: 9}
+  };
+  const formTailLayout = {
+    labelCol: {span: 4},
+    wrapperCol: {span: 8, offset: 4}
+  };
+  export default {
+    name: "DictChildEdit",
+    data() {
+      return {
+        loading: false,
+        baseCodeName: null,
+        formItemLayout,
+        formTailLayout,
+        childDict: {
+          isGb: false,
+          state: false
         }
+
+      };
+    },
+    beforeCreate() {
+      this.form = this.$form.createForm(this);
+    },
+    created() {
+      let id = this.$route.query.id;
+      if (id) {
+        findChildById(id).then(response => {
+          this.childDict = response.data.childCode;
+          this.baseCodeName = response.data.baseCodeName;
+        });
+      } else {
+        let baseCodeId = this.$route.query.baseCodeId;
+        if (baseCodeId) {
+          this.childDict.baseCodeId = baseCodeId;
+          findById(baseCodeId).then(response => {
+            this.baseCodeName = response.data.codeName;
+          });
+        }
+      }
+    },
+    methods: {
+      handleSubmit() {
+        this.form.validateFields((errors, values) => {
+          if (!errors) {
+            this.loading = true;
+            saveOrUpdateChild(Object.assign(this.childDict, this.form.getFieldsValue()))
+              .then(response => {
+                this.$message.success(response.message || "保存成功");
+                this.$router.replace({name: "dictChild", query: {"id": this.childDict.baseCodeId}});
+              }).finally(() => this.loading = false);
+          }
+        });
+      }
     }
+  }
 </script>
 
 <style scoped>

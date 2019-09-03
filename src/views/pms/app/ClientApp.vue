@@ -118,7 +118,7 @@
           title: '应用编号',
           align: 'center',
           dataIndex: 'appCode',
-          width: '8%',
+          width: '15%',
           sorter: true
         }, {
           title: '应用名称',
@@ -137,14 +137,14 @@
           title: '认证类型',
           align: 'center',
           dataIndex: 'authorizedGrantTypes',
-          width: "37%",
+          width: "30%",
           customRender(text) {
             return text.toString();
           }
         }, {
           title: '有效期',
           dataIndex: 'expireDate',
-          width: "13%",
+          width: "10%",
           sorter: true,
           customRender(text) {
             return text == null ? "长期" : text;
@@ -154,7 +154,7 @@
           scopedSlots: {
             customRender: "action"
           },
-          width: "22%"
+          width: "10%"
         }
         ];
       }

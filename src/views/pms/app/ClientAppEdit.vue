@@ -12,7 +12,7 @@
           </a-form-item>
         </a-col>
         <a-col :span="12">
-          <a-form-item :label-col="{span: 6}" has-feedback :wrapper-col="{span:16}"
+          <a-form-item :label-col="{span: 8}" has-feedback :wrapper-col="{span:16}"
                        label="应用名称">
             <a-input
               v-decorator="['appName',{initialValue:clientApp.appName, rules: [{ required: true, message: '应用名称必填，不能为空格，且不能超过20长度',max:20,whitespace:true }]}]"
@@ -37,7 +37,7 @@
           </a-form-item>
         </a-col>
         <a-col :span="12">
-          <a-form-item :label-col="{span: 6}" has-feedback :wrapper-col="{span:16}" label="有效日期">
+          <a-form-item :label-col="{span: 8}" has-feedback label="有效日期">
             <a-date-picker
               v-decorator="['expireDate',{initialValue:clientApp.expireDate, rules: [{ required: false, message: '请输入有效期' }]}]"
               placeholder="默认不过期"/>
@@ -75,7 +75,7 @@
           </a-form-item>
         </a-col>
         <a-col :span="12">
-          <a-form-item :label-col="{span:6}" :wrapper-col="{span:16}"
+          <a-form-item :label-col="{span:8}" :wrapper-col="{span:16}"
                        label="RefreshToken过期时间"
                        v-if="enableRefreshToken">
             <a-input-number
@@ -94,13 +94,9 @@
           </a-form-item>
         </a-col>
         <a-col :span="12">
-          <a-form-item :label-col="{span: 6}" label="状态">
-            <a-radio-group name="radioGroup" :value="clientApp.appStatus"
-                           @change="clientApp.appStatus = !clientApp.appStatus">
-              <a-radio :value="true">有效</a-radio>
-              <a-radio :value="false">无效</a-radio>
-            </a-radio-group>
-            <span class="ant-form-text">&nbsp;&nbsp;无效状态将不能通过该应用授权</span>
+          <a-form-item :label-col="{span: 8}" label="是否有效">
+            <a-switch :checked="clientApp.appStatus" @change="clientApp.appStatus = !clientApp.appStatus"/>
+            <span class="ant-form-text">&nbsp;&nbsp;无效状态则无法授权</span>
           </a-form-item>
         </a-col>
       </a-row>
@@ -143,6 +139,12 @@
         </a-col>
       </a-row>
     </a-form>
+
+    <a-modal title="查看Secret" :visible="secretVisible" @ok="secretVisible = false" @cancel="secretVisible = false">
+      <p>当前应用Id 为: <span>{{ clientApp.id }}</span></p>
+      <p>Secret 为: <span>{{ clientApp.originalSecret }}</span></p>
+      <p>将做为授权凭证，请妥善保管</p>
+    </a-modal>
   </a-spin>
 </template>
 
@@ -172,6 +174,7 @@
     data() {
       return {
         loading: false,
+        secretVisible: false,
         authorizedGrantTypes,
         formItemLayout,
         formTailLayout,
@@ -214,7 +217,11 @@
         this.$message.info("正在开发中...")
       },
       showSecret() {
-        this.$message.info("正在开发中...")
+        if (this.clientApp.id) {
+          this.secretVisible = true;
+        } else {
+          this.$message.info("当前未生成 Secret,请先生成Secret");
+        }
       },
       normFile(e) {
         console.log('Upload event:', e);
@@ -231,9 +238,10 @@
           if (!errors) {
             this.loading = true;
             let data = Object.assign(this.clientApp, this.form.getFieldsValue());
-            // data.redirectUri = data.redirectUri.split(",");
+            data.redirectUri = data.redirectUri.split(",");
             saveOrUpdate(data).then(response => {
-              this.$message.info(response.message || "保存成功");
+              this.$message.success(response.message || "保存成功");
+              this.$router.replace("/app");
             }).finally(() => this.loading = false);
           }
         });

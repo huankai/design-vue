@@ -61,53 +61,53 @@
 </template>
 
 <script>
-    import {findById, saveOrUpdate} from "@/network/dict";
+  import {findById, saveOrUpdate} from "@/network/dict";
 
-    const formItemLayout = {
-        labelCol: {span: 3},
-        wrapperCol: {span: 9}
-    };
-    const formTailLayout = {
-        labelCol: {span: 4},
-        wrapperCol: {span: 8, offset: 4}
-    };
-    export default {
-        name: "DictEdit",
-        data() {
-            return {
-                loading: false,
-                formItemLayout,
-                formTailLayout,
-                dict: {}
+  const formItemLayout = {
+    labelCol: {span: 3},
+    wrapperCol: {span: 9}
+  };
+  const formTailLayout = {
+    labelCol: {span: 4},
+    wrapperCol: {span: 8, offset: 4}
+  };
+  export default {
+    name: "DictEdit",
+    data() {
+      return {
+        loading: false,
+        formItemLayout,
+        formTailLayout,
+        dict: {}
 
-            };
-        },
-        beforeCreate() {
-            this.form = this.$form.createForm(this);
-        },
-        created() {
-            let id = this.$route.query.id;
-            if (id) {
-                findById(id).then(response => {
-                    this.dict = response.data;
-                })
-            }
-        },
-        methods: {
-            handleSubmit() {
-                this.form.validateFields((errors, values) => {
-                    if (!errors) {
-                        this.loading = true;
-                        saveOrUpdate(Object.assign(this.dict, this.form.getFieldsValue()))
-                            .then(response => {
-                                this.$message.success(response.message || "保存成功");
-                                this.$router.replace("/dict");
-                            }).finally(() => this.loading = false);
-                    }
-                });
-            }
-        }
+      };
+    },
+    beforeCreate() {
+      this.form = this.$form.createForm(this);
+    },
+    created() {
+      let id = this.$route.query.id;
+      if (id) {
+        findById(id).then(response => {
+          this.dict = response.data;
+        })
+      }
+    },
+    methods: {
+      handleSubmit() {
+        this.form.validateFields((errors, values) => {
+          if (!errors) {
+            this.loading = true;
+            saveOrUpdate(Object.assign(this.dict, this.form.getFieldsValue()))
+              .then(response => {
+                this.$message.success(response.message || "保存成功");
+                this.$router.replace("/dict");
+              }).finally(() => this.loading = false);
+          }
+        });
+      }
     }
+  }
 </script>
 
 <style scoped>
