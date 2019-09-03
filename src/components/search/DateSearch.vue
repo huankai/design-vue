@@ -13,113 +13,113 @@
   </a-col>
 </template>
 <script>
-    const dateItems = [
-        {
-            name: "今天",
-            selected: false,
-            range: "TD"
-        },
-        {
-            name: "昨天",
-            selected: false,
-            range: "YD"
-        },
-        {
-            name: "本周",
-            selected: false,
-            range: "TW"
-        },
-        {
-            name: "上周",
-            selected: false,
-            range: "LW"
-        },
-        {
-            name: "本月",
-            selected: false,
-            range: "TM"
-        },
-        {
-            name: "上月",
-            selected: false,
-            range: "LM"
-        },
-        {
-            name: "自定义",
-            selected: false,
-            range: "CUSTOM"
-        }
-    ];
-    export default {
-        name: "DateSearch",
-        props: {
-            showTime: {
-                type: Boolean,
-                default: false
-            },
-            showToday: {
-                type: Boolean,
-                default: true
-            },
-            dateName: {
-                default: "日期"
-            },
-            dateRanges: {
-                type: Array,
-                default() {
-                    return ['TD', 'YD', 'TW', 'LW', 'TM', 'LM', 'CUSTOM'];
-                }
-            }
-        },
-        data() {
-            return {
-                isCustom: false,
-                dateItems: [],
-                selected: {
-                    range: null,
-                    start: null,
-                    end: null
-                }
-            }
-        },
-        created() {
-            const dateItemList = [];
-            for (let range of this.dateRanges) {
-                for (let dateItem of dateItems) {
-                    if (range === dateItem.range) {
-                        dateItem.selected = false;//初始化时，将选中状态设置为 false
-                        dateItemList.push(dateItem);
-                        break;
-                    }
-                }
-            }
-            this.dateItems = dateItemList;
-        },
-        methods: {
-            changeSelectDate(range) {
-                if (this.selected.range !== range) {
-                    this.selected.range = range;
-                    this.isCustom = (range === "CUSTOM");
-                    this.dateItems.forEach(item => item.selected = (item.range === range));
-                } else {
-                    this.selected.range = null;
-                    this.isCustom = false;
-                    this.dateItems.forEach(item => item.selected = false);
-                }
-                this.selected.start = null;
-                this.selected.end = null;
-                this.emitDateChange();
-            },
-            dateOnChange(date, dateString) {
-                this.selected.start = dateString[0];
-                this.selected.end = dateString[1];
-                this.emitDateChange();
-            },
-            emitDateChange() {
-                this.$emit("dateChange", this.selected);
-            }
-        }
+  const dateItems = [
+    {
+      name: "今天",
+      selected: false,
+      range: "TD"
+    },
+    {
+      name: "昨天",
+      selected: false,
+      range: "YD"
+    },
+    {
+      name: "本周",
+      selected: false,
+      range: "TW"
+    },
+    {
+      name: "上周",
+      selected: false,
+      range: "LW"
+    },
+    {
+      name: "本月",
+      selected: false,
+      range: "TM"
+    },
+    {
+      name: "上月",
+      selected: false,
+      range: "LM"
+    },
+    {
+      name: "自定义",
+      selected: false,
+      range: "CUSTOM"
     }
+  ];
+  export default {
+    name: "DateSearch",
+    props: {
+      showTime: {
+        type: Boolean,
+        default: false
+      },
+      showToday: {
+        type: Boolean,
+        default: true
+      },
+      dateName: {
+        default: "日期"
+      },
+      dateRanges: {
+        type: Array,
+        default() {
+          return ['TD', 'YD', 'TW', 'LW', 'TM', 'LM', 'CUSTOM'];
+        }
+      }
+    },
+    data() {
+      return {
+        isCustom: false,
+        dateItems: [],
+        selected: {
+          range: null,
+          start: null,
+          end: null
+        }
+      }
+    },
+    created() {
+      const dateItemList = [];
+      for (let range of this.dateRanges) {
+        for (let dateItem of dateItems) {
+          if (range === dateItem.range) {
+            dateItem.selected = false;//初始化时，将选中状态设置为 false
+            dateItemList.push(dateItem);
+            break;
+          }
+        }
+      }
+      this.dateItems = dateItemList;
+    },
+    methods: {
+      changeSelectDate(range) {
+        if (this.selected.range !== range) {
+          this.selected.range = range;
+          this.isCustom = (range === "CUSTOM");
+          this.dateItems.forEach(item => item.selected = (item.range === range));
+        } else {
+          this.selected.range = null;
+          this.isCustom = false;
+          this.dateItems.forEach(item => item.selected = false);
+        }
+        this.selected.start = null;
+        this.selected.end = null;
+        this.emitDateChange();
+      },
+      dateOnChange(date, dateString) {
+        this.selected.start = dateString[0];
+        this.selected.end = dateString[1];
+        this.emitDateChange();
+      },
+      emitDateChange() {
+        this.$emit("dateChange", this.selected);
+      }
+    }
+  }
 </script>
 
 <style scoped>

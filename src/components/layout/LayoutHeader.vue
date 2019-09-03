@@ -52,46 +52,46 @@
   </a-layout-header>
 </template>
 <script>
-    import {getHeaderAppList} from "@/network/headerApp";
+  import {getHeaderAppList} from "@/network/headerApp";
 
-    export default {
-        name: "LayoutHeader",
-        props: ["collapsed"],
-        data() {
-            return {
-                appList: [],
-                visible: false
-            }
-        },
-        created() {
-            getHeaderAppList().then(response => {
-                this.appList = response;
-            })
-        },
-        methods: {
-            userSetting() {
-                this.$message.info("该功能正在开发中...");
-            },
-            updatePassword() {
-                this.$message.info("该功能正在开发中...");
-            },
-            logout() {
-                this.visible = false;
-                console.log("退出成功...");
-                this.$message.info("退出成功....");
-            },
-            collapsedClick() {
-                //组件传值到父类组件中
-                this.$emit("collapsedVal", !this.collapsed);
-            },
-            handlerAppSelect(value) {
-                window.open(value)
-            },
-            filterOption(input, option) {
-                return option.componentOptions.children[0].text.toLowerCase().indexOf(input.toLowerCase()) >= 0
-            }
-        }
+  export default {
+    name: "LayoutHeader",
+    props: ["collapsed"],
+    data() {
+      return {
+        appList: [],
+        visible: false
+      }
+    },
+    created() {
+      getHeaderAppList().then(response => {
+        this.appList = response;
+      })
+    },
+    methods: {
+      userSetting() {
+        this.$message.info("该功能正在开发中...");
+      },
+      updatePassword() {
+        this.$message.info("该功能正在开发中...");
+      },
+      logout() {
+        this.visible = false;
+        console.log("退出成功...");
+        this.$message.info("退出成功....");
+      },
+      collapsedClick() {
+        //组件传值到父类组件中
+        this.$emit("collapsedVal", !this.collapsed);
+      },
+      handlerAppSelect(value) {
+        window.open(value)
+      },
+      filterOption(input, option) {
+        return option.componentOptions.children[0].text.toLowerCase().indexOf(input.toLowerCase()) >= 0
+      }
     }
+  }
 </script>
 
 <style scoped>

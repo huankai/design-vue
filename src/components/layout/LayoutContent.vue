@@ -4,9 +4,9 @@
   </a-layout-content>
 </template>
 <script>
-    export default {
-        name: "LayoutContent"
-    }
+  export default {
+    name: "LayoutContent"
+  }
 </script>
 <style scoped>
   .ant-layout-content {
