@@ -1,11 +1,8 @@
 <template>
   <div>
     <div class="search">
-      <a-row>
-        <date-search :showTime="false" :showToday="true" :dateName="'上传时间'"
-                     @dateChange="dateChange"/>
-      </a-row>
-      <a-divider dashed/>
+      <date-search :showTime="false" :showToday="true" :label="'上传时间'"
+                   @dateChange="dateChange"/>
       <a-row>
         <a-col :span="8">
           <label>

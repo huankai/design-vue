@@ -1,11 +1,6 @@
 <template>
   <div>
     <div class="search">
-      <!--<a-row>
-        <date-search :showTime="false" :showToday="true" :dateName="'有效期'"
-                     @dateChange="dateChange"/>
-      </a-row>
-      <a-divider dashed/>-->
       <a-row>
         <a-col :span="8">
           <label>

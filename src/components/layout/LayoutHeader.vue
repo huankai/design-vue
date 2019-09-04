@@ -31,9 +31,6 @@
               <a-menu-item>
                 <a href="javascript:void (0);" @click="userSetting">用户设置</a>
               </a-menu-item>
-              <a-menu-item>
-                <a href="javascript:void (0);" @click="updatePassword">修改密码</a>
-              </a-menu-item>
               <a-menu-divider/>
               <a-menu-item>
                 <a href="javascript:void (0);" @click="visible = true">安全退出</a>
@@ -72,12 +69,8 @@
       userSetting() {
         this.$message.info("该功能正在开发中...");
       },
-      updatePassword() {
-        this.$message.info("该功能正在开发中...");
-      },
       logout() {
         this.visible = false;
-        console.log("退出成功...");
         this.$message.info("退出成功....");
       },
       collapsedClick() {

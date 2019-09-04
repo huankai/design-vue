@@ -54,6 +54,7 @@
         if (path === "") {
           path = "/";
         }
+        console.log(this.menuList);
         routes = this.$route.matched.concat();
         this.selectedKeys = [path];
         this.openKeys = this.$store.getters.getCurrentMenu;

@@ -6,8 +6,14 @@
     "name": "首页"
   },
   {
-    "id": "2",
+    "id": "7",
+    "link": "/my",
     "icon": "user",
+    "name": "个人中心"
+  },
+  {
+    "id": "2",
+    "icon": "bars",
     "name": "权限管理",
     "children": [
       {

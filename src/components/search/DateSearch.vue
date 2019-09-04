@@ -1,7 +1,8 @@
 <template>
-  <a-col :span="20">
-    <span class="field date-text">{{dateName}}: </span>
-    <span class="date">
+  <a-row>
+    <a-col style="height: 32px;">
+      <span class="field date-label">{{label}}: </span>
+      <span class="date">
       <span :class="item.selected ? 'date-item selected': 'date-item'" v-for="item in dateItems"
             :value="item.range"
             @click="changeSelectDate(item.range)">{{item.name}}
@@ -10,7 +11,9 @@
                       :format="showTime ? 'YYYY-MM-DD HH:mm:ss':'YYYY-MM-DD'"
                       @change="dateOnChange"/>
     </span>
-  </a-col>
+    </a-col>
+    <a-divider dashed/>
+  </a-row>
 </template>
 <script>
   const dateItems = [
@@ -61,7 +64,7 @@
         type: Boolean,
         default: true
       },
-      dateName: {
+      label: {
         default: "日期"
       },
       dateRanges: {
@@ -123,12 +126,13 @@
 </script>
 
 <style scoped>
-  .field.date-text {
-    width: 11.8%;
+  .field.date-label {
+    /*height: 32px;*/
+    padding-top: 5px;
   }
 
   .ant-row .date .date-item {
-    padding: 3px 0.5em;
+    padding: 5px 0.5em;
     cursor: pointer;
     margin-right: 5px;
   }
@@ -136,6 +140,7 @@
   .ant-row .date .date-item.selected {
     background-color: #1890ff;
     /*border: 1px solid #fff;*/
-    border-radius: 5px
+    color: #fff;
+    border-radius: 5px;
   }
 </style>

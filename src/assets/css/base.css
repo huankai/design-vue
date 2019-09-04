@@ -25,7 +25,8 @@
 }
 
 .search span.field {
-    width: 30%;
+    width: auto;
+    margin-right: 8px;
     font-weight: bold;
     display: inline-block;
 }
