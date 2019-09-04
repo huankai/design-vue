@@ -18,7 +18,7 @@
       <span class="header-item">
         <a-tooltip placement="topLeft" title="待办事项">
           <a-badge :count="5">
-            <a-icon type="sound" theme="twoTone"/>
+            <a-icon type="bell" theme="twoTone"/>
           </a-badge>
         </a-tooltip>
       </span>

@@ -41,6 +41,22 @@ export function findById(id) {
   })
 }
 
+export function deleteById(id) {
+  return pmsRequest({
+    method: "POST",
+    params: {id},
+    url: "/app/delete"
+  })
+}
+
+export function recovery(id) {
+  return pmsRequest({
+    method: "POST",
+    params: {id},
+    url: "/app/recovery"
+  })
+}
+
 export function saveOrUpdate(clientApp) {
   return pmsRequest({
     method: "POST",

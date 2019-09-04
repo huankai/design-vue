@@ -20,6 +20,7 @@ import Address from "@/router/address";
 import Dict from "@/router/dict"
 import Schedule from "@/router/schedule";
 import Files from "@/router/files";
+import Organization from "@/router/organization";
 
 
 const router = new VueRouter({
@@ -28,6 +29,7 @@ const router = new VueRouter({
   routes: [
     ...Dashboard.dashboard,
     ...ClientApp.clientApp,
+    ...Organization.organization,
     ...User.user,
     ...Role.role,
     ...Permission.permission,

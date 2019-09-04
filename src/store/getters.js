@@ -3,7 +3,7 @@ import {menuSessionStoreKey} from "@/store/mutations-types";
 export default {
 
   getCurrentMenu(state) {
-    let currentMenu = state.currentMenu;
-    return currentMenu == null ? JSON.parse(sessionStorage.getItem(menuSessionStoreKey)) : currentMenu;
+    let currentMenuOpenKeys = state.currentMenuOpenKeys;
+    return currentMenuOpenKeys.length === 0 ? JSON.parse(sessionStorage.getItem(menuSessionStoreKey)) : currentMenuOpenKeys;
   }
 }

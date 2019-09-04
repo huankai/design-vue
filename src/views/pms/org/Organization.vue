@@ -1,32 +1,23 @@
 <template>
   <div>
     <div class="search">
-      <!--<a-row>
-        <date-search :showTime="false" :showToday="true" :dateName="'有效期'"
-                     @dateChange="dateChange"/>
-      </a-row>
-      <a-divider dashed/>-->
       <a-row>
         <a-col :span="8">
           <label>
-            <span class="field">应用编号: </span>
-            <a-input v-model="params.appCode" placeholder="请输入应用编号"></a-input>
+            <span class="field">机构编号: </span>
+            <a-input v-model="params.orgCode" placeholder="请输入机构编号"></a-input>
           </label>
         </a-col>
         <a-col :span="8">
           <label>
-            <span class="field">应用名称: </span>
-            <a-input v-model="params.appName" placeholder="请输入应用编号"></a-input>
+            <span class="field">机构名称: </span>
+            <a-input v-model="params.orgName" placeholder="请输入机构编号"></a-input>
           </label>
         </a-col>
         <a-col :span="8">
           <div>
             <a-button type="primary" icon="search" @click="searchBtn">搜索</a-button>
-            <!--          <a-popconfirm title="确定要删除缓存吗？" @confirm="deleteCache">-->
-            <!--            <a-icon slot="icon" type="question-circle" style="color:red"/>-->
-            <!--            <a-button type="danger" :loading="deleteCacheLoading" icon="delete">清除缓存</a-button>-->
-            <!--          </a-popconfirm>-->
-            <router-link to="/app/add">
+            <router-link to="/org/add">
               <a-button type="primary" icon="plus">添加</a-button>
             </router-link>
           </div>
@@ -37,8 +28,8 @@
     <a-table rowKey="id" :columns="columns" :loading="loading" :dataSource="data"
              @change="handleChange"
              :pagination="pagination">
-      <span slot="appStatusRender" slot-scope="record">
-          <a-tag :color="record.appStatusColor">{{record.appStatusText}}</a-tag>
+      <span slot="orgStatusRender" slot-scope="record">
+          <a-tag :color="record.stateColor">{{record.stateText}}</a-tag>
       </span>
       <span slot="action" slot-scope="text,record">
         <span v-if="record.deleteStatus">
@@ -84,14 +75,14 @@
 </template>
 
 <script>
-  import {deleteById, disableApp, enableApp, queryForPage, recovery} from "@/network/clientApp";
   import {Order, PageQuery} from "@/util/pageQuery";
+  import {queryForPage} from "@/network/organization";
 
   export default {
     name: "ClientApp",
     created() {
       let query = new PageQuery();
-      query.addOrder(Order.desc("appCode"));
+      query.addOrder(Order.desc("orgCode"));
       this.loadingData(query);
     },
     data() {
@@ -110,8 +101,8 @@
           showSizeChanger: true
         },
         params: {
-          appCode: null,
-          appName: null
+          orgCode: null,
+          orgName: null
 
         }
       }
@@ -119,39 +110,23 @@
     computed: {
       columns() {
         return [{
-          title: '应用编号',
+          title: '机构编号',
           align: 'center',
-          dataIndex: 'appCode',
+          dataIndex: 'orgCode',
           width: '15%',
           sorter: true
         }, {
-          title: '应用名称',
+          title: '机构名称',
           align: 'center',
-          dataIndex: 'appName',
+          dataIndex: 'orgName',
           width: "15%"
         }, {
-          title: '启用状态',
+          title: '是否有效',
           align: 'center',
-          width: "10%",
+          width: "5%",
           sorter: true,
           scopedSlots: {
-            customRender: "appStatusRender"
-          }
-        }, {
-          title: '认证类型',
-          align: 'center',
-          dataIndex: 'authorizedGrantTypes',
-          width: "30%",
-          customRender(text) {
-            return text.toString();
-          }
-        }, {
-          title: '有效期',
-          dataIndex: 'expireDate',
-          width: "10%",
-          sorter: true,
-          customRender(text) {
-            return text == null ? "长期" : text;
+            customRender: "orgStatusRender"
           }
         }, {
           title: '操作',

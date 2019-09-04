@@ -38,6 +38,15 @@ export function findById(id) {
   });
 }
 
+
+export function findByParentId(parentId, maxDepth) {
+  return emiRequest({
+    method: "GET",
+    params: {parentId, maxCityType: maxDepth},
+    url: "city/child"
+  })
+}
+
 export function deleteById(id) {
   return emiRequest({
     method: "POST",

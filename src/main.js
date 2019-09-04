@@ -23,6 +23,7 @@ import {
   Card,
   InputNumber,
   Radio,
+  Cascader,
   Avatar,
   Icon,
   Checkbox,
@@ -58,6 +59,7 @@ Vue.use(Upload);
 Vue.use(Card);
 Vue.use(InputNumber);
 Vue.use(Radio);
+Vue.use(Cascader);
 Vue.use(Avatar);
 Vue.use(Icon);
 Vue.use(Checkbox);

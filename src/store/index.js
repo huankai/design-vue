@@ -10,9 +10,9 @@ Vue.use(Vuex);
 const state = {
 
   /*
-    记录当前选中的菜单
+    记录当前打开的菜单
    */
-  currentMenu: null,
+  currentMenuOpenKeys: [],
 };
 
 export default new Vuex.Store({

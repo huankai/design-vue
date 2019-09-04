@@ -22,25 +22,19 @@
       </a-row>
       <a-row :gutter="16">
         <a-col :span="12">
-          <a-form-item :label-col="formItemLayout.labelCol" :wrapper-col="formItemLayout.wrapperCol"
-                       label="secret">
-            <a-input type="password" disabled placeholder="点击右边生成或查看">
-              <a-button slot="addonAfter" type="primary" @click="generateSecret">
-                <a-icon type="setting"/>
-                生成
-              </a-button>
-              <a-button slot="addonAfter" type="primary" @click="showSecret">
-                <a-icon type="eye"/>
-                查看
-              </a-button>
-            </a-input>
-          </a-form-item>
-        </a-col>
-        <a-col :span="12">
-          <a-form-item :label-col="{span: 8}" has-feedback label="有效日期">
+          <a-form-item :label-col="formItemLayout.labelCol" :wrapper-col="formItemLayout.wrapperCol" has-feedback label="有效日期">
             <a-date-picker
               v-decorator="['expireDate',{initialValue:clientApp.expireDate, rules: [{ required: false, message: '请输入有效期' }]}]"
               placeholder="默认不过期"/>
+          </a-form-item>
+        </a-col>
+        <a-col :span="12">
+          <a-form-item  v-if="clientApp.id != null" :label-col="{span: 8}"
+                       label="secret">
+            <a-button type="primary" @click="showSecret">
+              <a-icon type="eye"/>
+              查看
+            </a-button>
           </a-form-item>
         </a-col>
       </a-row>
@@ -48,7 +42,7 @@
         <a-col :span="24">
           <a-form-item :label-col="{span: 3}" has-feedback :wrapper-col="{span: 9}"
                        label="回调地址">
-            <a-textarea placeholder="不需要以http或https 开头,多个使用 , 分隔"
+            <a-textarea placeholder="多个使用 , 分隔"
                         v-decorator="['redirectUri',{rules: [{ required: true, max:300,message: '回调地址必填，且不能超过300长度' }]}]"
                         autocomplete="off" :autosize="{minRows: 2,maxRows:5}"/>
           </a-form-item>
@@ -103,7 +97,7 @@
       <a-row :gutter="16">
         <a-col :span="24">
           <a-form-item :label-col="{span:3}" label="应用头像">
-            <a-upload v-decorator="['upload', {valuePropName: 'fileList',getValueFromEvent: normFile}]" name="logo"
+            <a-upload v-decorator="['upload', {valuePropName: 'fileList'}]" name="logo"
                       action="/upload" list-type="picture">
               <a-button>
                 <a-icon type="upload"/>
@@ -140,7 +134,8 @@
       </a-row>
     </a-form>
 
-    <a-modal title="查看Secret" :visible="secretVisible" @ok="secretVisible = false" @cancel="secretVisible = false">
+    <a-modal v-if="clientApp.id != null" title="查看Secret" :visible="secretVisible" @ok="secretVisible = false"
+             @cancel="secretVisible = false">
       <p>当前应用Id 为: <span>{{ clientApp.id }}</span></p>
       <p>Secret 为: <span>{{ clientApp.originalSecret }}</span></p>
       <p>将做为授权凭证，请妥善保管</p>
@@ -222,13 +217,6 @@
         } else {
           this.$message.info("当前未生成 Secret,请先生成Secret");
         }
-      },
-      normFile(e) {
-        console.log('Upload event:', e);
-        if (Array.isArray(e)) {
-          return e;
-        }
-        return e && e.fileList;
       },
       handlerAuthorizedGrantTypesChange(checkedValues) {
         this.clientApp.authorizedGrantTypes = checkedValues;
