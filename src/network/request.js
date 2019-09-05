@@ -1,28 +1,42 @@
 import axios from "axios"
 import {message} from "ant-design-vue";
+import string from "less/lib/less/functions/string";
 
-import fileDownload from "js-file-download";
+// import fileDownload from "js-file-download";
 
 axios.defaults.timeout = 1000000;
-const instance = axios.create({
-  baseURL: "/"
-});
-instance.interceptors.response.use(response => {
-  return response.data;
-}, error => {
+
+function onFulfilled(response) {
+  if (response.status === 200) {
+    if (response.data.statusCode === 10200) {
+      return response.data;
+    }
+  }
+  message.error(response.data.message || response.message || "请稍后再试");
+}
+
+function onRejected(error) {
   let message = "请稍后再试";
   if (error.response) {
     if (error.response.status === 403) {
       message = error.response.data.message || "您无权限访问";
-    } else {
+    } else if (typeof error.response.data !== 'string') {
       message = error.response.data.message || "操作失败";
     }
   }
   message.error(message);
+  return Promise.reject(error); // 要调用 reject 方法，否则，会执行调用者的 then() 方法
+}
+
+const defaultInstance = axios.create({
+  baseURL: "/"
 });
 
+defaultInstance.interceptors.response.use(response => onFulfilled(response),
+  error => onRejected(error));
+
 export function defaultRequest(options) {
-  return instance(options);
+  return defaultInstance(options);
 }
 
 /* ----------------------------------- emi ------------------------------------------------ */
@@ -33,43 +47,8 @@ export function defaultRequest(options) {
 const emiInstance = axios.create({
   baseURL: "/emi"
 });
-emiInstance.interceptors.response.use(response => {
-    // if (response.data instanceof Blob) { // 如果是下载文件请求
-    //   const filename = decodeURI(res.headers.get('Content-Disposition').split('filename=')[1]); // 获取后端headers里面的文件名
-    //   if (window.navigator.msSaveOrOpenBlob) {
-    //     navigator.msSaveBlob(blob, filename)  // 兼容ie10
-    //   } else {
-    //     const a = document.createElement('a');
-    //     document.body.appendChild(a); // 兼容火狐，将a标签添加到body当中
-    //     a.href = window.URL.createObjectURL(blob);
-    //     a.download = filename;
-    //     a.target = '_blank'; // a标签增加target属性
-    //     a.click();
-    //     a.remove();  // 移除a标签
-    //     window.URL.revokeObjectURL(url);
-    //     fileDownload(response.data, decodeURI(escape(fileName)));
-    //     return;
-    //   }
-    // }
-    if (response.status === 200) {
-      if (response.data.statusCode === 10200) {
-        return response.data;
-      }
-    }
-    message.error(response.data.message || response.message || "请稍后再试");
-  }, error => {
-    let message = "请稍后再试";
-    if (error.response) {
-      if (error.response.status === 403) {
-        message = error.response.data.message || "您无权限访问";
-      } else {
-        message = error.response.data.message || "操作失败";
-      }
-    }
-    message.error(message);
-  }
-)
-;
+emiInstance.interceptors.response.use(response => onFulfilled(response),
+  error => onRejected(error));
 
 export function emiRequest(options) {
   return emiInstance(options);
@@ -81,24 +60,8 @@ export function emiRequest(options) {
 const pmsInstance = axios.create({
   baseURL: "/pms"
 });
-pmsInstance.interceptors.response.use(response => {
-  if (response.status === 200) {
-    if (response.data.statusCode === 10200) {
-      return response.data;
-    }
-  }
-  message.error(response.data.message || response.message || "请稍后再试");
-}, error => {
-  let message = "请稍后再试";
-  if (error.response) {
-    if (error.response.status === 403) {
-      message = error.response.data.message || "您无权限访问";
-    } else {
-      message = error.response.data.message || "操作失败";
-    }
-  }
-  message.error(message);
-});
+pmsInstance.interceptors.response.use(response => onFulfilled(response),
+  error => onRejected(error));
 
 export function pmsRequest(options) {
   return pmsInstance(options);
@@ -112,24 +75,8 @@ export function pmsRequest(options) {
 const scheduleInstance = axios.create({
   baseURL: "/quartz"
 });
-scheduleInstance.interceptors.response.use(response => {
-  if (response.status === 200) {
-    if (response.data.statusCode === 10200) {
-      return response.data;
-    }
-  }
-  message.error(response.data.message || response.message || "请稍后再试");
-}, error => {
-  let message = "请稍后再试";
-  if (error.response) {
-    if (error.response.status === 403) {
-      message = error.response.data.message || "您无权限访问";
-    } else {
-      message = error.response.data.message || "操作失败";
-    }
-  }
-  message.error(message);
-});
+scheduleInstance.interceptors.response.use(response => onFulfilled(response),
+  error => onRejected(error));
 
 export function scheduleRequest(options) {
   return scheduleInstance(options);

@@ -13,18 +13,21 @@ export default {
     }, {
       path: "/address/add",
       meta: {
+        parent: "/address",
         title: "地址管理 - 添加"
       },
       component: AddressEdit
     }, {
       path: "/address/child",
       meta: {
+        parent: "/address",
         title: "地址管理 - 子级"
       },
       component: AddressChild
     }, {
       path: "/address/edit",
       meta: {
+        parent: "/address",
         title: "地址管理 - 修改"
       },
       component: AddressEdit

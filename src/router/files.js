@@ -12,6 +12,7 @@ export default {
     }, {
       path: "/file/add",
       meta: {
+        parent: "/file",
         title: "文件管理-添加"
       },
       component: FileAdd

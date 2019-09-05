@@ -14,12 +14,14 @@ export default {
     }, {
       path: "/dict/add",
       meta: {
+        parent: "/dict",
         title: "字典管理 - 添加"
       },
       component: DictEdit
     }, {
       path: "/dict/edit",
       meta: {
+        parent: "/dict",
         title: "字典管理 - 修改"
       },
       component: DictEdit
@@ -27,18 +29,21 @@ export default {
       path: "/dict/child",
       name: "dictChild",
       meta: {
+        parent: "/dict",
         title: "字典管理 - 子级"
       },
       component: DictChild
     }, {
       path: "/childDict/add",
       meta: {
+        parent: "/dict",
         title: "字典子级 - 添加"
       },
       component: DictChildEdit
     }, {
       path: "/childDict/edit",
       meta: {
+        parent: "/dict",
         title: "字典子级 - 修改"
       },
       component: DictChildEdit

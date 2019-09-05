@@ -7,20 +7,20 @@
         <!--  注意:这里的 :key  要取 link 的值-->
         <a-menu-item v-if="item.children == null || item.children.length === 0" :key="item.link">
           <router-link :to="item.link">
-            <a-icon :type="item.icon"/>
+            <!--            <a-icon :type="item.icon"/>-->
             <span>{{ item.name }}</span>
           </router-link>
         </a-menu-item>
         <!--  注意:这里的 :key  取 id 的值-->
         <a-sub-menu v-else :key="item.id">
           <span slot="title">
-            <a-icon :type="item.icon"/>
+<!--            <a-icon :type="item.icon"/>-->
             <span>{{item.name}}</span>
           </span>
           <!--  注意:这里的 :key  要取 link 的值-->
           <a-menu-item v-for="children in item.children" :key="children.link">
             <router-link :to="children.link">
-              <a-icon :type="children.icon"/>
+              <!--              <a-icon :type="children.icon"/>-->
               <span>{{ children.name }}</span>
             </router-link>
           </a-menu-item>
@@ -50,14 +50,18 @@
     methods: {
       flushSider(newValue, oldValue) {
         let routes = this.$route.matched.concat();
-        let path = routes.pop().path;
-        if (path === "") {
-          path = "/";
+        if (routes.length > 0) {
+          const route = routes.pop();
+          let path = route.path;
+          if (route.meta.parent) {
+            path = route.meta.parent;
+          } else if (path === "") {
+            path = "/";
+          }
+          routes = this.$route.matched.concat();
+          this.selectedKeys = [path];
+          this.openKeys = this.$store.getters.getCurrentMenu;
         }
-        console.log(this.menuList);
-        routes = this.$route.matched.concat();
-        this.selectedKeys = [path];
-        this.openKeys = this.$store.getters.getCurrentMenu;
       },
       openChange(openKeys) {
         this.openKeys = openKeys.length > 0 ? [openKeys[openKeys.length - 1]] : [];
@@ -70,9 +74,9 @@
     created() {
       getMenuList().then(response => {
         if (response != null) {
-          this.menuList = response;
-          if (response.length > 0) {
-            this.selectedKeys = [response[0].id];
+          this.menuList = response.data;
+          if (response.data.length > 0) {
+            this.selectedKeys = [response.data[0].id];
           }
         }
       });

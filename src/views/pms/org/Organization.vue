@@ -42,24 +42,11 @@
           </a>
         </span>
         <span v-else>
-          <router-link :to="{path:'/app/edit',query:{id:record.id}}">
+          <router-link :to="{path:'/org/edit',query:{id:record.id}}">
               <a-tooltip placement="topLeft" title="编辑">
                 <a-icon type="edit"/>
               </a-tooltip>
           </router-link>
-          <a href="javascript:void (0);">
-            <a-popconfirm title="确定要禁用吗？" placement="bottom" @confirm="handlerDisable(record)"
-                          v-if="record.appStatus">
-              <a-tooltip placement="topLeft" title="禁用">
-                <a-icon type="lock" :style="{color: 'red'}"/>
-              </a-tooltip>
-            </a-popconfirm>
-            <a-popconfirm v-else title="确定要启用吗？" placement="bottom" @confirm="handlerEnable(record)">
-              <a-tooltip placement="topLeft" title="启用">
-                <a-icon type="unlock"/>
-              </a-tooltip>
-            </a-popconfirm>
-          </a>
           <a href="javascript:void (0);">
             <a-popconfirm title="确定要删除吗？" placement="bottom" @confirm="handlerDelete(record)">
               <a-icon slot="icon" type="question-circle" style="color: red"/>
@@ -76,10 +63,10 @@
 
 <script>
   import {Order, PageQuery} from "@/util/pageQuery";
-  import {queryForPage} from "@/network/organization";
+  import {deleteById, queryForPage} from "@/network/organization";
 
   export default {
-    name: "ClientApp",
+    name: "Organization",
     created() {
       let query = new PageQuery();
       query.addOrder(Order.desc("orgCode"));
@@ -121,6 +108,16 @@
           dataIndex: 'orgName',
           width: "15%"
         }, {
+          title: '法人姓名',
+          align: 'center',
+          dataIndex: 'legalName',
+          width: "15%"
+        }, {
+          title: '法人手机',
+          align: 'center',
+          dataIndex: 'legalPhone',
+          width: "15%"
+        }, {
           title: '是否有效',
           align: 'center',
           width: "5%",
@@ -146,29 +143,11 @@
           this.pagination.total = response.data.totalRow;
         }).finally(() => this.loading.spinning = false);
       },
-      handlerRecovery(record) {
-        recovery(record.id).then(response => {
-          this.$message.success(response.message || "操作成功");
-          this.loadingData(new PageQuery());
-        });
-      },
       handlerDelete(record) {
         deleteById(record.id).then(response => {
-          this.$message.success(response.message || "删除成功");
+          this.$message.success(response.message);
           this.loadingData(new PageQuery());
         });
-      },
-      handlerDisable(record) {
-        disableApp(record.id).then(response => {
-          this.$message.info(response.message || "禁用成功");
-          this.loadingData(new PageQuery());
-        })
-      },
-      handlerEnable(record) {
-        enableApp(record.id).then(response => {
-          this.$message.info(response.message || "启用成功");
-          this.loadingData(new PageQuery());
-        })
       },
       searchBtn() {
         this.loadingData(new PageQuery(this.params));

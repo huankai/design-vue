@@ -292,7 +292,7 @@
             this.loading = true;
             saveOrUpdate(Object.assign(this.addressData, this.form.getFieldsValue()))
               .then(response => {
-                this.$message.success(response.message || "保存成功");
+                this.$message.success(response.message);
                 this.$router.replace("/address");
               }).finally(() => this.loading = false);
           }

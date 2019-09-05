@@ -62,7 +62,7 @@
     },
     created() {
       getHeaderAppList().then(response => {
-        this.appList = response;
+        this.appList = response.data;
       })
     },
     methods: {

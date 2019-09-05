@@ -38,6 +38,12 @@ export function findById(id) {
   });
 }
 
+export function findProvinceList() {
+  return emiRequest({
+    method: "GET",
+    url: "city/provinces"
+  });
+}
 
 export function findByParentId(parentId, maxDepth) {
   return emiRequest({
@@ -59,5 +65,15 @@ export function saveOrUpdate(city) {
     method: "POST",
     data: city,
     url: "city"
+  })
+}
+
+export function childs(ids) {
+  return emiRequest({
+    method: "GET",
+    params: {
+      "parentIds": ids
+    },
+    url: "city/childs"
   })
 }

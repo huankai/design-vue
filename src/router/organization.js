@@ -12,12 +12,14 @@ export default {
     }, {
       path: "/org/add",
       meta: {
+        parent: "/org",
         title: "机构管理 - 添加"
       },
       component: OrganizationEdit
     }, {
       path: "/org/edit",
       meta: {
+        parent: "/org",
         title: "机构管理 - 修改"
       },
       component: OrganizationEdit

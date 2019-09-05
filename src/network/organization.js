@@ -14,5 +14,28 @@ export function queryForPage(queryPage) {
   });
 }
 
+export function findById(id) {
+  return pmsRequest({
+    method: "GET",
+    url: "/org/" + id
+  })
+}
+
+export function deleteById(id) {
+  return pmsRequest({
+    method: "POST",
+    params: {id},
+    url: "/org/delete"
+  })
+}
+
+export function saveOrUpdate(org) {
+  return pmsRequest({
+    method: "POST",
+    data: org,
+    url: "/org"
+  })
+}
+
 
 

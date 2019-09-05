@@ -228,7 +228,7 @@
             let data = Object.assign(this.clientApp, this.form.getFieldsValue());
             data.redirectUri = data.redirectUri.split(",");
             saveOrUpdate(data).then(response => {
-              this.$message.success(response.message || "保存成功");
+              this.$message.success(response.message);
               this.$router.replace("/app");
             }).finally(() => this.loading = false);
           }

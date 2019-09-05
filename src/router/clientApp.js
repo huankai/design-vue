@@ -15,6 +15,7 @@ export default {
     {
       path: "/app/add",
       meta: {
+        parent: "/app",
         title: "应用管理-添加"
       },
       component: ClientAppEdit
@@ -22,6 +23,7 @@ export default {
     {
       path: "/app/edit",
       meta: {
+        parent: "/app",
         title: "应用管理-修改"
       },
       component: ClientAppEdit

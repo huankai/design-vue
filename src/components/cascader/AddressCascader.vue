@@ -9,6 +9,10 @@
   export default {
     name: "AddressCascader",
     props: {
+      form: {
+        type: Object,
+        required: true,
+      },
       decorator: {
         type: Array
       },
@@ -25,7 +29,8 @@
     },
     created() {
       this.loadAddressList();
-      console.log("------->", this.decorator);
+      console.log(this.form);
+      console.log(this.decorator);
     },
     methods: {
       loadAddressList(parentId) {
@@ -46,12 +51,7 @@
             selectOption.loading = false;
           });
         }
-
       }
     }
   }
 </script>
-
-<style scoped>
-
-</style>

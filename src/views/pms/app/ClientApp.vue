@@ -168,25 +168,25 @@
       },
       handlerRecovery(record) {
         recovery(record.id).then(response => {
-          this.$message.success(response.message || "操作成功");
+          this.$message.success(response.message);
           this.loadingData(new PageQuery());
         });
       },
       handlerDelete(record) {
         deleteById(record.id).then(response => {
-          this.$message.success(response.message || "删除成功");
+          this.$message.success(response.message);
           this.loadingData(new PageQuery());
         });
       },
       handlerDisable(record) {
         disableApp(record.id).then(response => {
-          this.$message.info(response.message || "禁用成功");
+          this.$message.info(response.message);
           this.loadingData(new PageQuery());
         })
       },
       handlerEnable(record) {
         enableApp(record.id).then(response => {
-          this.$message.info(response.message || "启用成功");
+          this.$message.info(response.message);
           this.loadingData(new PageQuery());
         })
       },

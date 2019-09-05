@@ -140,7 +140,7 @@
             this.loading = true;
             saveOrUpdateChild(Object.assign(this.childDict, this.form.getFieldsValue()))
               .then(response => {
-                this.$message.success(response.message || "保存成功");
+                this.$message.success(response.message);
                 this.$router.replace({name: "dictChild", query: {"id": this.childDict.baseCodeId}});
               }).finally(() => this.loading = false);
           }

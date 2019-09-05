@@ -100,7 +100,7 @@
             this.loading = true;
             saveOrUpdate(Object.assign(this.dict, this.form.getFieldsValue()))
               .then(response => {
-                this.$message.success(response.message || "保存成功");
+                this.$message.success(response.message);
                 this.$router.replace("/dict");
               }).finally(() => this.loading = false);
           }

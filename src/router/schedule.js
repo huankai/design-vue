@@ -16,6 +16,7 @@ export default {
       path: "/schedule/add",
       name: "scheduleAdd",
       meta: {
+        parent: "/schedule",
         title: "定时任务 - 添加"
       },
       component: ScheduleEdit
@@ -23,6 +24,7 @@ export default {
       path: "/schedule/edit",
       name: "scheduleEdit",
       meta: {
+        parent: "/schedule",
         title: "定时任务 - 修改"
       },
       component: ScheduleEdit
@@ -30,6 +32,7 @@ export default {
       path: "/schedule/detail",
       name: "scheduleDetail",
       meta: {
+        parent: "/schedule",
         title: "定时任务 - 详情"
       },
       component: ScheduleDetail
@@ -37,6 +40,7 @@ export default {
       path: "/schedule/log",
       name: "scheduleLog",
       meta: {
+        parent: "/schedule",
         title: "定时任务 - 日志"
       },
       component: ScheduleLog

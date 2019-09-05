@@ -135,7 +135,7 @@
       },
       handlerDelete(record) {
         deleteById(record.id).then(response => {
-          this.$message.success(response.message || "操作成功");
+          this.$message.success(response.message);
         }).finally(() => {
           this.loadingData(new PageQuery(this.params));
         });
