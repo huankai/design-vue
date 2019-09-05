@@ -7,20 +7,20 @@
         <!--  注意:这里的 :key  要取 link 的值-->
         <a-menu-item v-if="item.children == null || item.children.length === 0" :key="item.link">
           <router-link :to="item.link">
-            <!--            <a-icon :type="item.icon"/>-->
+            <a-icon :type="item.icon"/>
             <span>{{ item.name }}</span>
           </router-link>
         </a-menu-item>
         <!--  注意:这里的 :key  取 id 的值-->
         <a-sub-menu v-else :key="item.id">
           <span slot="title">
-<!--            <a-icon :type="item.icon"/>-->
+            <a-icon :type="item.icon"/>
             <span>{{item.name}}</span>
           </span>
           <!--  注意:这里的 :key  要取 link 的值-->
           <a-menu-item v-for="children in item.children" :key="children.link">
             <router-link :to="children.link">
-              <!--              <a-icon :type="children.icon"/>-->
+              <a-icon :type="children.icon"/>
               <span>{{ children.name }}</span>
             </router-link>
           </a-menu-item>

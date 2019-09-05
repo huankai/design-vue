@@ -65,7 +65,7 @@
             <a-input-number
               v-decorator="['accessTokenValidity', {initialValue: clientApp.accessTokenValidity,rules:[{ required: true, message: 'Token过期时间必填'}] }]"
               :min="3600" :step="60" :max="10800" @change="(value) => this.clientApp.accessTokenValidity = value"/>
-            <span class="ant-form-text">分 （{{ accessTokenValidityTime }} 小时）</span>
+            <span class="ant-form-text">秒 （{{ accessTokenValidityTime }} 小时）</span>
           </a-form-item>
         </a-col>
         <a-col :span="12">
@@ -75,7 +75,7 @@
             <a-input-number
               v-decorator="['refreshTokenValidity', {initialValue: clientApp.refreshTokenValidity,rules:[{required:enableRefreshToken,message:'RefreshToken过期时间必填'}]}]"
               :min="72000" :step="3600" :max="604800" @change="(value) => this.clientApp.refreshTokenValidity = value"/>
-            <span class="ant-form-text">分（{{ refreshTokenValidityTime }} 小时）</span>
+            <span class="ant-form-text">秒（{{ refreshTokenValidityTime }} 小时）</span>
           </a-form-item>
         </a-col>
       </a-row>

@@ -116,11 +116,11 @@
           title: '法人手机',
           align: 'center',
           dataIndex: 'legalPhone',
-          width: "15%"
+          width: "10%"
         }, {
           title: '是否有效',
           align: 'center',
-          width: "5%",
+          width: "10%",
           sorter: true,
           scopedSlots: {
             customRender: "orgStatusRender"

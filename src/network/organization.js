@@ -29,6 +29,23 @@ export function deleteById(id) {
   })
 }
 
+
+export function getRootOrgList(currentOrgId) {
+  return pmsRequest({
+    method: "GET",
+    params: {currentOrgId},
+    url: "/org/root"
+  })
+}
+
+export function getChildList(parentId, currentId) {
+  return pmsRequest({
+    method: "GET",
+    params: {parentId, currentId},
+    url: "/org/child"
+  })
+}
+
 export function saveOrUpdate(org) {
   return pmsRequest({
     method: "POST",

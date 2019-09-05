@@ -40,9 +40,10 @@
       </a-row>
       <a-row :gutter="16">
         <a-col :span="12">
-          <a-form-item :label-col="formItemLayout.labelCol" has-feedback :wrapper-col="formItemLayout.wrapperCol"
+          <a-form-item :label-col="formItemLayout.labelCol" :wrapper-col="formItemLayout.wrapperCol"
                        label="上级机构">
-            <a-input v-decorator="['parentId',{}]" disabled placeholder="请选择" autocomplete="off">
+            <a-input v-decorator="['parentName',{initialValue:org.parentName}]" disabled placeholder="请选择"
+                     autocomplete="off">
               <a-button slot="addonAfter" type="primary" @click="showParentOrgModal">
                 <a-icon type="select"/>&nbsp;请选择
               </a-button>
@@ -50,7 +51,7 @@
           </a-form-item>
         </a-col>
         <a-col :span="12">
-          <a-form-item :label-col="{span: 8}" has-feedback :wrapper-col="{span:16}" label="是否禁用">
+          <a-form-item :label-col="{span: 8}" has-feedback :wrapper-col="{span:16}" label="是否有效">
             <a-switch :checked="org.state" @change="org.state = !org.state"/>
           </a-form-item>
         </a-col>
@@ -115,20 +116,15 @@
         </a-col>
       </a-row>
     </a-form>
-    <a-modal title="选择上级机构" :visible="parentOrgVisible" @ok="parentOrgOnOkModal" @cancel="parentOrgVisible = false">
-      <p>
-        <a-input-search style="margin-bottom: 8px" placeholder="请输入名称搜索"/>
-        <a-tree :treeData="treeData" :onLoadData="onLoadData"
-                @select="parentOrgOnSelect"></a-tree>
-      </p>
-    </a-modal>
+    <organization-tree :parentOrgVisible='parentOrgVisible' @onSelect="organizationTreeOnSelect" @onCancel="organizationTreeOnCancel"/>
   </a-spin>
 </template>
 
 <script>
-  import AddressCascader from "@/components/cascader/AddressCascader";
+  // import AddressCascader from "@/components/cascader/AddressCascader";
+  import OrganizationTree from "@/views/pms/org/OrganizationTree";
   import {childs, findByParentId, findProvinceList} from "@/network/address";
-  import {findById, saveOrUpdate} from "@/network/organization";
+  import {findById, getChildList, getRootOrgList, saveOrUpdate} from "@/network/organization";
 
   const formItemLayout = {
     labelCol: {span: 6},
@@ -140,24 +136,15 @@
   };
   export default {
     name: "OrganizationEdit",
-    components: {AddressCascader},
+    components: {OrganizationTree},
     data() {
       return {
         loading: false,
         formItemLayout,
         formTailLayout,
         parentOrgVisible: false,
-        treeData: [
-          {
-            title: 'Expand to load',
-            key: '0',
-            disabled: true,
-            children: [{title: "item 1", key: '01'}, {title: "item 2", key: '02'}]
-          },
-          {title: 'Expand to load', key: '1'}
-        ],
         org: {
-          state: false
+          state: true,
         },
         maxDepth: 3,//最多选择多少级
         addressOptions: []
@@ -184,18 +171,19 @@
       }
     },
     methods: {
-      parentOrgOnSelect(selectedKeys, info) {
-        this.$message.info(selectedKeys[0]);
+      organizationTreeOnSelect(value) {
+
       },
-      parentOrgOnOkModal() {
+      organizationTreeOnCancel() {
 
       },
       showParentOrgModal() {
         this.parentOrgVisible = true
+        // if (this.orgTreeData.length === 0) {
+        //   getRootOrgList(this.org.id).then(response => this.orgTreeData = response.data);
+        // }
       },
-      onLoadData(treeNode) {
-        console.log(treeNode);
-      },
+
       loadAddressList() {
         findProvinceList().then(response => {
           this.addressOptions = response.data;
