@@ -128,6 +128,7 @@
           title: '启用状态',
           align: 'center',
           width: "10%",
+          key: 'appStatus',
           sorter: true,
           scopedSlots: {
             customRender: "appStatusRender"
@@ -204,7 +205,7 @@
         }, 2000);
       },
       handleChange(pagination, filters, sorter) {
-        let orders = sorter.order ? [new Order(sorter.field, sorter.order === "descend")] : [];
+        let orders = sorter.order ? [new Order(sorter.columnKey, sorter.order === "descend")] : [];
         this.loadingData(new PageQuery(this.params, pagination.current, pagination.pageSize, orders));
       },
       filterOption(input, option) {

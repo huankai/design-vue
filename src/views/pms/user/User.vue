@@ -20,7 +20,7 @@
               showSearch
               placeholder="用户状态"
               optionFilterProp="children"
-              style="width: 270px"
+              style="width: 50%"
               :allowClear="true"
               @change="value => this.params.userStatus = value">
               <a-select-option v-for="item in userStatusList" :value="item.value">{{ item.text}}</a-select-option>
@@ -94,6 +94,11 @@
                 <a-icon type="delete" :style="{color: 'red'}"/>
               </a-tooltip>
             </a-popconfirm>
+          </a>
+          <a href="javascript:void (0);" v-if="record.userStatus !== 0">
+              <a-tooltip placement="topLeft" title="配置角色">
+                  <a-icon type="audit"/>
+              </a-tooltip>
           </a>
         </span>
           </span>
@@ -179,14 +184,15 @@
           title: '注册时间',
           align: 'center',
           dataIndex: 'registerDate',
-          width: "10%",
+          key: "createdDate",
+          width: "15%",
           sorter: true
         }, {
           title: '操作',
           scopedSlots: {
             customRender: "action"
           },
-          width: "10%"
+          width: "20%"
         }
         ];
       }
@@ -246,7 +252,7 @@
         // });
       },
       handleChange(pagination, filters, sorter) {
-        let orders = sorter.order ? [new Order(sorter.field, sorter.order === "descend")] : [];
+        let orders = sorter.order ? [new Order(sorter.columnKey, sorter.order === "descend")] : [];
         this.loadingData(new PageQuery(this.params, pagination.current, pagination.pageSize, orders));
       },
     }

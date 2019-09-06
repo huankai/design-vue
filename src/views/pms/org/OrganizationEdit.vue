@@ -116,15 +116,15 @@
         </a-col>
       </a-row>
     </a-form>
-    <organization-tree :parentOrgVisible='parentOrgVisible' @onSelect="organizationTreeOnSelect" @onCancel="organizationTreeOnCancel"/>
+    <organization-tree :currentOrgId="this.$route.query.id" :parentOrgVisible='parentOrgVisible' @onSelect="organizationTreeOnSelect"
+                       @cancel="parentOrgVisible = false" @ok="parentOrgVisible = false"/>
   </a-spin>
 </template>
 
 <script>
-  // import AddressCascader from "@/components/cascader/AddressCascader";
   import OrganizationTree from "@/views/pms/org/OrganizationTree";
   import {childs, findByParentId, findProvinceList} from "@/network/address";
-  import {findById, getChildList, getRootOrgList, saveOrUpdate} from "@/network/organization";
+  import {findById, saveOrUpdate} from "@/network/organization";
 
   const formItemLayout = {
     labelCol: {span: 6},
@@ -163,7 +163,8 @@
             this.addressOptions = response.data;
           });
           this.form.setFieldsValue({
-            provinceId: ids
+            provinceId: ids,
+            parentName: response.data.orgName
           })
         })
       } else {
@@ -171,17 +172,14 @@
       }
     },
     methods: {
-      organizationTreeOnSelect(value) {
-
-      },
-      organizationTreeOnCancel() {
-
+      organizationTreeOnSelect(selected) {
+        this.org.parentId = selected.id;
+        this.form.setFieldsValue({
+          parentName: selected.orgName
+        })
       },
       showParentOrgModal() {
         this.parentOrgVisible = true
-        // if (this.orgTreeData.length === 0) {
-        //   getRootOrgList(this.org.id).then(response => this.orgTreeData = response.data);
-        // }
       },
 
       loadAddressList() {

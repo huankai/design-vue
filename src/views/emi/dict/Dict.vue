@@ -144,7 +144,7 @@
         this.loadingData(new PageQuery(this.params));
       },
       handleChange(pagination, filters, sorter) {
-        let orders = sorter.order ? [new Order(sorter.field, sorter.order === "descend")] : [];
+        let orders = sorter.order ? [new Order(sorter.columnKey, sorter.order === "descend")] : [];
         this.loadingData(new PageQuery(this.params, pagination.current, pagination.pageSize, orders));
       }
     }
