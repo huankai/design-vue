@@ -16,7 +16,7 @@
         </a-col>
         <a-col :span="8">
           <div>
-            <a-button type="primary" icon="search" @click="searchBtn">搜索</a-button>
+            <a-button type="primary" icon="search" @click="handlerSearch">搜索</a-button>
             <!--            <a-button type="primary" icon="file-excel" @click="visible = true">导出</a-button>-->
             <router-link to="/address/add">
               <a-button type="primary" icon="plus">添加</a-button>
@@ -174,7 +174,7 @@
           this.$message.success(response.message);
         }).finally(() => this.loadingData(new PageQuery(this.params)));
       },
-      searchBtn() {
+      handlerSearch() {
         this.loadingData(new PageQuery(this.params));
       },
       handleChange(pagination, filters, sorter) {

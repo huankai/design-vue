@@ -51,6 +51,14 @@ export function findChildById(id) {
   });
 }
 
+export function findChildList(baseCodeId) {
+  return emiRequest({
+    method: "GET",
+    params: {baseCodeId},
+    url: "childCode/findClild"
+  })
+}
+
 export function deleteChildById(id) {
   return emiRequest({
     method: "POST",

@@ -12,7 +12,7 @@
         </a-col>
         <a-col :span="8">
           <div>
-            <a-button type="primary" icon="search" @click="searchBtn">搜索</a-button>
+            <a-button type="primary" icon="search" @click="handlerSearch">搜索</a-button>
             <!--          <a-popconfirm title="确定要删除缓存吗？" @confirm="deleteCache">-->
             <!--            <a-icon slot="icon" type="question-circle" style="color:red"/>-->
             <!--            <a-button type="danger" :loading="deleteCacheLoading" icon="delete">清除缓存</a-button>-->
@@ -148,7 +148,7 @@
       handlerEnable() {
 
       },
-      searchBtn() {
+      handlerSearch() {
         console.log(this.params);
       },
       dateChange(selected) {

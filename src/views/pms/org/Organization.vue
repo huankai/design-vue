@@ -16,7 +16,7 @@
         </a-col>
         <a-col :span="8">
           <div>
-            <a-button type="primary" icon="search" @click="searchBtn">搜索</a-button>
+            <a-button type="primary" icon="search" @click="handlerSearch">搜索</a-button>
             <router-link to="/org/add">
               <a-button type="primary" icon="plus">添加</a-button>
             </router-link>
@@ -68,6 +68,7 @@
   export default {
     name: "Organization",
     created() {
+
       let query = new PageQuery();
       query.addOrder(Order.desc("orgCode"));
       this.loadingData(query);
@@ -149,7 +150,7 @@
           this.loadingData(new PageQuery());
         });
       },
-      searchBtn() {
+      handlerSearch() {
         this.loadingData(new PageQuery(this.params));
       },
       dateChange(selected) {

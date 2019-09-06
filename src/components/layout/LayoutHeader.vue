@@ -71,7 +71,7 @@
       },
       logout() {
         this.visible = false;
-        this.$message.info("退出成功....");
+        this.$message.success("退出成功....");
       },
       collapsedClick() {
         //组件传值到父类组件中

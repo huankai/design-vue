@@ -1,6 +1,5 @@
 import axios from "axios"
 import {message} from "ant-design-vue";
-import string from "less/lib/less/functions/string";
 
 // import fileDownload from "js-file-download";
 
@@ -13,6 +12,7 @@ function onFulfilled(response) {
     }
   }
   message.error(response.data.message || response.message || "请稍后再试");
+  return Promise.reject(response.data);
 }
 
 function onRejected(error) {
