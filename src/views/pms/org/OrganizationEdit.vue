@@ -116,8 +116,13 @@
         </a-col>
       </a-row>
     </a-form>
-    <organization-tree :currentOrgId="this.$route.query.id" :parentOrgVisible='parentOrgVisible' @onSelect="organizationTreeOnSelect"
-                       @cancel="parentOrgVisible = false" @ok="parentOrgVisible = false"/>
+    <a-modal title="选择上级机构" :visible="parentOrgVisible" @ok="parentOrgVisible = false"
+             @cancel="parentOrgVisible = false">
+      <p>
+        <organization-tree :currentOrgId="this.$route.query.id" :show-search="false"
+                           @onSelect="organizationTreeOnSelect"/>
+      </p>
+    </a-modal>
   </a-spin>
 </template>
 
@@ -164,7 +169,7 @@
           });
           this.form.setFieldsValue({
             provinceId: ids,
-            parentName: response.data.orgName
+            parentName: response.data.parentName
           })
         })
       } else {

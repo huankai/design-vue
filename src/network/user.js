@@ -22,6 +22,24 @@ export function disableUser(id) {
   })
 }
 
+export function markDeleted(id) {
+  return pmsRequest({
+    method: "POST",
+    params: {id},
+    url: "/users/deleted"
+  })
+}
+
+export function resetPasswordByAdmin(id, password, confirm) {
+  return pmsRequest({
+    method: "POST",
+    params: {
+      id, password, confirm
+    },
+    url: "/users/reset_pwd"
+  })
+}
+
 export function enableUser(id) {
   return pmsRequest({
     method: "POST",
@@ -43,4 +61,13 @@ export function queryForPage(queryPage) {
     data: queryPage,
     url: "/users/list"
   });
+}
+
+
+export function saveOrUpdate(user) {
+  return pmsRequest({
+    method: "POST",
+    data: user,
+    url: "/users"
+  })
 }

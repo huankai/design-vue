@@ -128,8 +128,16 @@ class ConditionParam {
   }
 }
 
+/**
+ * where  field = value
+ * @type {string}
+ */
 const EQ = "EQ";
 
+/**
+ * where field like '%value%'
+ * @type {string}
+ */
 const LIKEANYWHERE = "LIKEANYWHERE";
 
 class SimpleCondition {

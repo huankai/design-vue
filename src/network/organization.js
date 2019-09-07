@@ -29,11 +29,10 @@ export function deleteById(id) {
   })
 }
 
-
-export function getRootOrgList(currentOrgId) {
+export function getRootOrgList(currentOrgId, statusCheck) {
   return pmsRequest({
     method: "GET",
-    params: {currentOrgId},
+    params: {currentOrgId, statusCheck},
     url: "/org/root"
   })
 }

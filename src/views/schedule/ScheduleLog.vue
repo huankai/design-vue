@@ -138,7 +138,6 @@
     methods: {
       dateChange(selected) {
         this.params.updateDateRangeValue("startDate", selected);
-        console.log(this.params);
       },
       handleStateChange(value) {
         this.params.updateSimpleValue("success", value);

@@ -1,23 +1,39 @@
 <template>
-  <a-modal title="选择上级机构" :visible="parentOrgVisible" @ok="onOk"
-           @cancel="onCancel">
-    <p>
-      <!--        <a-input-search style="margin-bottom: 8px" placeholder="请输入名称搜索"/>-->
-      <a-tree :treeData="orgTreeData" :loadData="onLoadData"
-              @select="parentOrgOnSelect"></a-tree>
-    </p>
-  </a-modal>
+  <span>
+<!--    <a-input-search v-if="showSearch" style="margin-bottom: 8px" placeholder="请输入名称搜索" @change="orgSearchOnChange"/>-->
+    <a-tree :treeData="orgTreeData" :loadData="onLoadData" @select="parentOrgOnSelect"></a-tree>
+  </span>
 </template>
 
 <script>
   import {getChildList, getRootOrgList} from "@/network/organization";
 
+  // const getParentKey = (title, tree) => {
+  //   let parentKey;
+  //   for (let i = 0; i < tree.length; i++) {
+  //     const node = tree[i];
+  //     if (node.children) {
+  //       if (node.children.some(item => item.title === title)) {
+  //         parentKey = node.title;
+  //       } else if (getParentKey(title, node.children)) {
+  //         parentKey = getParentKey(title, node.children);
+  //       }
+  //     }
+  //   }
+  //   return parentKey
+  // };
+
+
   export default {
     name: "OrganizationTree",
     props: {
-      parentOrgVisible: {
+      showSearch: {
         type: Boolean,
-        default: false
+        default: true
+      },
+      statusCheck: {
+        type: Boolean,
+        default: true
       },
       currentOrgId: {
         type: String,
@@ -27,12 +43,18 @@
     data() {
       return {
         orgTreeData: []
+        // expandedKeys: [],
+        // autoExpandParent: true
       }
     },
     created() {
-      getRootOrgList(this.currentOrgId).then(response => this.orgTreeData = response.data);
+      getRootOrgList(this.currentOrgId, this.statusCheck,).then(response => this.orgTreeData = response.data);
     },
     methods: {
+      // onExpand(expandedKeys) {
+      //   this.expandedKeys = expandedKeys;
+      //   this.autoExpandParent = false
+      // },
       parentOrgOnSelect(selectedKeys, info) {
         const selectOrg = {
           id: null,
@@ -44,12 +66,20 @@
         }
         this.$emit("onSelect", selectOrg);
       },
-      onOk() {
-        this.$emit("ok");
-      },
-      onCancel() {
-        this.$emit("cancel");
-      },
+      // orgSearchOnChange(e) {
+      //   const value = e.target.value;
+      //   const expandedKeys = this.orgTreeData.map((item) => {
+      //     if (item.title.indexOf(value) > -1) {
+      //       return getParentKey(item.title, this.orgTreeData);
+      //     }
+      //     return null
+      //   }).filter((item, i, self) => item && self.indexOf(item) === i);
+      //   Object.assign(this, {
+      //     expandedKeys,
+      //     searchValue: value,
+      //     autoExpandParent: true
+      //   })
+      // },
       onLoadData(treeNode) {
         return new Promise(resolve => {
           getChildList(treeNode.value, this.currentOrgId)

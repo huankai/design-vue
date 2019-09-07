@@ -30,7 +30,8 @@
           </a-form-item>
         </a-col>
         <a-col :span="12">
-          <a-form-item :label-col="{span: 8}" has-feedback :wrapper-col="{span:16}" label="用户密码" v-if="this.$route.query.id == null">
+          <a-form-item :label-col="{span: 8}" has-feedback :wrapper-col="{span:16}" label="用户密码"
+                       v-if="this.$route.query.id == null">
             <a-input type="password"
                      v-decorator="['password',{rules: [{ required: true, message: '密码必填，不能为空格，且长度在 8 ~ 20之间',min:8,max:20,whitespace:true  }]}]"
                      placeholder="请输入用户密码"
@@ -74,7 +75,7 @@
           <a-form-item v-if="user.userType !== 1" :label-col="{span: 8}" :wrapper-col="{span:16}" label="用户机构">
             <a-input disabled placeholder="请选择" autocomplete="off"
                      v-decorator="['orgName',{initialValue:user.orgName,rules: [{required:user.userType !== 1,message: '机构必选'}]}]">
-              <a-button slot="addonAfter" type="primary">
+              <a-button slot="addonAfter" type="primary" @click="showParentOrgModal">
                 <a-icon type="select"/>&nbsp;请选择
               </a-button>
             </a-input>
@@ -147,13 +148,21 @@
         </a-col>
       </a-row>
     </a-form>
+    <a-modal title="选择上级机构" :visible="parentOrgVisible" @ok="parentOrgVisible = false"
+             @cancel="parentOrgVisible = false">
+      <p>
+        <organization-tree :currentOrgId="this.$route.query.id" :show-search="false"
+                           @onSelect="organizationTreeOnSelect"></organization-tree>
+      </p>
+    </a-modal>
   </a-spin>
 </template>
 
 <script>
   import {endOfDay} from "@/util/moments";
   import {findByParentId, findProvinceList} from "@/network/address";
-  import {findById, getByUserTypes} from "@/network/user";
+  import {findById, getByUserTypes, saveOrUpdate} from "@/network/user";
+  import OrganizationTree from "@/views/pms/org/OrganizationTree";
 
   const formItemLayout = {
     labelCol: {span: 6},
@@ -165,6 +174,7 @@
   };
   export default {
     name: "UserEdit",
+    components: {OrganizationTree},
     data() {
       return {
         loading: false,
@@ -180,9 +190,7 @@
         },
         disabledDate(current) {
           return current && current > endOfDay();
-        },
-        maxDepth: 3,//最多选择多少级
-        addressOptions: []
+        }
       };
     },
     beforeCreate() {
@@ -196,7 +204,6 @@
       getByUserTypes().then(response => {
         this.userTypeList = response.data
       });
-      this.loadAddressList();
     },
     methods: {
       handlePreview(file) {
@@ -205,48 +212,24 @@
       handleChange({fileList}) {
         this.fileList = fileList
       },
-      organizationTreeOnSelect(value) {
-
-      },
-      organizationTreeOnCancel() {
-
+      organizationTreeOnSelect(selected) {
+        this.user.orgId = selected.id;
+        this.form.setFieldsValue({
+          orgName: selected.orgName
+        })
       },
       showParentOrgModal() {
         this.parentOrgVisible = true
-
-      },
-
-      loadAddressList() {
-        findProvinceList().then(response => {
-          this.addressOptions = response.data;
-        });
-      },
-      addressLoadData(selectedOptions) {
-        if (selectedOptions.length < this.maxDepth) {
-          const selectOption = selectedOptions[selectedOptions.length - 1];
-          selectOption.loading = true;
-          findByParentId(selectOption.value, this.maxDepth).then(response => {
-            if (response.data.length > 0) {
-              selectOption.children = response.data;
-              this.addressOptions = [...this.addressOptions];
-            }
-            selectOption.loading = false;
-          });
-        }
       },
       handleSubmit() {
         this.form.validateFields((errors) => {
           if (!errors) {
-            // this.loading = true;
-            // let data = Object.assign(this.org, this.form.getFieldsValue());
-            // let provinceArray = data.provinceId;
-            // data.provinceId = provinceArray[0];
-            // data.cityId = provinceArray[1];
-            // data.areaId = provinceArray[2];
-            // saveOrUpdate(data).then(response => {
-            //   this.$message.success(response.message);
-            //   this.$router.replace("/users");
-            // }).finally(() => this.loading = false);
+            this.loading = true;
+            let data = Object.assign(this.user, this.form.getFieldsValue());
+            saveOrUpdate(data).then(response => {
+              this.$message.success(response.message);
+              this.$router.replace("/users");
+            }).finally(() => this.loading = false);
           }
         });
       }
