@@ -3,7 +3,8 @@
  */
 module.exports = {
   // 当 publicPath 配置了 上下文后，如果使用的是 vue-router，也需要在 router/index.js 文件中 配置 base属性，值与这里的一样
-  // publicPath: "/vue",
+  // 也可以使用 process.env.BASE_URL 来获取该值
+  publicPath: "/vue",
   devServer: {
     // 配置项目启动后自动打开浏览器
     open: true,

@@ -21,13 +21,16 @@ import Dict from "@/router/dict"
 import Schedule from "@/router/schedule";
 import Files from "@/router/files";
 import Organization from "@/router/organization";
+import Mine from "@/router/mine";
 
 
 const router = new VueRouter({
   mode: "history",
-  // base: "/vue",
+  //  使用 vue.config.js 中的 publicPath 值 ，源码在 @vue/cli-service/lib/util/resolveClientEnv.js
+  base: process.env.BASE_URL,
   routes: [
     ...Dashboard.dashboard,
+    ...Mine.mine,
     ...ClientApp.clientApp,
     ...Organization.organization,
     ...User.user,

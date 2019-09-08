@@ -1,4 +1,5 @@
 import axios from "axios"
+import "@/util/message"
 import {message} from "ant-design-vue";
 
 // import fileDownload from "js-file-download";
@@ -16,15 +17,15 @@ function onFulfilled(response) {
 }
 
 function onRejected(error) {
-  let message = "请稍后再试";
+  let content = "请稍后再试";
   if (error.response) {
     if (error.response.status === 403) {
-      message = error.response.data.message || "您无权限访问";
+      content = error.response.data.message || "您无权限访问";
     } else if (typeof error.response.data !== 'string') {
-      message = error.response.data.message || "操作失败";
+      content = error.response.data.message || "操作失败";
     }
   }
-  message.error(message);
+  message.error(content);
   return Promise.reject(error); // 要调用 reject 方法，否则，会执行调用者的 then() 方法
 }
 

@@ -49,12 +49,12 @@
     <div>
       <a-row :gutter="16">
         <a-col :span="4" style="border-right:1px dashed #e8e8e8;">
-          <!--          <a-input-search style="margin-bottom: 8px" placeholder="请输入机构名称搜索"/>-->
-          <!--          <a-tree-->
-          <!--            :treeData="orgTreeData"-->
-          <!--          ></a-tree>-->
-          <organization-tree :show-search="false" @onSelect="org => this.params.updateSimpleValue('orgId',org.id)"
-                             :status-check="false"></organization-tree>
+            <!--          <a-input-search style="margin-bottom: 8px" placeholder="请输入机构名称搜索"/>-->
+            <!--          <a-tree-->
+            <!--            :treeData="orgTreeData"-->
+            <!--          ></a-tree>-->
+            <organization-tree :show-search="false" @onSelect="org => this.params.updateSimpleValue('orgId',org.id)"
+                               :status-check="false"></organization-tree>
         </a-col>
         <a-col :span="20">
           <a-table rowKey="id" :columns="columns" :loading="loading" :dataSource="data"
@@ -142,6 +142,7 @@
     queryForPage,
     resetPasswordByAdmin
   } from "@/network/user";
+  import {format} from "@/util/moments";
 
   export default {
     name: "User",
@@ -170,6 +171,7 @@
         updatePasswordVisible: false,
         updatePasswordUser: {},
         form: null
+
       }
     },
     created() {
@@ -187,35 +189,37 @@
           width: '10%',
           sorter: true
         }, {
-          title: '手机号',
-          align: 'center',
-          dataIndex: 'phone',
-          width: "10%"
-        }, {
           title: '用户名称',
           align: 'center',
           dataIndex: 'realName',
           width: "10%"
+        }, {
+          title: '用户类型',
+          align: 'center',
+          width: "10%",
+          dataIndex: 'userTypeText'
         }, {
           title: '用户状态',
           align: 'center',
           width: "10%",
           scopedSlots: {
             customRender: "userStatus"
-          },
+          }
         }, {
           title: '注册时间',
           align: 'center',
-          dataIndex: 'registerDate',
           key: "createdDate",
           width: "15%",
+          customRender(record) {
+            return format(record.registerDate);
+          },
           sorter: true
         }, {
           title: '操作',
           scopedSlots: {
             customRender: "action"
           },
-          width: "20%"
+          width: "15%"
         }
         ];
 

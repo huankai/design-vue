@@ -23,13 +23,13 @@
         </a-tooltip>
       </span>
       <span>
-          <a-avatar :size="32" icon="user" :src="'https://avatars1.githubusercontent.com/u/16852503'"/>
+          <a-avatar :size="32" icon="user" :src="userIcon"/>
           <a-dropdown>
             <a class="ant-dropdown-link" href="javascript:void(0);">系统管理员&nbsp;<a-icon type="down"/>
             </a>
             <a-menu slot="overlay">
               <a-menu-item>
-                <a href="javascript:void (0);" @click="userSetting">用户设置</a>
+                <router-link :to="'mine/settings'">用户设置</router-link>
               </a-menu-item>
               <a-menu-divider/>
               <a-menu-item>
@@ -57,6 +57,7 @@
     data() {
       return {
         appList: [],
+        userIcon: require('@/assets/image/user.png'),
         visible: false
       }
     },

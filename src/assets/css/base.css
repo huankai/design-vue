@@ -12,8 +12,16 @@
 
 #components-layout-demo-custom-trigger .logo {
     height: 32px;
-    background: white;
+    /*background: white;*/
     margin: 16px;
+}
+
+.logo h1{
+    display: inline-block;
+    margin: 0 0 0 12px;
+    color: #fff;
+    font-size: 100%;
+    vertical-align: middle;
 }
 
 .ant-divider-horizontal {

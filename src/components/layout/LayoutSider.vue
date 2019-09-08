@@ -1,6 +1,9 @@
 <template>
   <a-layout-sider :trigger="null" collapsible v-model="collapsed">
-    <div class="logo"></div>
+    <div class="logo">
+      <img :src="require('@/assets/image/user.png')" width="32px;">
+      <h1 v-if="!collapsed">综合管理系统</h1>
+    </div>
     <a-menu theme="dark" mode="inline" :selectedKeys="selectedKeys" :openKeys="openKeys" @select="handleSelect"
             @openChange="openChange">
       <template v-for="item in menuList">
@@ -58,7 +61,6 @@
           } else if (path === "") {
             path = "/";
           }
-          routes = this.$route.matched.concat();
           this.selectedKeys = [path];
           this.openKeys = this.$store.getters.getCurrentMenu;
         }

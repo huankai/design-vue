@@ -10,9 +10,9 @@
     },
     {
       "id": "7",
-      "link": "/my",
+      "link": "/mine/settings",
       "icon": "user",
-      "name": "个人中心"
+      "name": "个人设置"
     },
     {
       "id": "2",

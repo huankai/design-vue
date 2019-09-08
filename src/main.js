@@ -10,7 +10,7 @@ import router from "@/router";
 import store from "@/store";
 
 /*
- 按需要导入 ant 的组件，这里只导入了 Button
+ 按需要导入 ant 的组件
  */
 import {
   Form,
@@ -42,6 +42,7 @@ import {
   Breadcrumb,
   Col,
   Row,
+  List,
   Divider,
   Modal,
   Dropdown
@@ -78,6 +79,7 @@ Vue.use(Badge);
 Vue.use(Breadcrumb);
 Vue.use(Col);
 Vue.use(Row);
+Vue.use(List);
 Vue.use(Divider);
 Vue.use(Modal);
 Vue.use(Dropdown);

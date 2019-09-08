@@ -1,8 +1,8 @@
 <template>
-  <span>
-<!--    <a-input-search v-if="showSearch" style="margin-bottom: 8px" placeholder="请输入名称搜索" @change="orgSearchOnChange"/>-->
+  <a-spin :spinning="orgSpinning" tip="加载中...">
+    <!--    <a-input-search v-if="showSearch" style="margin-bottom: 8px" placeholder="请输入名称搜索" @change="orgSearchOnChange"/>-->
     <a-tree :treeData="orgTreeData" :loadData="onLoadData" @select="parentOrgOnSelect"></a-tree>
-  </span>
+  </a-spin>
 </template>
 
 <script>
@@ -42,19 +42,26 @@
     },
     data() {
       return {
-        orgTreeData: []
+        orgTreeData: [],
+        orgSpinning: false
         // expandedKeys: [],
         // autoExpandParent: true
       }
     },
     created() {
-      getRootOrgList(this.currentOrgId, this.statusCheck,).then(response => this.orgTreeData = response.data);
+      this.getRootOrgList();
     },
     methods: {
       // onExpand(expandedKeys) {
       //   this.expandedKeys = expandedKeys;
       //   this.autoExpandParent = false
       // },
+      getRootOrgList() {
+        this.orgSpinning = true;
+        getRootOrgList(this.currentOrgId, this.statusCheck,)
+          .then(response => this.orgTreeData = response.data)
+          .finally(() => this.orgSpinning = false);
+      },
       parentOrgOnSelect(selectedKeys, info) {
         const selectOrg = {
           id: null,
