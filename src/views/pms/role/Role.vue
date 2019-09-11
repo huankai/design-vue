@@ -6,7 +6,8 @@
           <label>
             <span class="field">应用名称: </span>
             <a-select style="width: 50%">
-              <a-select-option v-for="item in appList" :key="item.id" :disabled="item.disabled">{{ item.name}}</a-select-option>
+              <a-select-option v-for="item in appList" :key="item.id" :disabled="item.disabled">{{ item.name}}
+              </a-select-option>
             </a-select>
           </label>
         </a-col>
@@ -37,40 +38,31 @@
 
 <script>
   import {Order, PageQuery} from "@/util/pageQuery";
+  import {getSelectOption} from "@/network/clientApp";
+  import {queryForPage} from "@/network/role";
+  import {pageSizeOptions, defaultPageSize, showTotal} from "@/util/pagination";
 
   export default {
     name: "Role",
     data() {
       return {
         data: [],
-        appList:[
-          {
-            id:"1",
-            disabled: true,
-            name:"字典管理系统"
-          },{
-            id:"2",
-            name:"文件管理系统"
-          },{
-            id:"3",
-            name:"权限管理系统"
-          }
-        ],
+        appList: [],
         loading: {spinning: false, tip: "加载中..."},
         params: {},
         pagination: {
           total: 0,
-          defaultPageSize: 10,
-          showTotal: (total, range) => {
-            return "共 " + total + " 条记录";
-          },
-          pageSizeOptions: ['10', '20', '50', '100'],
+          defaultPageSize,
+          showTotal,
+          pageSizeOptions,
           showQuickJumper: true,
           showSizeChanger: true
         }
       }
     },
     created() {
+      getSelectOption().then(response => this.appList = response.data);
+      this.loadingData(new PageQuery());
     },
     computed: {
       columns() {
@@ -101,6 +93,15 @@
       }
     },
     methods: {
+      loadingData(pageQuery) {
+        this.loading.spinning = true;
+        queryForPage(pageQuery)
+          .then(response => {
+            this.data = response.data;
+            this.pagination.total = response.data.totalRow;
+          })
+          .finally(() => this.loading.spinning = false);
+      },
       handlerSearch() {
         this.loadingData(new PageQuery(this.params));
       },
@@ -111,7 +112,3 @@
     }
   }
 </script>
-
-<style scoped>
-
-</style>

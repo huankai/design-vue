@@ -67,6 +67,7 @@
   import DateSearch from "@/components/search/DateSearch";
   import {findById, queryForLogPage} from "@/network/schedule";
   import {ConditionParam, DateRangeCondition, Order, PageQuery, SimpleCondition} from "@/util/pageQuery";
+  import {pageSizeOptions, defaultPageSize, showTotal} from "@/util/pagination";
 
   export default {
     name: "ScheduleLog",
@@ -84,11 +85,9 @@
         loading: false,
         pagination: {
           total: 0,
-          defaultPageSize: 10,
-          showTotal: (total, range) => {
-            return "共 " + total + " 条记录";
-          },
-          pageSizeOptions: ['10', '20', '50', '100'],
+          defaultPageSize,
+          showTotal,
+          pageSizeOptions,
           showQuickJumper: true,
           showSizeChanger: true
         },
@@ -116,7 +115,6 @@
           align: 'center',
           dataIndex: 'takeTime',
           width: '10%'
-          // sorter: (a, b) => a.age - b.age
         }, {
           title: '状态',
           align: 'center',
@@ -159,7 +157,3 @@
     }
   }
 </script>
-
-<style scoped>
-
-</style>

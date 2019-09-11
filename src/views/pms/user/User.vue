@@ -49,12 +49,12 @@
     <div>
       <a-row :gutter="16">
         <a-col :span="4" style="border-right:1px dashed #e8e8e8;">
-            <!--          <a-input-search style="margin-bottom: 8px" placeholder="请输入机构名称搜索"/>-->
-            <!--          <a-tree-->
-            <!--            :treeData="orgTreeData"-->
-            <!--          ></a-tree>-->
-            <organization-tree :show-search="false" @onSelect="org => this.params.updateSimpleValue('orgId',org.id)"
-                               :status-check="false"></organization-tree>
+          <!--          <a-input-search style="margin-bottom: 8px" placeholder="请输入机构名称搜索"/>-->
+          <!--          <a-tree-->
+          <!--            :treeData="orgTreeData"-->
+          <!--          ></a-tree>-->
+          <organization-tree :show-search="false" @onSelect="org => this.params.updateSimpleValue('orgId',org.id)"
+                             :status-check="false"></organization-tree>
         </a-col>
         <a-col :span="20">
           <a-table rowKey="id" :columns="columns" :loading="loading" :dataSource="data"
@@ -134,6 +134,8 @@
   import DateSearch from "@/components/search/DateSearch";
   import OrganizationTree from "@/views/pms/org/OrganizationTree";
   import {ConditionParam, DateRangeCondition, LIKEANYWHERE, Order, PageQuery, SimpleCondition} from "@/util/pageQuery";
+  import {pageSizeOptions, defaultPageSize, showTotal} from "@/util/pagination";
+
   import {
     disableUser,
     enableUser,
@@ -160,11 +162,9 @@
         orgTreeData: [],
         pagination: {
           total: 0,
-          defaultPageSize: 10,
-          showTotal: (total, range) => {
-            return "共 " + total + " 条记录";
-          },
-          pageSizeOptions: ['10', '20', '50', '100'],
+          defaultPageSize,
+          showTotal,
+          pageSizeOptions,
           showQuickJumper: true,
           showSizeChanger: true
         },
@@ -290,7 +290,3 @@
     }
   }
 </script>
-
-<style scoped>
-
-</style>

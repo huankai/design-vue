@@ -24,6 +24,14 @@ export function disableApp(id) {
   })
 }
 
+
+export function getSelectOption() {
+  return pmsRequest({
+    method: "GET",
+    url: "/app/select"
+  });
+}
+
 export function enableApp(id) {
   return pmsRequest({
     method: "POST",

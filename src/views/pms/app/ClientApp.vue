@@ -81,6 +81,7 @@
 <script>
   import {deleteById, disableApp, enableApp, queryForPage, recovery} from "@/network/clientApp";
   import {Order, PageQuery} from "@/util/pageQuery";
+  import {pageSizeOptions, defaultPageSize, showTotal} from "@/util/pagination";
 
   export default {
     name: "ClientApp",
@@ -96,11 +97,9 @@
         loading: {spinning: false, tip: "加载中..."},
         pagination: {
           total: 0,
-          defaultPageSize: 10,
-          showTotal: (total, range) => {
-            return "共 " + total + " 条记录";
-          },
-          pageSizeOptions: ['10', '20', '50', '100'],
+          defaultPageSize,
+          showTotal,
+          pageSizeOptions,
           showQuickJumper: true,
           showSizeChanger: true
         },

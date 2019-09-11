@@ -17,7 +17,7 @@
         <a-col :span="12">
           <div>
             <a-button type="primary" icon="search" @click="handlerSearch">搜索</a-button>
-<!--            <a-button type="primary" icon="file-excel" @click="visible = true">导出</a-button>-->
+            <!--            <a-button type="primary" icon="file-excel" @click="visible = true">导出</a-button>-->
             <router-link :to="{path: '/address/add',query:{parentId:this.$route.query.id}}">
               <a-button type="primary" icon="plus">添加</a-button>
             </router-link>
@@ -78,6 +78,7 @@
 <script>
   import {queryForPage, findById, deleteById} from "@/network/address";
   import {Order, PageQuery} from "@/util/pageQuery";
+  import {pageSizeOptions, defaultPageSize, showTotal} from "@/util/pagination";
 
   export default {
     name: "AddressChild",
@@ -98,11 +99,9 @@
         loading: {spinning: false, tip: "加载中..."},
         pagination: {
           total: 0,
-          defaultPageSize: 10,
-          showTotal: (total, range) => {
-            return "共 " + total + " 条记录";
-          },
-          pageSizeOptions: ['10', '20', '50', '100'],
+          defaultPageSize,
+          showTotal,
+          pageSizeOptions,
           showQuickJumper: true,
           showSizeChanger: true
         },
@@ -187,7 +186,6 @@
       handlerDelete(record) {
         deleteById(record.id).then(response => {
           this.$message.success(response.data.message);
-        }).finally(() => {
           this.loadingData(new PageQuery(this.params));
         });
       },

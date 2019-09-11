@@ -150,6 +150,7 @@
   import {findById, getCityType} from "@/network/address";
   import {queryForPage, saveOrUpdate} from "@/network/address";
   import {PageQuery} from "@/util/pageQuery";
+  import {pageSizeOptions, defaultPageSize, showTotal} from "@/util/pagination";
 
   const formItemLayout = {
     labelCol: {span: 6},
@@ -218,11 +219,9 @@
         pagination: {
           total: 0,
           current: 0,
-          defaultPageSize: 10,
-          showTotal: (total, range) => {
-            return "共 " + total + " 条记录";
-          },
-          pageSizeOptions: ['10', '20', '50', '100'],
+          defaultPageSize,
+          showTotal,
+          pageSizeOptions,
           showQuickJumper: true,
           showSizeChanger: true
         }

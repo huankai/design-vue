@@ -1,22 +1,21 @@
 import axios from "axios"
-import "@/util/message"
 import {message} from "ant-design-vue";
 
 // import fileDownload from "js-file-download";
 
 axios.defaults.timeout = 1000000;
 
-function onFulfilled(response) {
+async function onFulfilled(response) {
   if (response.status === 200) {
     if (response.data.statusCode === 10200) {
       return response.data;
     }
   }
-  message.error(response.data.message || response.message || "请稍后再试");
+  await message.error(response.data.message || response.message || "请稍后再试");
   return Promise.reject(response.data);
 }
 
-function onRejected(error) {
+async function onRejected(error) {
   let content = "请稍后再试";
   if (error.response) {
     if (error.response.status === 403) {
@@ -25,7 +24,7 @@ function onRejected(error) {
       content = error.response.data.message || "操作失败";
     }
   }
-  message.error(content);
+  await message.error(content);
   return Promise.reject(error); // 要调用 reject 方法，否则，会执行调用者的 then() 方法
 }
 
@@ -82,3 +81,19 @@ scheduleInstance.interceptors.response.use(response => onFulfilled(response),
 export function scheduleRequest(options) {
   return scheduleInstance(options);
 }
+
+/* ------------------------------------ file ----------------------------------------------- */
+/**
+ * fsInstance
+ * @type {AxiosInstance}
+ */
+const fsInstance = axios.create({
+  baseURL: "/fs"
+});
+fsInstance.interceptors.response.use(response => onFulfilled(response),
+  error => onRejected(error));
+
+export function fsRequest(options) {
+  return fsInstance(options);
+}
+

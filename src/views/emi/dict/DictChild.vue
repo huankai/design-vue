@@ -62,6 +62,7 @@
 <script>
   import {queryChildForPage, findById, deleteChildById} from "@/network/dict";
   import {Order, PageQuery} from "@/util/pageQuery";
+  import {pageSizeOptions, defaultPageSize, showTotal} from "@/util/pagination";
 
   export default {
     name: "Dict",
@@ -78,11 +79,9 @@
         loading: {spinning: false, tip: "加载中..."},
         pagination: {
           total: 0,
-          defaultPageSize: 10,
-          showTotal: (total, range) => {
-            return "共 " + total + " 条记录";
-          },
-          pageSizeOptions: ['10', '20', '50', '100'],
+          defaultPageSize,
+          showTotal,
+          pageSizeOptions,
           showQuickJumper: true,
           showSizeChanger: true
         },
@@ -181,7 +180,3 @@
     }
   }
 </script>
-
-<style scoped>
-
-</style>

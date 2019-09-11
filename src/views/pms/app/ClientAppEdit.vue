@@ -22,14 +22,15 @@
       </a-row>
       <a-row :gutter="16">
         <a-col :span="12">
-          <a-form-item :label-col="formItemLayout.labelCol" :wrapper-col="formItemLayout.wrapperCol" has-feedback label="有效日期">
+          <a-form-item :label-col="formItemLayout.labelCol" :wrapper-col="formItemLayout.wrapperCol" has-feedback
+                       label="有效日期">
             <a-date-picker
               v-decorator="['expireDate',{initialValue:clientApp.expireDate, rules: [{ required: false, message: '请输入有效期' }]}]"
               placeholder="默认不过期"/>
           </a-form-item>
         </a-col>
         <a-col :span="12">
-          <a-form-item  v-if="clientApp.id != null" :label-col="{span: 8}"
+          <a-form-item v-if="clientApp.id != null" :label-col="{span: 8}"
                        label="secret">
             <a-button type="primary" @click="showSecret">
               <a-icon type="eye"/>
@@ -39,9 +40,16 @@
         </a-col>
       </a-row>
       <a-row :gutter="16">
-        <a-col :span="24">
-          <a-form-item :label-col="{span: 3}" has-feedback :wrapper-col="{span: 9}"
-                       label="回调地址">
+        <a-col :span="12">
+          <a-form-item :label-col="{span: 8}" has-feedback :wrapper-col="{span:16}"
+                       label="首页地址">
+            <a-input placeholder="首页地址"
+                     v-decorator="['mainUrl',{initialValue:clientApp.mainUrl,rules: [{ required: true, max:100,message: '首页地址必填，且不能超过100长度' }]}]"
+                     autocomplete="off"/>
+          </a-form-item>
+        </a-col>
+        <a-col :span="12">
+          <a-form-item :label-col="formItemLayout.labelCol" :wrapper-col="formItemLayout.wrapperCol" label="回调地址">
             <a-textarea placeholder="多个使用 , 分隔"
                         v-decorator="['redirectUri',{rules: [{ required: true, max:300,message: '回调地址必填，且不能超过300长度' }]}]"
                         autocomplete="off" :autosize="{minRows: 2,maxRows:5}"/>
@@ -222,7 +230,7 @@
         this.clientApp.authorizedGrantTypes = checkedValues;
       },
       handleSubmit() {
-        this.form.validateFields((errors, values) => {
+        this.form.validateFields((errors) => {
           if (!errors) {
             this.loading = true;
             let data = Object.assign(this.clientApp, this.form.getFieldsValue());
@@ -237,7 +245,3 @@
     }
   };
 </script>
-
-<style scoped>
-
-</style>

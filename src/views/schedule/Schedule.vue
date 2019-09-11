@@ -95,6 +95,7 @@
 <script>
   import {deleteById, pause, queryForPage, resume, trigger} from "@/network/schedule";
   import {Order, PageQuery} from "@/util/pageQuery";
+  import {pageSizeOptions, defaultPageSize, showTotal} from "@/util/pagination";
 
   export default {
     name: "Schedule",
@@ -109,15 +110,12 @@
           {name: "停止", value: 2},
           {name: "删除", value: 0}
         ],
-        deleteCacheLoading: false,
         loading: {spinning: false, tip: "加载中..."},
         pagination: {
           total: 0,
-          defaultPageSize: 10,
-          showTotal: (total, range) => {
-            return "共 " + total + " 条记录";
-          },
-          pageSizeOptions: ['10', '20', '50', '100'],
+          defaultPageSize,
+          showTotal,
+          pageSizeOptions,
           showQuickJumper: true,
           showSizeChanger: true
         },
@@ -207,13 +205,6 @@
       handlerSearch() {
         this.loadingData(new PageQuery(this.params));
       },
-      // deleteCache() {
-      //     this.deleteCacheLoading = true;
-      //     const _this = this;
-      //     setTimeout(() => {
-      //         _this.deleteCacheLoading = false;
-      //     }, 2000);
-      // },
       handleChange(pagination, filters, sorter) {
         let orders = sorter.order ? [new Order(sorter.columnKey, sorter.order === "descend")] : [];
         this.loadingData(new PageQuery(this.params, pagination.current, pagination.pageSize, orders));
@@ -224,7 +215,3 @@
     }
   }
 </script>
-
-<style scoped>
-
-</style>

@@ -29,14 +29,6 @@ export default {
       },
       component: ScheduleEdit
     }, {
-      path: "/schedule/detail",
-      name: "scheduleDetail",
-      meta: {
-        parent: "/schedule",
-        title: "定时任务 - 详情"
-      },
-      component: ScheduleDetail
-    }, {
       path: "/schedule/log",
       name: "scheduleLog",
       meta: {

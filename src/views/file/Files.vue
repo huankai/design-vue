@@ -62,13 +62,13 @@
   import DateSearch from "@/components/search/DateSearch";
   import {queryForPage} from "@/network/files";
   import {Order, PageQuery} from "@/util/pageQuery";
+  import {pageSizeOptions, defaultPageSize, showTotal} from "@/util/pagination";
 
   export default {
     name: "Files",
     components: {DateSearch},
     created() {
       let query = new PageQuery();
-      console.log(query);
       queryForPage(query).then(response => {
         this.data = response.data;
         this.pagination.total = response.totalRow;
@@ -81,18 +81,15 @@
         loading: {spinning: false, tip: "加载中..."},
         pagination: {
           total: 0,
-          defaultPageSize: 10,
-          showTotal: (total, range) => {
-            return "共 " + total + " 条记录";
-          },
-          pageSizeOptions: ['10', '20', '50', '100'],
+          defaultPageSize,
+          showTotal,
+          pageSizeOptions,
           showQuickJumper: true,
           showSizeChanger: true
         },
         params: {
           appCode: null,
           appName: null
-
         }
       }
     },
@@ -173,12 +170,6 @@
         setTimeout(() => {
           this.loading.spinning = false;
         }, 200);
-      },
-      handleBlur() {
-        console.log('blur');
-      },
-      handleFocus() {
-        console.log('focus');
       },
       filterOption(input, option) {
         return option.componentOptions.children[0].text.toLowerCase().indexOf(input.toLowerCase()) >= 0

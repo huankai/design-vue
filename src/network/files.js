@@ -2,7 +2,6 @@ import {defaultRequest} from "@/network/request";
 
 /**
  *
- * 获取头部 app 应用列表
  * @param queryPage
  * @returns {AxiosPromise}
  */

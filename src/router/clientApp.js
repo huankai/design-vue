@@ -11,21 +11,19 @@ export default {
       title: "应用管理"
     },
     component: ClientApp,
-  },
-    {
-      path: "/app/add",
-      meta: {
-        parent: "/app",
-        title: "应用管理-添加"
-      },
-      component: ClientAppEdit
+  }, {
+    path: "/app/add",
+    meta: {
+      parent: "/app",
+      title: "应用管理-添加"
     },
-    {
-      path: "/app/edit",
-      meta: {
-        parent: "/app",
-        title: "应用管理-修改"
-      },
-      component: ClientAppEdit
-    }]
+    component: ClientAppEdit
+  }, {
+    path: "/app/edit",
+    meta: {
+      parent: "/app",
+      title: "应用管理-修改"
+    },
+    component: ClientAppEdit
+  }]
 }
