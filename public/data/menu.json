@@ -73,12 +73,6 @@
           "link": "/dict",
           "icon": "profile",
           "name": "数据字典"
-        },
-        {
-          "id": "33",
-          "link": "/params",
-          "icon": "environment",
-          "name": "参数配置"
         }
       ]
     },

@@ -5,7 +5,7 @@
         <a-col>
           <a-form-item :label-col="formItemLayout.labelCol" has-feedback :wrapper-col="formItemLayout.wrapperCol"
                        label="所属上级">
-            {{baseCodeName}}
+            {{childDict.baseCodeName}}
           </a-form-item>
         </a-col>
       </a-row>
@@ -103,7 +103,6 @@
     data() {
       return {
         loading: false,
-        baseCodeName: null,
         formItemLayout,
         formTailLayout,
         childDict: {
@@ -120,15 +119,14 @@
       let id = this.$route.query.id;
       if (id) {
         findChildById(id).then(response => {
-          this.childDict = response.data.childCode;
-          this.baseCodeName = response.data.baseCodeName;
+          this.childDict = response.data;
         });
       } else {
         let baseCodeId = this.$route.query.baseCodeId;
         if (baseCodeId) {
           this.childDict.baseCodeId = baseCodeId;
           findById(baseCodeId).then(response => {
-            this.baseCodeName = response.data.codeName;
+            this.childDict.baseCodeName = response.data.codeName;
           });
         }
       }

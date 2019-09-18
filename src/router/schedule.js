@@ -1,7 +1,6 @@
 const Schedule = () => import("@/views/schedule/Schedule");
 const ScheduleLog = () => import("@/views/schedule/ScheduleLog");
 const ScheduleEdit = () => import("@/views/schedule/ScheduleEdit");
-const ScheduleDetail = () => import("@/views/schedule/ScheduleDetail");
 
 export default {
   schedule: [

@@ -41,7 +41,7 @@
       </a-row>
       <a-row :gutter="16">
         <a-col :span="12">
-          <a-form-item :label-col="{span: 8}" has-feedback :wrapper-col="{span:16}"
+          <a-form-item :label-col="formItemLayout.labelCol" :wrapper-col="formItemLayout.wrapperCol"
                        label="首页地址">
             <a-input placeholder="首页地址"
                      v-decorator="['mainUrl',{initialValue:clientApp.mainUrl,rules: [{ required: true, max:100,message: '首页地址必填，且不能超过100长度' }]}]"
@@ -49,7 +49,7 @@
           </a-form-item>
         </a-col>
         <a-col :span="12">
-          <a-form-item :label-col="formItemLayout.labelCol" :wrapper-col="formItemLayout.wrapperCol" label="回调地址">
+          <a-form-item :label-col="{span: 8}" :wrapper-col="{span:16}" label="回调地址">
             <a-textarea placeholder="多个使用 , 分隔"
                         v-decorator="['redirectUri',{rules: [{ required: true, max:300,message: '回调地址必填，且不能超过300长度' }]}]"
                         autocomplete="off" :autosize="{minRows: 2,maxRows:5}"/>

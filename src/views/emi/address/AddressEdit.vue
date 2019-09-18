@@ -66,7 +66,7 @@
               v-decorator="['cityType',{initialValue:addressData.cityType}]"
               optionFilterProp="children"
               @change="handleCityTypeChange">
-              <a-select-option v-for="item in cityTypeOptions" :value="item.value">{{ item.name}}
+              <a-select-option v-for="item in cityTypeOptions" :value="item.value">{{ item.text}}
               </a-select-option>
             </a-select>
           </a-form-item>

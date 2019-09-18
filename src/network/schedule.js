@@ -63,7 +63,7 @@ export function queryForLogPage(queryPage) {
   return scheduleRequest({
     method: "POST",
     data: queryPage,
-    url: "/joblog/page"
+    url: "/joblog/list"
   });
 }
 
