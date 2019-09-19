@@ -78,19 +78,12 @@
     },
     {
       "id": "4",
-      "link": "/file",
       "icon": "file",
       "name": "文件管理",
       "children": [
         {
-          "id": "41",
-          "link": "/file/store",
-          "icon": "inbox",
-          "name": "存储管理"
-        },
-        {
           "id": "42",
-          "link": "/file/info",
+          "link": "/file/list",
           "icon": "file",
           "name": "文件管理"
         }

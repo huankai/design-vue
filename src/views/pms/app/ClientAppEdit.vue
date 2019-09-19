@@ -106,11 +106,11 @@
         <a-col :span="24">
           <a-form-item :label-col="{span:3}" label="应用头像">
             <a-upload v-decorator="['upload', {valuePropName: 'fileList'}]" name="logo"
-                      action="/upload" list-type="picture">
-              <a-button>
+                      :action="action" list-type="picture-card">
+              <div>
                 <a-icon type="upload"/>
                 点击上传
-              </a-button>
+              </div>
             </a-upload>
           </a-form-item>
         </a-col>
@@ -153,6 +153,7 @@
 
 <script>
   import {findById, saveOrUpdate} from "@/network/clientApp";
+  import {uploadUrl} from "@/util/fsConstant";
 
   const formItemLayout = {
     labelCol: {span: 6},
@@ -178,6 +179,7 @@
       return {
         loading: false,
         secretVisible: false,
+        action: uploadUrl,
         authorizedGrantTypes,
         formItemLayout,
         formTailLayout,

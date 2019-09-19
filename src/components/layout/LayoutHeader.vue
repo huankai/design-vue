@@ -29,7 +29,7 @@
             </a>
             <a-menu slot="overlay">
               <a-menu-item>
-                <router-link :to="'mine/settings'">用户设置</router-link>
+                <router-link :to="'/mine/settings/base'">用户设置</router-link>
               </a-menu-item>
               <a-menu-divider/>
               <a-menu-item>

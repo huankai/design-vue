@@ -7,7 +7,8 @@
         <a-col :span="8">
           <label>
             <span class="field">文件名: </span>
-            <a-input v-model="params.fileName" placeholder="请输入文件名"></a-input>
+            <a-input @change="e => this.params.updateSimpleValue('fileName',e.target.value)"
+                     placeholder="请输入文件名"></a-input>
           </label>
         </a-col>
         <a-col :span="8">
@@ -29,21 +30,21 @@
              @change="handleChange"
              :pagination="pagination">
           <span slot="action" slot-scope="text,record">
-            <router-link :to="{path:'/files/details',query:{id:record.id}}">
+            <!--<router-link :to="{path:'/files/details',query:{id:record.id}}">
                 <a-tooltip placement="topLeft" title="详情">
                   <a-icon type="eye"/>
                 </a-tooltip>
-            </router-link>
-            <router-link :to="{path:'/files/down',query:{id:record.id}}">
-              <a-tooltip placement="topLeft" title="下载">
-                <a-icon type="download"/>
-              </a-tooltip>
-            </router-link>
-            <router-link :to="{path:'/files/view',query:{id:record.id}}">
+            </router-link>-->
+            <a :href=" downBaseUrl + record.filePath">
+                <a-tooltip placement="topLeft" title="下载">
+                  <a-icon type="download"/>
+                </a-tooltip>
+            </a>
+            <a :href="viewBaseUrl + record.filePath" target="_blank">
               <a-tooltip placement="topLeft" title=预览>
               <a-icon type="picture"/>
               </a-tooltip>
-            </router-link>
+            </a>
             <a href="javascript:void (0);">
               <a-popconfirm title="确定要删除吗？" placement="bottom" @confirm="handlerDelete(record)">
                 <a-icon slot="icon" type="question-circle" style="color: red"/>
@@ -60,24 +61,25 @@
 
 <script>
   import DateSearch from "@/components/search/DateSearch";
-  import {queryForPage} from "@/network/files";
-  import {Order, PageQuery} from "@/util/pageQuery";
+  import {deleteFile, queryForPage} from "@/network/files";
+  import {ConditionParam, DateRangeCondition, LIKEANYWHERE, Order, PageQuery, SimpleCondition} from "@/util/pageQuery";
   import {pageSizeOptions, defaultPageSize, showTotal} from "@/util/pagination";
+  import {viewBaseUrl, downBaseUrl} from "@/util/fsConstant";
 
   export default {
     name: "Files",
     components: {DateSearch},
     created() {
-      let query = new PageQuery();
-      queryForPage(query).then(response => {
-        this.data = response.data;
-        this.pagination.total = response.totalRow;
-      });
+      const pageQuery = new PageQuery(this.params);
+      pageQuery.addOrder(Order.desc("uploadDate"));
+      this.loadingData(pageQuery);
     },
     data() {
       return {
         data: [],
         deleteCacheLoading: false,
+        viewBaseUrl,
+        downBaseUrl,
         loading: {spinning: false, tip: "加载中..."},
         pagination: {
           total: 0,
@@ -87,10 +89,8 @@
           showQuickJumper: true,
           showSizeChanger: true
         },
-        params: {
-          appCode: null,
-          appName: null
-        }
+        params: new ConditionParam([new SimpleCondition("fileName", null, LIKEANYWHERE)],
+          [new DateRangeCondition(null, "uploadDate")])
       }
     },
     computed: {
@@ -108,18 +108,21 @@
         }, {
           title: '扩展名',
           align: 'center',
-          dataIndex: 'ext',
+          dataIndex: 'extension',
           width: "10%"
         }, {
           title: '文件大小',
           align: 'center',
-          dataIndex: 'fileSize',
-          width: "10%"
+          width: "10%",
+          customRender(record) {
+            return record.fileSize + record.unit;
+          }
         }, {
           title: '上传时间',
           align: 'center',
           dataIndex: 'uploadDate',
-          width: "20%"
+          width: "20%",
+          sorter: true
         }, {
           title: '操作',
           scopedSlots: {
@@ -132,24 +135,24 @@
     },
     methods: {
       handlerDelete(record) {
-        let index = this.data.indexOf(record);
-        if (index !== -1) {
-          this.data.splice(index, 1);
-          this.pagination.total = this.data.length;
-          this.$message.success("删除成功");
-        }
+        deleteFile(record.id)
+          .then(response => {
+            this.loadingData(new PageQuery(this.params));
+            this.$message.success(response.message);
+          });
       },
-      handlerDisable() {
-
-      },
-      handlerEnable() {
-
+      loadingData(query) {
+        this.loading.spinning = true;
+        queryForPage(query).then(response => {
+          this.data = response.data.data;
+          this.pagination.total = response.data.totalRow;
+        }).finally(() => this.loading.spinning = false);
       },
       handlerSearch() {
-        console.log(this.params);
+        this.loadingData(new PageQuery(this.params));
       },
       dateChange(selected) {
-        this.params.createDate = selected;
+        this.params.updateDateRangeValue("uploadDate", selected);
       },
       deleteCache() {
         this.deleteCacheLoading = true;
@@ -158,21 +161,9 @@
           _this.deleteCacheLoading = false;
         }, 2000);
       },
-      onChange() {
-
-      },
       handleChange(pagination, filters, sorter) {
-        console.log(pagination);
-        console.log(filters);
-        // console.log(`sorter ${sorter}`);
-        console.log(sorter);
-        this.loading.spinning = true;
-        setTimeout(() => {
-          this.loading.spinning = false;
-        }, 200);
-      },
-      filterOption(input, option) {
-        return option.componentOptions.children[0].text.toLowerCase().indexOf(input.toLowerCase()) >= 0
+        let orders = sorter.order ? [new Order(sorter.columnKey, sorter.order === "descend")] : [];
+        this.loadingData(new PageQuery(this.params, pagination.current, pagination.pageSize, orders));
       }
     }
   }

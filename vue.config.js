@@ -50,7 +50,7 @@ module.exports = {
         }
       },
       "/fs": {
-        target: "http://127.0.0.1:7130",
+        target: "http://127.0.0.1:6240",
         changeOrigin: true,
         pathRewrite: {
           "^/fs": "/fs"

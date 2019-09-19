@@ -79,7 +79,7 @@ Vue.prototype.$validator = {
       callback("值不能为空白字符串");
       return;
     }
-    /^(1[3-8][0-9])\d{8}$/.test(value) ? callback() : callback(rule.message || "不是合法的手机号");
+    /^(1[3-9][0-9])\d{8}$/.test(value) ? callback() : callback(rule.message || "不是合法的手机号");
   },
 
   /**

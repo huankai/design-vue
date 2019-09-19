@@ -6,10 +6,8 @@ import {message} from "ant-design-vue";
 axios.defaults.timeout = 1000000;
 
 async function onFulfilled(response) {
-  if (response.status === 200) {
-    if (response.data.statusCode === 10200) {
-      return response.data;
-    }
+  if (response.status === 200 && response.data.statusCode === 10200) {
+    return response.data;
   }
   await message.error(response.data.message || response.message || "请稍后再试");
   return Promise.reject(response.data);
@@ -40,12 +38,13 @@ export function defaultRequest(options) {
 }
 
 /* ----------------------------------- emi ------------------------------------------------ */
+const emiBaseURL = "/emi";
 /**
  * emi
  * @type {AxiosInstance}
  */
 const emiInstance = axios.create({
-  baseURL: "/emi"
+  baseURL: emiBaseURL
 });
 emiInstance.interceptors.response.use(response => onFulfilled(response),
   error => onRejected(error));
@@ -56,9 +55,9 @@ export function emiRequest(options) {
 
 
 /* ------------------------------------ pms ----------------------------------------------- */
-
+const pmsBaseURL = "/pms";
 const pmsInstance = axios.create({
-  baseURL: "/pms"
+  baseURL: pmsBaseURL
 });
 pmsInstance.interceptors.response.use(response => onFulfilled(response),
   error => onRejected(error));
@@ -68,12 +67,13 @@ export function pmsRequest(options) {
 }
 
 /* ------------------------------------ schedule ----------------------------------------------- */
+const scheduleBaseURL = "/quartz";
 /**
  * scheduleInstance
  * @type {AxiosInstance}
  */
 const scheduleInstance = axios.create({
-  baseURL: "/quartz"
+  baseURL: scheduleBaseURL
 });
 scheduleInstance.interceptors.response.use(response => onFulfilled(response),
   error => onRejected(error));
@@ -83,12 +83,13 @@ export function scheduleRequest(options) {
 }
 
 /* ------------------------------------ file ----------------------------------------------- */
+const fsBaseURL = "/fs";
 /**
  * fsInstance
  * @type {AxiosInstance}
  */
 const fsInstance = axios.create({
-  baseURL: "/fs"
+  baseURL: fsBaseURL
 });
 fsInstance.interceptors.response.use(response => onFulfilled(response),
   error => onRejected(error));
@@ -96,4 +97,6 @@ fsInstance.interceptors.response.use(response => onFulfilled(response),
 export function fsRequest(options) {
   return fsInstance(options);
 }
+
+export {fsBaseURL}
 

@@ -1,4 +1,4 @@
-import {defaultRequest} from "@/network/request";
+import {fsRequest} from "@/network/request";
 
 /**
  *
@@ -6,10 +6,20 @@ import {defaultRequest} from "@/network/request";
  * @returns {AxiosPromise}
  */
 export function queryForPage(queryPage) {
-  return defaultRequest({
-    method: "GET",
+  return fsRequest({
+    method: "POST",
     data: queryPage,
-    url: "/data/files.json"
+    url: "/info/list"
   });
 }
+
+export function deleteFile(id) {
+  return fsRequest({
+    method: "POST",
+    params: {id},
+    url: "/info/delete"
+  })
+}
+
+
 

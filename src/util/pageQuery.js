@@ -21,11 +21,11 @@ class Order {
   }
 
   static desc(field) {
-    return new Order(field, false);
+    return new Order(field, true);
   }
 
   static asc(field) {
-    return new Order(field, true);
+    return new Order(field, false);
   }
 }
 

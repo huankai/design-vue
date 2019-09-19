@@ -115,12 +115,12 @@
         <a-form-item label="新密码">
           <a-input
             v-decorator="['password',{rules: [{ required: true, message: '密码必填，不能为空格，且长度在 8 ~ 20之间',min:8,max:20,whitespace:true  }]}]"
-            type="password"></a-input>
+            type="password" placeholder="请输入新密码"></a-input>
         </a-form-item>
         <a-form-item label="确认新密码">
           <a-input
             v-decorator="['confirm',{rules: [{ required: true, message: '两次输入密码不正确',validator:compareToFirstPassword}]}]"
-            type="password"></a-input>
+            type="password" placeholder="请再次输入新密码"></a-input>
         </a-form-item>
       </a-form>
     </a-modal>

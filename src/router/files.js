@@ -4,7 +4,7 @@ const FileAdd = () => import("@/views/file/FileAdd");
 export default {
   files: [
     {
-      path: "/file",
+      path: "/file/list",
       meta: {
         title: "文件管理"
       },
@@ -12,7 +12,7 @@ export default {
     }, {
       path: "/file/add",
       meta: {
-        parent: "/file",
+        parent: "/file/list",
         title: "文件管理-添加"
       },
       component: FileAdd
