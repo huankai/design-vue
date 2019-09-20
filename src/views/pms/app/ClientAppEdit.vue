@@ -104,14 +104,16 @@
       </a-row>
       <a-row :gutter="16">
         <a-col :span="24">
-          <a-form-item :label-col="{span:3}" label="应用头像">
-            <a-upload v-decorator="['upload', {valuePropName: 'fileList'}]" name="logo"
-                      :action="action" list-type="picture-card">
-              <div>
-                <a-icon type="upload"/>
-                点击上传
-              </div>
-            </a-upload>
+          <a-form-item :label-col="{span:3}" :wrapper-col="{span: 9}" label="应用头像">
+            <div class="clearfix">
+              <a-upload name="appIcon" :fileList="fileList"
+                        :action="action" list-type="picture-card" @change="handleFileUploadChange">
+                <div v-if="fileList.length === 0">
+                  <a-icon type="plus"/>
+                  <div class="ant-upload-text">点击上传</div>
+                </div>
+              </a-upload>
+            </div>
           </a-form-item>
         </a-col>
       </a-row>
@@ -153,7 +155,7 @@
 
 <script>
   import {findById, saveOrUpdate} from "@/network/clientApp";
-  import {uploadUrl} from "@/util/fsConstant";
+  import {uploadUrl, viewBaseUrl} from "@/util/fsConstant";
 
   const formItemLayout = {
     labelCol: {span: 6},
@@ -183,6 +185,7 @@
         authorizedGrantTypes,
         formItemLayout,
         formTailLayout,
+        fileList: [],
         clientApp: {
           accessTokenValidity: 7200,
           refreshTokenValidity: 86400,
@@ -203,6 +206,15 @@
           this.form.setFieldsValue({
             redirectUri: this.clientApp.redirectUri.toString()
           });
+          if (this.clientApp.appIcon != null) {
+            this.fileList = [{
+              uid: this.clientApp.appIcon,
+              name: this.clientApp.appIcon,
+              status: 'done',
+              url: viewBaseUrl + this.clientApp.appIcon
+            }
+            ]
+          }
         })
       }
     },
@@ -220,6 +232,14 @@
     methods: {
       generateSecret() {
         this.$message.info("正在开发中...")
+      },
+      handleFileUploadChange({file, fileList, event}) {
+        if (file.status === 'done') {
+          const uploadFile = file.response.data[0];
+          this.clientApp.appIcon = uploadFile.filePath;
+          fileList[0].url = viewBaseUrl + uploadFile.filePath;
+        }
+        this.fileList = fileList;
       },
       showSecret() {
         if (this.clientApp.id) {

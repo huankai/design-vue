@@ -56,7 +56,7 @@
           <a-tag :color="record.color">{{record.stateText}}</a-tag>
       </span>
       <span slot="success" slot-scope="record">
-        <a-tag v-if="record" color="blue">成功</a-tag>
+        <a-tag v-if="record.isSuccess" color="blue">成功</a-tag>
         <a-tag v-else color="red">失败</a-tag>
       </span>
     </a-table>
@@ -118,7 +118,6 @@
         }, {
           title: '状态',
           align: 'center',
-          dataIndex: 'success',
           width: "10%",
           scopedSlots: {
             customRender: "success"

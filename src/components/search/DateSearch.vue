@@ -3,11 +3,11 @@
     <a-col style="height: 32px;">
       <span class="field date-label">{{label}}: </span>
       <span class="date">
-      <span :class="item.selected ? 'date-item selected': 'date-item'" v-for="item in dateItems"
-            :value="item.range"
-            @click="changeSelectDate(item.range)">{{item.name}}
-      </span>
-      <a-range-picker v-if="isCustom" :showTime="showTime" :showToday="showToday"
+        <span :class="item.selected ? 'date-item selected': 'date-item'" v-for="item in dateItems"
+              :value="item.range"
+              @click="changeSelectDate(item.range)">{{item.name}}
+        </span>
+        <a-range-picker v-if="isCustom" :showTime="showTime" :showToday="showToday"
                       :format="showTime ? 'YYYY-MM-DD HH:mm:ss':'YYYY-MM-DD'"
                       @change="dateOnChange"/>
     </span>

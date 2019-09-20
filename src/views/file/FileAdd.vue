@@ -2,7 +2,7 @@
   <a-form :form="form">
     <a-form-item :label-col="{span:3}" label="请选择文件">
       <a-upload-dragger name="files" :multiple="true" :withCredentials="true" :action="action" :remove="handlerRemove"
-                        @change="handleFileUploadChange">
+                        :beforeUpload="beforeUpload">
         <p class="ant-upload-drag-icon">
           <a-icon type="inbox"/>
         </p>
@@ -38,8 +38,16 @@
       handlerRemove(file) {
         return deleteFile(file.response.data[0].id);
       },
-      handleFileUploadChange(file) {
+      beforeUpload(file) {
+        const isLt10M = file.size / 1024 / 1024 < 10;
+        if (!isLt10M) {
+          this.$message.error("文件大小不能超过10M")
+        }
+        return isLt10M;
       }
+      // handleFileUploadChange({file,fileList,event}) {
+      //   debugger
+      // }
     }
   }
 </script>

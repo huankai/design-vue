@@ -10,13 +10,8 @@ import Role from "@/router/role"
 import Permission from "@/router/permission"
 import Menu from "@/router/menu"
 
-/*
-  emi--- address
- */
+
 import Address from "@/router/address";
-/*
-  emi--- dict
- */
 import Dict from "@/router/dict"
 import Schedule from "@/router/schedule";
 import Files from "@/router/files";
