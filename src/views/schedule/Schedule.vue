@@ -85,7 +85,6 @@
               <a-icon type="delete" :style="{color: 'red'}"/>
             </a-tooltip>
           </a-popconfirm>
-
         </a>
       </span>
     </a-table>

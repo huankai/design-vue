@@ -16,7 +16,8 @@
         <a slot="actions" @click="item.actions.callback">{{ item.actions.title }}</a>
       </template>
     </a-list-item>
-    <a-modal title="修改密码" :destroyOnClose="true" :maskClosable="false" :visible="updatePasswordVisible" @cancel="updatePasswordVisible = false"
+    <a-modal title="修改密码" :destroyOnClose="true" :maskClosable="false" :visible="updatePasswordVisible"
+             @cancel="updatePasswordVisible = false"
              @ok="handlerUpdatePassword">
       <a-form :form="form" :confirmLoading="true">
         <a-form-item label="原密码" :label-col="{ span: 6 }" :wrapper-col="{ span: 12 }">
@@ -36,7 +37,8 @@
         </a-form-item>
       </a-form>
     </a-modal>
-    <a-modal title="修改手机" :destroyOnClose="true" :maskClosable="false" :visible="updatePhoneVisible" @cancel="updatePhoneVisible = false"
+    <a-modal title="修改手机" :destroyOnClose="true" :maskClosable="false" :visible="updatePhoneVisible"
+             @cancel="updatePhoneVisible = false"
              @ok="handlerUpdatePhone">
       <a-form :form="form" :confirmLoading="true">
         <a-form-item label="新手机号" :label-col="{ span: 6 }" :wrapper-col="{ span: 12 }">
@@ -45,12 +47,21 @@
           ></a-input>
         </a-form-item>
         <a-form-item label="验证码" :label-col="{ span: 6 }" :wrapper-col="{ span: 12 }">
-          <a-input
-            v-decorator="['code',{rules: [{ required: true, message: '验证码不能为空'}]}]"></a-input>
+          <a-row>
+            <a-col :span="12">
+              <a-input
+                v-decorator="['code',{rules: [{ required: true, message: '验证码不能为空'}]}]"></a-input>
+            </a-col>
+            <a-col :span="3"></a-col>
+            <a-col :span="9">
+              <a-button type="primary" :disabled="updatePhoneSendDisabled">点击发送</a-button>
+            </a-col>
+          </a-row>
         </a-form-item>
       </a-form>
     </a-modal>
-    <a-modal title="修改邮箱" :destroyOnClose="true" :maskClosable="false" :visible="updateEmailVisible" @cancel="updateEmailVisible = false"
+    <a-modal title="修改邮箱" :destroyOnClose="true" :maskClosable="false" :visible="updateEmailVisible"
+             @cancel="updateEmailVisible = false"
              @ok="handlerUpdateEmail">
       <a-form :form="form" :confirmLoading="true">
         <a-form-item label="新邮箱号" :label-col="{ span: 6 }" :wrapper-col="{ span: 12 }">
@@ -59,8 +70,17 @@
           ></a-input>
         </a-form-item>
         <a-form-item label="验证码" :label-col="{ span: 6 }" :wrapper-col="{ span: 12 }">
-          <a-input
-            v-decorator="['code',{rules: [{ required: true, message: '验证码不能为空'}]}]"></a-input>
+          <a-row>
+            <a-col :span="12">
+              <a-input
+                v-decorator="['code',{rules: [{ required: true, message: '验证码不能为空'}]}]"></a-input>
+            </a-col>
+            <a-col :span="3"></a-col>
+            <a-col :span="9">
+              <a-button type="primary" :disabled="updateEmailSendDisabled">点击发送</a-button>
+            </a-col>
+          </a-row>
+
         </a-form-item>
       </a-form>
     </a-modal>
@@ -75,6 +95,8 @@
         updatePasswordVisible: false,
         updatePhoneVisible: false,
         updateEmailVisible: false,
+        updatePhoneSendDisabled: true,
+        updateEmailSendDisabled: true,
         form: null,
         data: [
           {
