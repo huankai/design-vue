@@ -57,7 +57,7 @@
 <script>
   import {Order, PageQuery} from "@/util/pageQuery";
   import {getSelectOption} from "@/network/clientApp";
-  import {queryForPage} from "@/network/role";
+  import {deleteById, queryForPage} from "@/network/role";
   import {pageSizeOptions, defaultPageSize, showTotal} from "@/util/pagination";
 
   export default {
@@ -89,7 +89,7 @@
           align: 'center',
           dataIndex: 'appName',
           width: '10%'
-        },{
+        }, {
           title: '角色编号',
           align: 'center',
           dataIndex: 'roleCode',
@@ -124,22 +124,21 @@
           .then(response => {
             this.data = response.data.data;
             this.pagination.total = response.data.totalRow;
-          })
-          .finally(() => this.loading.spinning = false);
+          }).finally(() => this.loading.spinning = false);
       },
       handlerDelete(record) {
-        // deleteById(record.id).then(response => {
-        //   this.$message.success(response.message);
-        // }).finally(() => {
-        //   this.loadingData(new PageQuery(this.params));
-        // });
-        this.$message.warn("delete");
+        deleteById(record.id).then(response => {
+          this.$message.success(response.message);
+          this.loadingData(new PageQuery(this.params, this.pagination.current, this.pagination.pageSize));
+        })
       },
       handlerSearch() {
         this.loadingData(new PageQuery(this.params));
       },
       handleChange(pagination, filters, sorter) {
         let orders = sorter.order ? [new Order(sorter.columnKey, sorter.order === "descend")] : [];
+        this.pagination.current = pagination.current;
+        this.pagination.pageSize = pagination.pageSize;
         this.loadingData(new PageQuery(this.params, pagination.current, pagination.pageSize, orders));
       },
     }

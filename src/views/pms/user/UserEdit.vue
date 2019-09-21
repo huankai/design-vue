@@ -108,10 +108,9 @@
                        label="用户头像">
             <div class="clearfix">
               <a-upload
-                action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
+                :action="action" name="iconPath"
                 listType="picture-card"
                 :fileList="fileList"
-                @preview="handlePreview"
                 @change="handleChange">
                 <div v-if="fileList.length === 0">
                   <a-icon type="plus"/>
@@ -163,6 +162,7 @@
   import {findByParentId, findProvinceList} from "@/network/address";
   import {findById, getByUserTypes, saveOrUpdate} from "@/network/user";
   import OrganizationTree from "@/views/pms/org/OrganizationTree";
+  import {uploadUrl, viewBaseUrl} from "@/util/fsConstant";
 
   const formItemLayout = {
     labelCol: {span: 6},
@@ -183,6 +183,7 @@
         fileList: [],
         userTypeList: [],
         parentOrgVisible: false,
+        action: uploadUrl,
         user: {
           userStatus: 1,
           userType: 3,
@@ -199,18 +200,31 @@
     created() {
       const id = this.$route.query.id;
       if (id) {
-        findById(id).then(response => this.user = response.data);
+        findById(id).then(response => {
+          this.user = response.data;
+          if (this.user.iconPath != null) {
+            this.fileList = [{
+              uid: this.user.iconPath,
+              name: this.user.iconPath,
+              status: 'done',
+              url: viewBaseUrl + this.user.iconPath
+            }
+            ]
+          }
+        });
       }
       getByUserTypes().then(response => {
         this.userTypeList = response.data
       });
     },
     methods: {
-      handlePreview(file) {
-
-      },
-      handleChange({fileList}) {
-        this.fileList = fileList
+      handleChange({file, fileList, event}) {
+        if (file.status === 'done') {
+          const uploadFile = file.response.data[0];
+          this.user.iconPath = uploadFile.filePath;
+          fileList[0].url = viewBaseUrl + uploadFile.filePath;
+        }
+        this.fileList = fileList;
       },
       organizationTreeOnSelect(selected) {
         this.user.orgId = selected.id;

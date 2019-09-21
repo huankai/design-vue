@@ -167,7 +167,7 @@
         deleteById(record.id).then(response => {
           this.$message.success(response.message);
         }).finally(() => {
-          this.loadingData(new PageQuery(this.params));
+          this.loadingData(new PageQuery(this.params, this.pagination.current, this.pagination.pageSize));
         });
       },
       loadingData(queryPage) {
@@ -180,22 +180,19 @@
       handlerPause(record) {
         pause(record.id).then(response => {
           this.$message.success(response.message);
-        }).finally(() => {
-          this.loadingData(new PageQuery(this.params));
+          this.loadingData(new PageQuery(this.params, this.pagination.current, this.pagination.pageSize));
         });
       },
       handlerResume(record) {
         resume(record.id).then(response => {
           this.$message.success(response.message);
-        }).finally(() => {
-          this.loadingData(new PageQuery(this.params));
+          this.loadingData(new PageQuery(this.params, this.pagination.current, this.pagination.pageSize));
         });
       },
       handlerTrigger(record) {
         trigger(record.id).then(response => {
           this.$message.success(response.message);
-        }).finally(() => {
-          this.loadingData(new PageQuery(this.params));
+          this.loadingData(new PageQuery(this.params, this.pagination.current, this.pagination.pageSize));
         });
       },
       handleStateChange(value) {
@@ -206,6 +203,8 @@
       },
       handleChange(pagination, filters, sorter) {
         let orders = sorter.order ? [new Order(sorter.columnKey, sorter.order === "descend")] : [];
+        this.pagination.current = pagination.current;
+        this.pagination.pageSize = pagination.pageSize;
         this.loadingData(new PageQuery(this.params, pagination.current, pagination.pageSize, orders));
       },
       filterOption(input, option) {

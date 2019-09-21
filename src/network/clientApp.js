@@ -71,6 +71,12 @@ export function saveOrUpdate(clientApp) {
     data: clientApp,
     url: "/app"
   })
+}
 
+export function findTree() {
+  return pmsRequest({
+    method: "GET",
+    url: "/app/tree"
+  })
 }
 

@@ -8,22 +8,6 @@
 <script>
   import {getChildList, getRootOrgList} from "@/network/organization";
 
-  // const getParentKey = (title, tree) => {
-  //   let parentKey;
-  //   for (let i = 0; i < tree.length; i++) {
-  //     const node = tree[i];
-  //     if (node.children) {
-  //       if (node.children.some(item => item.title === title)) {
-  //         parentKey = node.title;
-  //       } else if (getParentKey(title, node.children)) {
-  //         parentKey = getParentKey(title, node.children);
-  //       }
-  //     }
-  //   }
-  //   return parentKey
-  // };
-
-
   export default {
     name: "OrganizationTree",
     props: {
@@ -44,18 +28,12 @@
       return {
         orgTreeData: [],
         orgSpinning: false
-        // expandedKeys: [],
-        // autoExpandParent: true
       }
     },
     created() {
       this.getRootOrgList();
     },
     methods: {
-      // onExpand(expandedKeys) {
-      //   this.expandedKeys = expandedKeys;
-      //   this.autoExpandParent = false
-      // },
       getRootOrgList() {
         this.orgSpinning = true;
         getRootOrgList(this.currentOrgId, this.statusCheck,)
@@ -73,20 +51,6 @@
         }
         this.$emit("onSelect", selectOrg);
       },
-      // orgSearchOnChange(e) {
-      //   const value = e.target.value;
-      //   const expandedKeys = this.orgTreeData.map((item) => {
-      //     if (item.title.indexOf(value) > -1) {
-      //       return getParentKey(item.title, this.orgTreeData);
-      //     }
-      //     return null
-      //   }).filter((item, i, self) => item && self.indexOf(item) === i);
-      //   Object.assign(this, {
-      //     expandedKeys,
-      //     searchValue: value,
-      //     autoExpandParent: true
-      //   })
-      // },
       onLoadData(treeNode) {
         return new Promise(resolve => {
           getChildList(treeNode.value, this.currentOrgId)

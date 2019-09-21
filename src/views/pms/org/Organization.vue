@@ -146,7 +146,7 @@
       handlerDelete(record) {
         deleteById(record.id).then(response => {
           this.$message.success(response.message);
-          this.loadingData(new PageQuery());
+          this.loadingData(new PageQuery(this.params, this.pagination.current, this.pagination.pageSize));
         });
       },
       handlerSearch() {
@@ -164,6 +164,8 @@
       },
       handleChange(pagination, filters, sorter) {
         let orders = sorter.order ? [new Order(sorter.columnKey, sorter.order === "descend")] : [];
+        this.pagination.current = pagination.current;
+        this.pagination.pageSize = pagination.pageSize;
         this.loadingData(new PageQuery(this.params, pagination.current, pagination.pageSize, orders));
       },
       filterOption(input, option) {

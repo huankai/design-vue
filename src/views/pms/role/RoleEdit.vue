@@ -107,7 +107,7 @@
       handleSubmit() {
         this.form.validateFields((errors) => {
           if (!errors) {
-            this.loading = true;debugger
+            this.loading = true;
             let data = Object.assign(this.role, this.form.getFieldsValue());
             saveOrUpdate(data).then(response => {
               this.$message.success(response.message);

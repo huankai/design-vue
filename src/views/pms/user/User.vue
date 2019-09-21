@@ -96,7 +96,7 @@
                     </a-tooltip>
                   </a-popconfirm>
                 </a>
-                <a href="javascript:void (0);" v-if="record.userStatus === 1">
+                <a href="javascript:void (0);" v-if="record.userStatus === 1" @click="showConfigRoleModal(record)">
                     <a-tooltip placement="topLeft" title="配置角色">
                         <a-icon type="audit"/>
                     </a-tooltip>
@@ -124,6 +124,15 @@
         </a-form-item>
       </a-form>
     </a-modal>
+    <a-modal title="配置角色" :visible="configUserRoleModalVisible" @ok="uploadUserRole"
+             @cancel="configUserRoleModalVisible = false" :destroyOnClose="true" :maskClosable="false">
+      <p>
+        <a-tree :checkable="true" :treeData="roleTreeList" :checkedKeys="roleCheckedKeys"
+                @check="roleOnCheck"
+                :loadData="loadRoleData"></a-tree>
+      </p>
+    </a-modal>
+
   </div>
 </template>
 
@@ -142,6 +151,8 @@
     resetPasswordByAdmin
   } from "@/network/user";
   import {format} from "@/util/moments";
+  import {findTree} from "@/network/clientApp";
+  import {loadRoleData, uploadUserRole} from "@/network/role";
 
   export default {
     name: "User",
@@ -167,8 +178,11 @@
         },
         updatePasswordVisible: false,
         updatePasswordUser: {},
-        form: null
-
+        form: null,
+        configUserRoleModalVisible: false,
+        roleTreeList: [],
+        roleCheckedKeys: [],
+        userId: null, //配置用户角色的用户id
       }
     },
     created() {
@@ -223,6 +237,34 @@
       }
     },
     methods: {
+      loadRoleData(treeNode) {
+        return new Promise(resolve => {
+          loadRoleData(treeNode.value, this.userId).then(response => {
+            treeNode.dataRef.children = response.data.treeData;
+            this.roleCheckedKeys = response.data.userRoleIds;
+            this.roleTreeList = [...this.roleTreeList];
+            resolve();
+          })
+        });
+      },
+      roleOnCheck(selectedKeys) {
+        this.roleCheckedKeys = selectedKeys;
+      },
+      uploadUserRole() {
+        uploadUserRole(this.userId, this.roleCheckedKeys).then(response => {
+          this.configUserRoleModalVisible = false;
+          this.$message.success(response.message);
+        });
+      },
+      showConfigRoleModal(record) {
+        this.configUserRoleModalVisible = true;
+        this.userId = record.id;
+        if (this.roleTreeList.length === 0) {
+          findTree().then(response => {
+            this.roleTreeList = response.data;
+          })
+        }
+      },
       dateChange(value) {
         this.params.updateDateRangeValue("createdDate", value);
       },
@@ -262,13 +304,13 @@
       handleDisable(record) {
         disableUser(record.id).then(response => {
           this.$message.success(response.message);
-          this.loadingData(new PageQuery());
+          this.loadingData(new PageQuery(this.params, this.pagination.current, this.pagination.pageSize));
         })
       },
       handleEnable(record) {
         enableUser(record.id).then(response => {
           this.$message.success(response.message);
-          this.loadingData(new PageQuery());
+          this.loadingData(new PageQuery(this.params, this.pagination.current, this.pagination.pageSize));
         })
       },
       handlerSearch() {
@@ -277,11 +319,13 @@
       handlerDelete(record) {
         markDeleted(record.id).then(response => {
           this.$message.success(response.message);
-          this.loadingData(new PageQuery());
+          this.loadingData(new PageQuery(this.params, this.pagination.current, this.pagination.pageSize));
         })
       },
       handleChange(pagination, filters, sorter) {
         let orders = sorter.order ? [new Order(sorter.columnKey, sorter.order === "descend")] : [];
+        this.pagination.current = pagination.current;
+        this.pagination.pageSize = pagination.pageSize;
         this.loadingData(new PageQuery(this.params, pagination.current, pagination.pageSize, orders));
       },
     }
