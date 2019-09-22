@@ -29,28 +29,39 @@
       </a-row>
       <a-divider dashed/>
     </div>
-    <a-table rowKey="id" :columns="columns" :loading="loading" :dataSource="data"
-             @change="handleChange"
-             :pagination="pagination">
-      <span slot="roleStatusSlot" slot-scope="record">
-          <a-tag :color="record.roleStatusColor">{{record.roleStatusText}}</a-tag>
-      </span>
-      <span slot="action" slot-scope="text,record">
-        <router-link :to="{path:'/roles/edit',query:{id:record.id}}">
-          <a-tooltip placement="topLeft" title="编辑">
-            <a-icon type="edit"/>
-          </a-tooltip>
-        </router-link>
-        <a href="javascript:void (0);">
-          <a-popconfirm title="确定要删除吗？" placement="bottom" @confirm="handlerDelete(record)">
-            <a-icon slot="icon" type="question-circle" style="color: red"/>
-            <a-tooltip placement="topLeft" title="删除">
-              <a-icon type="delete" :style="{color: 'red'}"/>
-            </a-tooltip>
-          </a-popconfirm>
-        </a>
-      </span>
-    </a-table>
+    <div>
+      <a-row>
+        <a-col :span="4" style="border-right:1px dashed #e8e8e8;">
+          <organization-tree :show-search="false" @onSelect="org => this.params.orgId = org.id"
+                             :status-check="false"></organization-tree>
+        </a-col>
+        <a-col :span="20">
+          <a-table rowKey="id" :columns="columns" :loading="loading" :dataSource="data"
+                   @change="handleChange"
+                   :pagination="pagination">
+            <span slot="roleStatusSlot" slot-scope="record">
+                <a-tag :color="record.roleStatusColor">{{record.roleStatusText}}</a-tag>
+            </span>
+            <span slot="action" slot-scope="text,record">
+              <router-link :to="{path:'/roles/edit',query:{id:record.id}}">
+                <a-tooltip placement="topLeft" title="编辑">
+                  <a-icon type="edit"/>
+                </a-tooltip>
+              </router-link>
+              <a href="javascript:void (0);">
+                <a-popconfirm title="确定要删除吗？" placement="bottom" @confirm="handlerDelete(record)">
+                  <a-icon slot="icon" type="question-circle" style="color: red"/>
+                  <a-tooltip placement="topLeft" title="删除">
+                    <a-icon type="delete" :style="{color: 'red'}"/>
+                  </a-tooltip>
+                </a-popconfirm>
+              </a>
+            </span>
+          </a-table>
+        </a-col>
+      </a-row>
+    </div>
+
   </div>
 </template>
 
@@ -59,9 +70,11 @@
   import {getSelectOption} from "@/network/clientApp";
   import {deleteById, queryForPage} from "@/network/role";
   import {pageSizeOptions, defaultPageSize, showTotal} from "@/util/pagination";
+  import OrganizationTree from "@/views/pms/org/OrganizationTree";
 
   export default {
     name: "Role",
+    components: {OrganizationTree},
     data() {
       return {
         data: [],
@@ -88,6 +101,11 @@
           title: '所属应用',
           align: 'center',
           dataIndex: 'appName',
+          width: '10%'
+        }, {
+          title: '所属机构',
+          align: 'center',
+          dataIndex: 'orgName',
           width: '10%'
         }, {
           title: '角色编号',
@@ -133,7 +151,7 @@
         })
       },
       handlerSearch() {
-        this.loadingData(new PageQuery(this.params));
+        this.loadingData(new PageQuery(this.params, this.pagination.current, this.pagination.pageSize));
       },
       handleChange(pagination, filters, sorter) {
         let orders = sorter.order ? [new Order(sorter.columnKey, sorter.order === "descend")] : [];

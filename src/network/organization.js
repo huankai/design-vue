@@ -29,6 +29,14 @@ export function deleteById(id) {
   })
 }
 
+export function recovery(id) {
+  return pmsRequest({
+    method: "POST",
+    params: {id},
+    url: "/org/recovery"
+  })
+}
+
 export function getRootOrgList(currentOrgId, statusCheck) {
   return pmsRequest({
     method: "GET",

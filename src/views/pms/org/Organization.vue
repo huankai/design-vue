@@ -32,9 +32,9 @@
           <a-tag :color="record.stateColor">{{record.stateText}}</a-tag>
       </span>
       <span slot="action" slot-scope="text,record">
-        <span v-if="record.deleteStatus">
+        <span v-if="record.isDeleted">
           <a href="javascript:void (0);">
-            <a-popconfirm title="当前应用标记为删除，要重新生效吗？" placement="bottom" @confirm="handlerRecovery(record)">
+            <a-popconfirm title="该应用标记为删除，要重新生效吗？" placement="bottom" @confirm="handlerRecovery(record)">
               <a-tooltip placement="topLeft" title="重新生效">
                 <a-icon type="rest" :style="{color: 'red'}"/>
               </a-tooltip>
@@ -63,7 +63,7 @@
 
 <script>
   import {Order, PageQuery} from "@/util/pageQuery";
-  import {deleteById, queryForPage} from "@/network/organization";
+  import {deleteById, queryForPage, recovery} from "@/network/organization";
   import {pageSizeOptions, defaultPageSize, showTotal} from "@/util/pagination";
 
   export default {
@@ -142,6 +142,12 @@
           this.data = response.data.data;
           this.pagination.total = response.data.totalRow;
         }).finally(() => this.loading.spinning = false);
+      },
+      handlerRecovery(record) {
+        recovery(record.id).then(response => {
+          this.$message.success(response.message);
+          this.loadingData(new PageQuery(this.params, this.pagination.current, this.pagination.pageSize));
+        });
       },
       handlerDelete(record) {
         deleteById(record.id).then(response => {

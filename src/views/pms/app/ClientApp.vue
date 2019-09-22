@@ -36,9 +36,9 @@
           <a-tag :color="record.appStatusColor">{{record.appStatusText}}</a-tag>
       </span>
       <span slot="action" slot-scope="text,record">
-        <span v-if="record.deleteStatus">
+        <span v-if="record.isDeleted">
           <a href="javascript:void (0);">
-            <a-popconfirm title="当前应用标记为删除，要重新生效吗？" placement="bottom" @confirm="handlerRecovery(record)">
+            <a-popconfirm title="该应用标记为删除，要重新生效吗？" placement="bottom" @confirm="handlerRecovery(record)">
               <a-tooltip placement="topLeft" title="重新生效">
                 <a-icon type="rest" :style="{color: 'red'}"/>
               </a-tooltip>
@@ -169,7 +169,7 @@
       handlerRecovery(record) {
         recovery(record.id).then(response => {
           this.$message.success(response.message);
-          this.loadingData(new PageQuery());
+          this.loadingData(new PageQuery(this.params, this.pagination.current, this.pagination.pageSize));
         });
       },
       handlerDelete(record) {

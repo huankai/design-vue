@@ -15,6 +15,20 @@
       </a-row>
       <a-row :gutter="16">
         <a-col :span="24">
+          <a-form-item :label-col="formItemLayout.labelCol" :wrapper-col="formItemLayout.wrapperCol"
+                       label="所属机构">
+            <a-input v-decorator="['orgName',{initialValue:role.orgName, rules: [{ required: true,message: '所属机构必选'}]}]"
+                     disabled placeholder="请选择"
+                     autocomplete="off">
+              <a-button slot="addonAfter" type="primary" @click="orgVisible = true">
+                <a-icon type="select"/>&nbsp;请选择
+              </a-button>
+            </a-input>
+          </a-form-item>
+        </a-col>
+      </a-row>
+      <a-row :gutter="16">
+        <a-col :span="24">
           <a-form-item :label-col="formItemLayout.labelCol" has-feedback :wrapper-col="formItemLayout.wrapperCol"
                        label="角色编号">
             <a-input
@@ -67,6 +81,13 @@
         </a-col>
       </a-row>
     </a-form>
+    <a-modal title="选择上级机构" :visible="orgVisible" @ok="orgVisible = false"
+             @cancel="orgVisible = false">
+      <p>
+        <organization-tree :currentOrgId="this.role.orgId" :show-search="false"
+                           @onSelect="organizationTreeOnSelect"/>
+      </p>
+    </a-modal>
   </a-spin>
 </template>
 
@@ -74,6 +95,7 @@
 
   import {getSelectOption} from "@/network/clientApp";
   import {findById, saveOrUpdate} from "@/network/role";
+  import OrganizationTree from "@/views/pms/org/OrganizationTree";
 
   const formItemLayout = {
     labelCol: {span: 3},
@@ -81,6 +103,7 @@
   };
   export default {
     name: "RoleEdit",
+    components: {OrganizationTree},
     data() {
       return {
         loading: false,
@@ -88,7 +111,8 @@
         appList: [],
         role: {
           roleStatus: true
-        }
+        },
+        orgVisible: false
       }
     },
     beforeCreate() {
@@ -104,6 +128,12 @@
       }
     },
     methods: {
+      organizationTreeOnSelect(selected) {
+        this.role.orgId = selected.id;
+        this.form.setFieldsValue({
+          orgName: selected.orgName
+        })
+      },
       handleSubmit() {
         this.form.validateFields((errors) => {
           if (!errors) {

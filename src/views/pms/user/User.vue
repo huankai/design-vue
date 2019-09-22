@@ -112,12 +112,12 @@
              @cancel="updatePasswordVisible = false" :destroyOnClose="true" :maskClosable="false">
       <a-form :form="form" :confirmLoading="true">
         <p>当前正在修改 {{updatePasswordUser.realName }} 的密码：</p>
-        <a-form-item label="新密码">
+        <a-form-item label="新密码" :label-col="{span: 6}" :wrapper-col="{span: 12}">
           <a-input
             v-decorator="['password',{rules: [{ required: true, message: '密码必填，不能为空格，且长度在 8 ~ 20之间',min:8,max:20,whitespace:true  }]}]"
             type="password" placeholder="请输入新密码"></a-input>
         </a-form-item>
-        <a-form-item label="确认新密码">
+        <a-form-item label="确认新密码" :label-col="{span: 6}" :wrapper-col="{span: 12}">
           <a-input
             v-decorator="['confirm',{rules: [{ required: true, message: '两次输入密码不正确',validator:compareToFirstPassword}]}]"
             type="password" placeholder="请再次输入新密码"></a-input>
@@ -182,7 +182,7 @@
         configUserRoleModalVisible: false,
         roleTreeList: [],
         roleCheckedKeys: [],
-        userId: null, //配置用户角色的用户id
+        configRoleUser: null, //配置用户角色的用户
       }
     },
     created() {
@@ -239,7 +239,7 @@
     methods: {
       loadRoleData(treeNode) {
         return new Promise(resolve => {
-          loadRoleData(treeNode.value, this.userId).then(response => {
+          loadRoleData(treeNode.value, this.configRoleUser.id,this.configRoleUser.orgId).then(response => {
             treeNode.dataRef.children = response.data.treeData;
             this.roleCheckedKeys = response.data.userRoleIds;
             this.roleTreeList = [...this.roleTreeList];
@@ -251,14 +251,14 @@
         this.roleCheckedKeys = selectedKeys;
       },
       uploadUserRole() {
-        uploadUserRole(this.userId, this.roleCheckedKeys).then(response => {
+        uploadUserRole(this.configRoleUser.id, this.roleCheckedKeys).then(response => {
           this.configUserRoleModalVisible = false;
           this.$message.success(response.message);
         });
       },
       showConfigRoleModal(record) {
         this.configUserRoleModalVisible = true;
-        this.userId = record.id;
+        this.configRoleUser = record;
         if (this.roleTreeList.length === 0) {
           findTree().then(response => {
             this.roleTreeList = response.data;

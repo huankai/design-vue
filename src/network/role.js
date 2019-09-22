@@ -42,10 +42,10 @@ export function uploadUserRole(userId, roleIds) {
   })
 }
 
-export function loadRoleData(appId, userId) {
+export function loadRoleData(appId, userId, orgId) {
   return pmsRequest({
     method: "GET",
-    params: {appId, userId},
+    params: {appId, userId, orgId},
     url: "/role/getUserAppRole"
   })
 }
