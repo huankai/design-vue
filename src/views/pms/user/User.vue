@@ -239,7 +239,7 @@
     methods: {
       loadRoleData(treeNode) {
         return new Promise(resolve => {
-          loadRoleData(treeNode.value, this.configRoleUser.id,this.configRoleUser.orgId).then(response => {
+          loadRoleData(treeNode.value, this.configRoleUser.id, this.configRoleUser.orgId).then(response => {
             treeNode.dataRef.children = response.data.treeData;
             this.roleCheckedKeys = response.data.userRoleIds;
             this.roleTreeList = [...this.roleTreeList];
@@ -259,11 +259,9 @@
       showConfigRoleModal(record) {
         this.configUserRoleModalVisible = true;
         this.configRoleUser = record;
-        if (this.roleTreeList.length === 0) {
-          findTree().then(response => {
-            this.roleTreeList = response.data;
-          })
-        }
+        findTree().then(response => {
+          this.roleTreeList = response.data;
+        })
       },
       dateChange(value) {
         this.params.updateDateRangeValue("createdDate", value);
@@ -323,9 +321,11 @@
         })
       },
       handleChange(pagination, filters, sorter) {
+        const pager = {...this.pagination};
+        pager.current = pagination.current;
+        pager.pageSize = pagination.pageSize;
+        this.pagination = pager;
         let orders = sorter.order ? [new Order(sorter.columnKey, sorter.order === "descend")] : [];
-        this.pagination.current = pagination.current;
-        this.pagination.pageSize = pagination.pageSize;
         this.loadingData(new PageQuery(this.params, pagination.current, pagination.pageSize, orders));
       },
     }

@@ -204,9 +204,11 @@
         }, 2000);
       },
       handleChange(pagination, filters, sorter) {
+        const pager = { ...this.pagination };
+        pager.current = pagination.current;
+        pager.pageSize = pagination.pageSize;
+        this.pagination= pager;
         let orders = sorter.order ? [new Order(sorter.columnKey, sorter.order === "descend")] : [];
-        this.pagination.current = pagination.current;
-        this.pagination.pageSize = pagination.pageSize;
         this.loadingData(new PageQuery(this.params, pagination.current, pagination.pageSize, orders));
       }
     }

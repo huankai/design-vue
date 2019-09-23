@@ -150,9 +150,7 @@
         findById(id).then(response => {
           this.params.baseCodeId = response.data.id;
           this.parentDict = response.data;
-          const query = new PageQuery();
-          query.param = this.params;
-          this.loadingData(query);
+          this.loadingData(new PageQuery(this.params));
         });
       },
       loadingData(queryPage) {
@@ -173,9 +171,11 @@
         this.loadingData(new PageQuery(this.params));
       },
       handleChange(pagination, filters, sorter) {
+        const pager = {...this.pagination};
+        pager.current = pagination.current;
+        pager.pageSize = pagination.pageSize;
+        this.pagination = pager;
         let orders = sorter.order ? [new Order(sorter.columnKey, sorter.order === "descend")] : [];
-        this.pagination.current = pagination.current;
-        this.pagination.pageSize = pagination.pageSize;
         this.loadingData(new PageQuery(this.params, pagination.current, pagination.pageSize, orders));
       }
     }

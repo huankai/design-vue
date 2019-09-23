@@ -29,15 +29,21 @@
       </a-row>
       <a-divider dashed/>
     </div>
-    <a-table rowKey="id" :columns="columns" :loading="loading" :dataSource="data"
-             @change="handleChange"
-             :pagination="pagination">
+    <div>
+      <a-table rowKey="id" :columns="columns" :loading="loading" :dataSource="data"
+               @change="handleChange"
+               :pagination="pagination">
       <span slot="action" slot-scope="text,record">
         <router-link :to="{path:'/permission/edit',query:{id:record.id}}">
           <a-tooltip placement="topLeft" title="编辑">
             <a-icon type="edit"/>
           </a-tooltip>
         </router-link>
+        <a href="javascript:void (0);" @click="showConfigResourceModal(record)">
+            <a-tooltip placement="topLeft" title="配置资源">
+              <a-icon type="security-scan"/>
+            </a-tooltip>
+        </a>
         <a href="javascript:void (0);">
           <a-popconfirm title="确定要删除吗？" placement="bottom" @confirm="handlerDelete(record)">
             <a-icon slot="icon" type="question-circle" style="color: red"/>
@@ -47,15 +53,25 @@
           </a-popconfirm>
         </a>
       </span>
-    </a-table>
+      </a-table>
+    </div>
+    <a-modal title="配置资源" :visible="configResourceVisible" @ok="uploadPermissionResource"
+             @cancel="configResourceVisible = false" :destroyOnClose="true" :maskClosable="false">
+      <p>
+        <a-tree :checkable="true" :treeData="appResourceTreeList" :checkedKeys="resourceCheckedKeys"
+                @check="resourceOnCheck"
+                :loadData="loadResourceData"></a-tree>
+      </p>
+    </a-modal>
   </div>
 </template>
 
 <script>
   import {Order, PageQuery} from "@/util/pageQuery";
-  import {getSelectOption} from "@/network/clientApp";
+  import {findTree, getSelectOption} from "@/network/clientApp";
   import {pageSizeOptions, defaultPageSize, showTotal} from "@/util/pagination";
   import {deleteById, queryForPage} from "@/network/permission";
+  import {loadResourceTreeData} from "@/network/menu";
 
   export default {
     name: "Permission",
@@ -72,7 +88,11 @@
           pageSizeOptions,
           showQuickJumper: true,
           showSizeChanger: true
-        }
+        },
+        configResourceVisible: false,
+        appResourceTreeList: [],
+        resourceCheckedKeys: [],
+        configPermission: {}
       }
     },
     created() {
@@ -108,6 +128,32 @@
       }
     },
     methods: {
+      loadResourceData(treeNode) {
+        debugger
+        console.log(this.configPermission);
+        return new Promise(resolve => {
+          loadResourceTreeData(this.configPermission.appId, this.configPermission.id, treeNode.value).then(response => {
+            treeNode.dataRef.children = response.data.treeData;
+            this.resourceCheckedKeys = response.data.permissionResourceIds;
+            this.appResourceTreeList = [...this.appResourceTreeList];
+            resolve();
+          })
+        });
+      },
+      resourceOnCheck(selectedKeys) {
+        this.resourceCheckedKeys = selectedKeys;
+      },
+      uploadPermissionResource() {
+
+      },
+      showConfigResourceModal(record) {
+        this.configResourceVisible = true;
+        this.configPermission = record;
+        loadResourceTreeData(record.appId, record.id).then(response => {
+          this.appResourceTreeList = response.data.treeData;
+          this.resourceCheckedKeys = response.data.permissionResourceIds;
+        });
+      },
       loadingData(pageQuery) {
         this.loading.spinning = true;
         queryForPage(pageQuery)
@@ -126,9 +172,11 @@
         this.loadingData(new PageQuery(this.params, this.pagination.current, this.pagination.pageSize));
       },
       handleChange(pagination, filters, sorter) {
+        const pager = {...this.pagination};
+        pager.current = pagination.current;
+        pager.pageSize = pagination.pageSize;
+        this.pagination = pager;
         let orders = sorter.order ? [new Order(sorter.columnKey, sorter.order === "descend")] : [];
-        this.pagination.current = pagination.current;
-        this.pagination.pageSize = pagination.pageSize;
         this.loadingData(new PageQuery(this.params, pagination.current, pagination.pageSize, orders));
       },
     }

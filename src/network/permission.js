@@ -42,10 +42,10 @@ export function updateRolePermission(roleId, permissionIds) {
   })
 }
 
-export function loadPermissionData(appId, roleId) {
+export function loadPermissionData(appId, permissionId, parentId) {
   return pmsRequest({
     method: "GET",
-    params: {appId, roleId},
+    params: {appId, permissionId, parentId},
     url: "/permission/getRoleAppPermission"
   })
 }

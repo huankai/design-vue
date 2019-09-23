@@ -112,11 +112,9 @@
           width: "10%"
         }, {
           title: '文件大小',
+          dataIndex: 'fileSize',
           align: 'center',
-          width: "10%",
-          customRender(record) {
-            return record.fileSize + record.unit;
-          }
+          width: "10%"
         }, {
           title: '上传时间',
           align: 'center',
@@ -162,9 +160,11 @@
         }, 2000);
       },
       handleChange(pagination, filters, sorter) {
-        let orders = sorter.order ? [new Order(sorter.columnKey, sorter.order === "descend")] : [];
-        this.pagination.current = pagination.current;
-        this.pagination.pageSize = pagination.pageSize;
+        const pager = { ...this.pagination };
+        pager.current = pagination.current;
+        pager.pageSize = pagination.pageSize;
+        this.pagination= pager;
+        let orders = sorter.order ? [new Order(sorter.columnKey, sorter.order === "descend")] : [Order.desc("uploadDate")];
         this.loadingData(new PageQuery(this.params, pagination.current, pagination.pageSize, orders));
       }
     }

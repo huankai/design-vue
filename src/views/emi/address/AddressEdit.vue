@@ -149,7 +149,7 @@
 <script>
   import {findById, getCityType} from "@/network/address";
   import {queryForPage, saveOrUpdate} from "@/network/address";
-  import {PageQuery} from "@/util/pageQuery";
+  import {Order, PageQuery} from "@/util/pageQuery";
   import {pageSizeOptions, defaultPageSize, showTotal} from "@/util/pagination";
 
   const formItemLayout = {
@@ -256,10 +256,13 @@
       }
     },
     methods: {
-      handleTableChange(pagination) {
-        this.pagination.current = pagination.current;
-        this.pagination.defaultPageSize = pagination.pageSize;
-        this.loadParentData();
+      handleTableChange(pagination, filters, sorter) {
+        const pager = {...this.pagination};
+        pager.current = pagination.current;
+        pager.pageSize = pagination.pageSize;
+        this.pagination = pager;
+        let orders = sorter.order ? [new Order(sorter.columnKey, sorter.order === "descend")] : [];
+        this.loadParentData(new PageQuery(this.params, pagination.current, pagination.pageSize, orders));
       },
       handleCityTypeChange(value) {
         this.addressData.cityType = value;

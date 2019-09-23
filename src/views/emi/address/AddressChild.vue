@@ -171,9 +171,7 @@
         findById(id).then(response => {
           this.params.parentId = response.data.id;
           this.parentAddress = response.data;
-          const query = new PageQuery();
-          query.param = this.params;
-          this.loadingData(query);
+          this.loadingData(new PageQuery(this.params));
         });
       },
       loadingData(queryPage) {
@@ -186,13 +184,17 @@
       handlerDelete(record) {
         deleteById(record.id).then(response => {
           this.$message.success(response.data.message);
-          this.loadingData(new PageQuery(this.params));
+          this.loadingData(new PageQuery(this.params, this.pagination.current, this.pagination.pageSize));
         });
       },
       handlerSearch() {
         this.loadingData(new PageQuery(this.params));
       },
       handleChange(pagination, filters, sorter) {
+        const pager = {...this.pagination};
+        pager.current = pagination.current;
+        pager.pageSize = pagination.pageSize;
+        this.pagination = pager;
         let orders = sorter.order ? [new Order(sorter.columnKey, sorter.order === "descend")] : [];
         this.loadingData(new PageQuery(this.params, pagination.current, pagination.pageSize, orders));
       }
