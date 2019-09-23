@@ -59,3 +59,11 @@ export function loadResourceTreeData(appId, permissionId, parentId) {
     url: "/menu/tree"
   })
 }
+
+export function findChild(appId, parentId) {
+  return pmsRequest({
+    method: "GET",
+    params: {appId, parentId},
+    url: "/menu/child"
+  })
+}

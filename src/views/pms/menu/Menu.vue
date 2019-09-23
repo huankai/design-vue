@@ -18,9 +18,12 @@
             <a-input v-model="params.resourceName" placeholder="请输入资源名称"></a-input>
           </label>
         </a-col>
-        <a-col :span="6">
+        <a-col :span="12">
           <div>
             <a-button type="primary" icon="search" @click="handlerSearch">搜索</a-button>
+            <router-link to="/menu/tree">
+              <a-button type="primary" icon="ordered-list">树形显示</a-button>
+            </router-link>
             <router-link to="/menu/add">
               <a-button type="primary" icon="plus">添加</a-button>
             </router-link>

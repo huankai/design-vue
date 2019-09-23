@@ -25,5 +25,12 @@ export default {
       title: "菜单管理 - 修改"
     },
     component: MenuEdit
+  }, {
+    path: "/menu/tree",
+    meta: {
+      parent: "/menu",
+      title: "菜单管理 - 树形结构"
+    },
+    component: () => import("@/views/pms/menu/MenuTreeList")
   }]
 }

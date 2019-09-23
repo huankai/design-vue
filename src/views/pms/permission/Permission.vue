@@ -57,6 +57,7 @@
     </div>
     <a-modal title="配置资源" :visible="configResourceVisible" @ok="uploadPermissionResource"
              @cancel="configResourceVisible = false" :destroyOnClose="true" :maskClosable="false">
+      <p>正在为:[{{ configPermission.appName }} - {{ configPermission.permissionName}} ]配置允许访问的资源:</p>
       <p>
         <a-tree :checkable="true" :treeData="appResourceTreeList" :checkedKeys="resourceCheckedKeys"
                 @check="resourceOnCheck"
@@ -129,7 +130,6 @@
     },
     methods: {
       loadResourceData(treeNode) {
-        debugger
         console.log(this.configPermission);
         return new Promise(resolve => {
           loadResourceTreeData(this.configPermission.appId, this.configPermission.id, treeNode.value).then(response => {
