@@ -25,7 +25,8 @@
       <span>
           <a-avatar :size="32" icon="user" :src="userIcon"/>
           <a-dropdown>
-            <a class="ant-dropdown-link" href="javascript:void(0);">系统管理员&nbsp;<a-icon type="down"/>
+            <a class="ant-dropdown-link" href="javascript:void(0);">{{ this.$store.getters.getCurrentUserInfo == null ? null : this.$store.getters.getCurrentUserInfo.realName}}&nbsp;<a-icon
+              type="down"/>
             </a>
             <a-menu slot="overlay">
               <a-menu-item>
@@ -50,6 +51,8 @@
 </template>
 <script>
   import {getHeaderAppList} from "@/network/headerApp";
+  import {getUserInfo} from "@/network/user";
+  import {setUserInfo} from "@/store/mutations-types";
 
   export default {
     name: "LayoutHeader",
@@ -64,7 +67,14 @@
     created() {
       getHeaderAppList().then(response => {
         this.appList = response.data;
-      })
+      });
+      let userInfo = this.$store.getters.getCurrentUserInfo;
+      if (userInfo === null) {
+        getUserInfo().then(response => {
+          userInfo = response.data;
+          this.$store.commit(setUserInfo, response.data);
+        });
+      }
     },
     methods: {
       userSetting() {

@@ -1,13 +1,24 @@
 import axios from "axios"
 import {message} from "ant-design-vue";
+import cfg from "@/config"
 
 // import fileDownload from "js-file-download";
 
 axios.defaults.timeout = 1000000;
 
 async function onFulfilled(response) {
-  if (response.status === 200 && response.data.statusCode === 10200) {
-    return response.data;
+  if (response.status === 200) {
+    switch (response.data.statusCode) {
+      case 10200:
+        return response.data;
+      case 10401:
+        sessionStorage.removeItem(cfg.access_token);
+        location.href = cfg.loginUrl;
+        break;
+      default:
+        return response.data;
+    }
+    // return response.data;
   }
   await message.error(response.data.message || response.message || "请稍后再试");
   return Promise.reject(response.data);
@@ -58,6 +69,15 @@ export function emiRequest(options) {
 const pmsBaseURL = "/pms";
 const pmsInstance = axios.create({
   baseURL: pmsBaseURL
+});
+pmsInstance.interceptors.request.use(config => {
+  let accessToken = sessionStorage.getItem(cfg.access_token);
+  if (accessToken != null) {
+    config.headers = {
+      "Authorization": "Bearer " + accessToken
+    }
+  }
+  return config;
 });
 pmsInstance.interceptors.response.use(response => onFulfilled(response),
   error => onRejected(error));

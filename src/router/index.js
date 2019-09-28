@@ -18,6 +18,10 @@ import Files from "@/router/files";
 import Organization from "@/router/organization";
 import Mine from "@/router/mine";
 
+import Video from "@/router/video";
+import Login from "@/router/login";
+
+import config from "@/config"
 
 const router = new VueRouter({
   mode: "history",
@@ -35,11 +39,22 @@ const router = new VueRouter({
     ...Address.address,
     ...Dict.dict,
     ...Files.files,
-    ...Schedule.schedule
+    ...Schedule.schedule,
+    ...Video.video,
+    ...Login.login
   ]
 });
 
 router.beforeEach((to, from, next) => {
+  let accessToken = sessionStorage.getItem(config.access_token);
+  if (accessToken == null) {
+    accessToken = to.query.access_token;
+    if (accessToken != null) sessionStorage.setItem(config.access_token, accessToken);
+  }
+  if (accessToken == null) {
+    location.href = config.loginUrl;
+    return;
+  }
   document.title = to.meta.title || "后台管理系统";
   next();// 重写beforeEach 后，必须调用 next()方法，否则所有的路由无法调用， vue router 默认就是调用了 next()
 });

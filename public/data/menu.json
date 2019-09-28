@@ -100,6 +100,12 @@
       "link": "/message",
       "icon": "message",
       "name": "待办事项"
+    },
+    {
+      "id": "7",
+      "link": "/video",
+      "icon": "play-circle",
+      "name": "视频播放"
     }
   ]
 }

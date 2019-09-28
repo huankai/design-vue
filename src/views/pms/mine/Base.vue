@@ -1,15 +1,16 @@
 <template>
   <div class="account-settings-info-view">
-    <a-form>
+    <a-form :form="form">
       <a-form-item label="匿名" :label-col="{ span: 3 }" :wrapper-col="{ span: 9 }">
-        <a-input v-decorator="['realName',{rules: [{ required: true, message: 'Please input your note!' }]}]"/>
+        <a-input
+          v-decorator="['realName',{initialValue:user.realName,rules: [{ required: true, message: 'Please input your note!' }]}]"/>
       </a-form-item>
       <a-form-item label="头像" :label-col="{ span: 3 }" :wrapper-col="{ span: 9 }">
         <a-upload
           action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
           listType="picture-card">
           <div>
-            <a-icon type="plus" />
+            <a-icon type="plus"/>
             <div class="ant-upload-text">点击上传</div>
           </div>
         </a-upload>
@@ -39,12 +40,11 @@
     name: "Base",
     data() {
       return {
+        form: this.$form.createForm(this),
         disabledDate(current) {
           return current && current > endOfDay();
         },
-        user: {
-          sex: 1
-        }
+        user: this.$store.getters.getCurrentUserInfo
       }
     },
   }

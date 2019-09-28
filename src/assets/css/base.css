@@ -72,3 +72,9 @@ button {
     text-align: center;
     float: none !important;
 }
+
+/* video 视频播放按键样式*/
+/*.video-js .vjs-big-play-button {*/
+/*    top: 50%;*/
+/*    left: 50%;*/
+/*}*/

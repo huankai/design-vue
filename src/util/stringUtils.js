@@ -1,7 +1,9 @@
+import _ from "lodash"
+
 export default {
 
   isEmpty(value) {
-    return value === null || value === undefined || "" === value;
+    return _.isEmpty(value);
   },
 
   isNotEmpty(value) {

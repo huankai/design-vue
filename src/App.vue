@@ -32,6 +32,7 @@
         this.collapsed = collapsed;
       }
     }
+
   }
 </script>
 

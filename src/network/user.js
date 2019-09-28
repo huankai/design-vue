@@ -1,5 +1,21 @@
 import {pmsRequest} from "@/network/request";
 
+/**
+ * 获取当前用户信息
+ * @returns {*}
+ */
+export function getUserInfo() {
+  // let userInfo = ;
+  // if (userInfo == null) {
+  //   .then(response => userInfo = response.data);
+  // }
+  // return userInfo;
+  return pmsRequest({
+    method: "POST",
+    url: "/getUser"
+  });
+}
+
 export function getUserStatusList() {
   return pmsRequest({
     method: "GET",

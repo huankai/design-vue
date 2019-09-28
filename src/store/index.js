@@ -13,6 +13,7 @@ const state = {
     记录当前打开的菜单
    */
   currentMenuOpenKeys: [],
+  userInfo: null
 };
 
 export default new Vuex.Store({

@@ -33,7 +33,7 @@
               <!--              </a-popconfirm>-->
               <a-popconfirm title="确定要删除吗？" placement="bottom" @confirm="handlerDelete(selected)">
                 <a-tooltip placement="topLeft" title="删除">
-                  <a-icon type="delete" :style="{color: 'red'}"/>
+                  <a-icon type="delete"/>
                 </a-tooltip>
               </a-popconfirm>
             </template>
@@ -56,7 +56,8 @@
               </a-row>
               <a-row :gutter="16">
                 <a-col :span="24">
-                  <a-form-item :label-col="formItemLayout.labelCol" has-feedback :wrapper-col="formItemLayout.wrapperCol"
+                  <a-form-item :label-col="formItemLayout.labelCol" has-feedback
+                               :wrapper-col="formItemLayout.wrapperCol"
                                label="资源名称">
                     <a-input
                       v-decorator="['resourceName',{initialValue:resource.resourceName, rules: [{ required: true,message: '权限编号必填，且不能超过 20 长度',max:20,whitespace:true }]}]"
@@ -66,7 +67,8 @@
               </a-row>
               <a-row :gutter="16">
                 <a-col :span="24">
-                  <a-form-item :label-col="formItemLayout.labelCol" has-feedback :wrapper-col="formItemLayout.wrapperCol"
+                  <a-form-item :label-col="formItemLayout.labelCol" has-feedback
+                               :wrapper-col="formItemLayout.wrapperCol"
                                label="资源地址">
                     <a-input
                       v-decorator="['resourceUri',{initialValue:resource.resourceUri, rules: [{ required: true,message: '资源地址必填，且不能超过 20 长度',max:20,whitespace:true }]}]"
@@ -110,7 +112,8 @@
               </a-row>
               <a-row :gutter="16">
                 <a-col :span="24">
-                  <a-form-item :label-col="formItemLayout.labelCol" has-feedback :wrapper-col="formItemLayout.wrapperCol"
+                  <a-form-item :label-col="formItemLayout.labelCol" has-feedback
+                               :wrapper-col="formItemLayout.wrapperCol"
                                label="资源Icon">
                     <a-input
                       v-decorator="['icon',{initialValue:resource.icon, rules: [{ required: false,message: '资源Icon不能超过 10 长度',max:10,whitespace:true }]}]"
@@ -120,7 +123,8 @@
               </a-row>
               <a-row :gutter="16">
                 <a-col :span="24">
-                  <a-form-item :label-col="formItemLayout.labelCol" has-feedback :wrapper-col="formItemLayout.wrapperCol"
+                  <a-form-item :label-col="formItemLayout.labelCol" has-feedback
+                               :wrapper-col="formItemLayout.wrapperCol"
                                label="描述">
                     <a-textarea placeholder="请输入描述信息..."
                                 v-decorator="['description',{initialValue:resource.description, rules: [{max:200,message:'最长不能超过200字'}]}]"
@@ -189,7 +193,9 @@
         this.$message.info(selected.key);
       },
       handleSelect(selectedKeys, info) {
-        findById(selectedKeys[0]).then(response => this.resource = response.data);
+        if (selectedKeys.length === 1) {
+          findById(selectedKeys[0]).then(response => this.resource = response.data);
+        }
       },
       onLoadData(treeNode) {
         this.loadedKeys.push(treeNode.value);
@@ -213,11 +219,12 @@
 </script>
 
 <style scoped>
-  .ant-tree-title span {
+  .ant-tree-title span, i {
     margin-right: 8px;
   }
 
-  .ant-tree-title i {
-    margin-right: 8px;
+  .ant-tree-title .anticon-delete {
+    color: red;
   }
+
 </style>

@@ -3,3 +3,4 @@
  */
 export const updateMenu = "updateMenu";
 export const menuSessionStoreKey = "menuSessionKey";
+export const setUserInfo = "setUserInfo";
