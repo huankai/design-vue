@@ -53,6 +53,7 @@
   import {getHeaderAppList} from "@/network/headerApp";
   import {getUserInfo} from "@/network/user";
   import {setUserInfo} from "@/store/mutations-types";
+  import config from "@/config"
 
   export default {
     name: "LayoutHeader",
@@ -82,7 +83,8 @@
       },
       logout() {
         this.visible = false;
-        this.$message.success("退出成功....");
+        localStorage.removeItem(config.access_token);
+        location.href = config.logout
       },
       collapsedClick() {
         //组件传值到父类组件中

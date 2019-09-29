@@ -46,10 +46,12 @@ const router = new VueRouter({
 });
 
 router.beforeEach((to, from, next) => {
-  let accessToken = sessionStorage.getItem(config.access_token);
+  let accessToken = localStorage.getItem(config.access_token);
   if (accessToken == null) {
     accessToken = to.query.access_token;
-    if (accessToken != null) sessionStorage.setItem(config.access_token, accessToken);
+    if (accessToken != null) {
+      localStorage.setItem(config.access_token, accessToken);
+    }
   }
   if (accessToken == null) {
     location.href = config.loginUrl;

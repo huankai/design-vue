@@ -26,7 +26,7 @@
                        label="有效日期">
             <a-date-picker
               v-decorator="['expireDate',{initialValue:clientApp.expireDate, rules: [{ required: false, message: '请输入有效期' }]}]"
-              placeholder="默认不过期"/>
+              placeholder="默认不过期"></a-date-picker>
           </a-form-item>
         </a-col>
         <a-col :span="12">
@@ -57,8 +57,14 @@
         </a-col>
       </a-row>
       <a-row>
-        <a-col :span="24">
-          <a-form-item :label-col="{span:3}" label="认证模式">
+        <a-col :span="12">
+          <a-form-item :label-col="formItemLayout.labelCol" :wrapper-col="formItemLayout.wrapperCol" label="认证Scope">
+            <a-checkbox-group :options="scope" @change="handlerScopeChange"
+                              v-decorator="['scope',{initialValue:clientApp.scope, rules: [{ required: true, message: '认证Scope至少选择一种',type:'array'}]}]"/>
+          </a-form-item>
+        </a-col>
+        <a-col :span="12">
+          <a-form-item :label-col="{span:8}" :wrapper-col="{span:16}" label="认证模式">
             <!--
               注意: 这里在使用验证时，要使用 this.form.setFieldsValue 来设置默认的选中值，使用 Vue 中生命周期中的 mounted 函数来实现
             -->
@@ -157,6 +163,9 @@
   import {findById, saveOrUpdate} from "@/network/clientApp";
   import {uploadUrl, viewBaseUrl} from "@/util/fsConstant";
 
+  const scope = [
+    "snsapi_base", "snsapi_userinfo"
+  ];
   const formItemLayout = {
     labelCol: {span: 6},
     wrapperCol: {span: 18}
@@ -180,6 +189,7 @@
     data() {
       return {
         loading: false,
+        scope,
         secretVisible: false,
         action: uploadUrl,
         authorizedGrantTypes,
@@ -232,6 +242,9 @@
     methods: {
       generateSecret() {
         this.$message.info("正在开发中...")
+      },
+      handlerScopeChange(checkedValues) {debugger
+        this.clientApp.scope = checkedValues;
       },
       handleFileUploadChange({file, fileList, event}) {
         if (file.status === 'done') {

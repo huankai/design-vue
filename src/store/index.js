@@ -1,9 +1,10 @@
 import Vue from "vue"
 import Vuex from "vuex"
 
-import mutations from "@/store/mutations";
-import actions from "@/store/actions";
-import getters from "@/store/getters";
+import mutations from "@/store/mutations"
+import actions from "@/store/actions"
+import getters from "@/store/getters"
+
 
 Vue.use(Vuex);
 
@@ -37,5 +38,6 @@ export default new Vuex.Store({
   /*
       与 计算属性类型，当在 state 中定义的数据需要使用计算后返回时，可以在这里定义
    */
-  getters,
+  getters
+
 });

@@ -2,8 +2,6 @@ import axios from "axios"
 import {message} from "ant-design-vue";
 import cfg from "@/config"
 
-// import fileDownload from "js-file-download";
-
 axios.defaults.timeout = 1000000;
 
 async function onFulfilled(response) {
@@ -12,13 +10,12 @@ async function onFulfilled(response) {
       case 10200:
         return response.data;
       case 10401:
-        sessionStorage.removeItem(cfg.access_token);
+        localStorage.removeItem(cfg.access_token);
         location.href = cfg.loginUrl;
         break;
       default:
-        return response.data;
+        break;
     }
-    // return response.data;
   }
   await message.error(response.data.message || response.message || "请稍后再试");
   return Promise.reject(response.data);
@@ -71,7 +68,7 @@ const pmsInstance = axios.create({
   baseURL: pmsBaseURL
 });
 pmsInstance.interceptors.request.use(config => {
-  let accessToken = sessionStorage.getItem(cfg.access_token);
+  let accessToken = localStorage.getItem(cfg.access_token);
   if (accessToken != null) {
     config.headers = {
       "Authorization": "Bearer " + accessToken
