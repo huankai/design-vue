@@ -1,6 +1,5 @@
 import axios from "axios"
 import {message} from "ant-design-vue";
-import cfg from "@/config"
 
 axios.defaults.timeout = 1000000;
 
@@ -10,8 +9,8 @@ async function onFulfilled(response) {
       case 10200:
         return response.data;
       case 10401:
-        localStorage.removeItem(cfg.access_token);
-        location.href = cfg.loginUrl;
+        localStorage.removeItem(process.env.VUE_APP_ACCESS_TOKEN);
+        location.href = process.env.VUE_APP_LOGIN_URL;
         break;
       default:
         break;
@@ -68,7 +67,7 @@ const pmsInstance = axios.create({
   baseURL: pmsBaseURL
 });
 pmsInstance.interceptors.request.use(config => {
-  let accessToken = localStorage.getItem(cfg.access_token);
+  let accessToken = localStorage.getItem(process.env.VUE_APP_ACCESS_TOKEN);
   if (accessToken != null) {
     config.headers = {
       "Authorization": "Bearer " + accessToken

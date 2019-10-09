@@ -21,7 +21,7 @@ import Mine from "@/router/mine";
 import Video from "@/router/video";
 import Login from "@/router/login";
 
-import config from "@/config"
+// import config from "@/config"
 
 const router = new VueRouter({
   mode: "history",
@@ -46,15 +46,16 @@ const router = new VueRouter({
 });
 
 router.beforeEach((to, from, next) => {
-  let accessToken = localStorage.getItem(config.access_token);
+  const tokenKey = process.env.VUE_APP_ACCESS_TOKEN;
+  let accessToken = localStorage.getItem(tokenKey);
   if (accessToken == null) {
     accessToken = to.query.access_token;
     if (accessToken != null) {
-      localStorage.setItem(config.access_token, accessToken);
+      localStorage.setItem(tokenKey, accessToken);
     }
   }
   if (accessToken == null) {
-    location.href = config.loginUrl;
+    location.href = process.env.VUE_APP_LOGIN_URL;
     return;
   }
   document.title = to.meta.title || "后台管理系统";
