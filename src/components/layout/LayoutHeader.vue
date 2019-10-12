@@ -53,7 +53,6 @@
   import {getHeaderAppList} from "@/network/headerApp";
   import {getUserInfo} from "@/network/user";
   import {setUserInfo} from "@/store/mutations-types";
-  // import config from "@/config"
 
   export default {
     name: "LayoutHeader",
@@ -83,9 +82,8 @@
       },
       logout() {
         this.visible = false;
-        const token = localStorage.getItem(process.env.VUE_APP_ACCESS_TOKEN);
         localStorage.removeItem(process.env.VUE_APP_LOGIN_URL);
-        location.href = config.logout + "?access_token=" + token;
+        location.href = process.env.VUE_APP_LOGOUT_URL;
       },
       collapsedClick() {
         //组件传值到父类组件中

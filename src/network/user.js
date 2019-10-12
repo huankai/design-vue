@@ -10,6 +10,7 @@ export function getUserInfo() {
   //   .then(response => userInfo = response.data);
   // }
   // return userInfo;
+  // debugger
   return pmsRequest({
     method: "POST",
     url: "/getUser"

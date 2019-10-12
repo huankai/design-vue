@@ -55,11 +55,12 @@ router.beforeEach((to, from, next) => {
     }
   }
   if (accessToken == null) {
-    location.href = process.env.VUE_APP_LOGIN_URL;
-    return;
+    location.replace(process.env.VUE_APP_LOGIN_URL);
+    next(false);
+  } else {
+    document.title = to.meta.title || "后台管理系统";
+    next();// 重写beforeEach 后，必须调用 next()方法，否则所有的路由无法调用， vue router 默认就是调用了 next()
   }
-  document.title = to.meta.title || "后台管理系统";
-  next();// 重写beforeEach 后，必须调用 next()方法，否则所有的路由无法调用， vue router 默认就是调用了 next()
 });
 
 export default router;
